@@ -14,4 +14,27 @@ namespace DancePlatform.BL.Models
 	public class Role : IdentityRole<int>
 	{
 	}
+
+	public class UserLogin : IdentityUserLogin<int>
+	{
+		public int Id { get; set; }
+	}
+
+	public class UserRole : IdentityUserRole<int>
+	{
+		public int Id { get; set; }
+	}
+
+	public class RoleClaim : IdentityRoleClaim<int>
+	{
+	}
+
+	public class UserClaim : IdentityUserClaim<int>
+	{
+	}
+
+	public class UserToken : IdentityUserToken<int>
+	{
+		public int Id { get; set; }
+	}
 }
