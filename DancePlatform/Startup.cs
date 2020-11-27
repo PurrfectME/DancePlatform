@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using DancePlatform.BL.Models;
 using Microsoft.AspNetCore.Identity;
+using DancePlatform.BL.Interfaces;
+using DancePlatform.BL.Services;
 
 namespace DancePlatform
 {
@@ -22,11 +24,17 @@ namespace DancePlatform
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddDbContext<ApplicationContext>(options =>
+			services.AddDbContext<IApplicationContext, ApplicationContext>(options =>
 				options.UseSqlServer(Configuration.GetConnectionString("DancePlatform")));
 
 			services.AddIdentity<User, Role>()
-				.AddEntityFrameworkStores<ApplicationContext>();
+				.AddEntityFrameworkStores<ApplicationContext>()
+				.AddDefaultTokenProviders();
+
+			
+
+
+			services.AddScoped<IWorkshopService, WorkshopService>();
 
 			services.Configure<IdentityOptions>(options =>
 			{
