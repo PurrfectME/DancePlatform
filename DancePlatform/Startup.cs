@@ -24,15 +24,15 @@ namespace DancePlatform
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddDbContext<IApplicationContext, ApplicationContext>(options =>
+			services.AddDbContext<ApplicationContext>(options =>
 				options.UseSqlServer(Configuration.GetConnectionString("DancePlatform")));
 
 			services.AddIdentity<User, Role>()
 				.AddEntityFrameworkStores<ApplicationContext>()
 				.AddDefaultTokenProviders();
 
-			
 
+            services.AddScoped<IApplicationContext, ApplicationContext>();
 
 			services.AddScoped<IWorkshopService, WorkshopService>();
 

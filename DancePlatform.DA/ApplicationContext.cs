@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DancePlatform.DA
 {
-	public class ApplicationContext : IdentityDbContext<User, Role, int, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>, IApplicationContext
+	public class ApplicationContext : IdentityDbContext<User, Role, int>, IApplicationContext
 	{
-		public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
+		public ApplicationContext(DbContextOptions options) : base(options)
 		{
 		}
 
@@ -24,7 +24,9 @@ namespace DancePlatform.DA
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
-			builder.Entity<Role>().HasData(
+            base.OnModelCreating(builder);
+
+            builder.Entity<Role>().HasData(
 				new Role
 				{
 					Id = 1,
