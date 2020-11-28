@@ -7,9 +7,11 @@ namespace DancePlatform.BL.Interfaces
 	public interface IApplicationContext
 	{
 		DbSet<Workshop> Workshops { get; set; }
+        DbSet<Registration> Registrations { get; set; }
 
 
-		Task SaveChangesAsync();
+
+        Task SaveChangesAsync();
 		
 	}
 }
