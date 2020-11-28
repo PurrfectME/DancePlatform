@@ -34,7 +34,12 @@ namespace DancePlatform.BL.Services
 			return _context.Workshops.ToListAsync();
 		}
 
-		public async Task Update(Workshop entity)
+        public Task<Workshop> GetById(int id)
+        {
+            return _context.Workshops.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task Update(Workshop entity)
 		{
 			_context.Workshops.Update(entity);
 
