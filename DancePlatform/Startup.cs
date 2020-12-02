@@ -35,6 +35,7 @@ namespace DancePlatform
             services.AddScoped<IApplicationContext, ApplicationContext>();
 
 			services.AddScoped<IWorkshopService, WorkshopService>();
+			services.AddScoped<IRegistrationService, RegistrationService>();
 
 			services.Configure<IdentityOptions>(options =>
 			{
