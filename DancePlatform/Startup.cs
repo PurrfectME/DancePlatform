@@ -1,16 +1,21 @@
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using DancePlatform.BL.Interfaces;
+using DancePlatform.BL.Models;
+using DancePlatform.BL.Services;
 using DancePlatform.DA;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using DancePlatform.BL.Models;
-using Microsoft.AspNetCore.Identity;
-using DancePlatform.BL.Interfaces;
-using DancePlatform.BL.Services;
+using Microsoft.IdentityModel.Tokens;
 
-namespace DancePlatform
+namespace DancePlatform.API
 {
 	public class Startup
 	{
@@ -48,7 +53,58 @@ namespace DancePlatform
 				options.Password.RequiredUniqueChars = 0;
 			});
 
-			services.AddControllers();
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //    .AddJwtBearer(options =>
+            //    {
+            //        options.RequireHttpsMetadata = false;
+            //        options.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            // укзывает, будет ли валидироваться издатель при валидации токена
+            //            ValidateIssuer = true,
+            //            // строка, представляющая издателя
+            //            ValidIssuer = Configuration["JWT:ValidIssuer"],
+                        
+            //            // будет ли валидироваться потребитель токена
+            //            ValidateAudience = true,
+            //            // установка потребителя токена
+            //            ValidAudience = Configuration["JWT:ValidAudience"],
+            //            // будет ли валидироваться время существования
+            //            ValidateLifetime = true,
+            //            // установка ключа безопасности
+            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"])),
+            //            // валидация ключа безопасности
+            //            ValidateIssuerSigningKey = true,
+            //        };
+            //    });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidAudience = Configuration["JWT:ValidAudience"],
+                    ValidIssuer = Configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                };
+            });
+
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ADMIN",
+                    policy => policy.RequireRole("ADMIN"));
+            });
+
+            services.AddControllers();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,7 +123,7 @@ namespace DancePlatform
 
 			app.UseAuthorization();
 
-			SeedUsers(userManager);
+			//SeedUsers(userManager);
 
 
 			app.UseEndpoints(endpoints =>
@@ -76,21 +132,19 @@ namespace DancePlatform
 			});
 		}
 
-		private static void SeedUsers(UserManager<User> manager)
-		{
-			if (manager.FindByNameAsync("Admin").Result == null)
-			{
-				var admin = new User
-				{
-					UserName = "Admin",
-				};
+		//private static void SeedUsers(UserManager<User> manager)
+  //      {
+  //          if (manager.FindByNameAsync("Admin").Result != null) return;
+  //          var admin = new User
+  //          {
+  //              UserName = "Admin",
+  //          };
 
-				if((manager.CreateAsync(admin, "admin").Result).Succeeded)
-				{
-					manager.AddToRoleAsync(admin,
-								"Admin").Wait();
-				}
-			}
-		}
+  //          if((manager.CreateAsync(admin, "admin").Result).Succeeded)
+  //          {
+  //              manager.AddToRoleAsync(admin,
+  //                  "Admin").Wait();
+  //          }
+  //      }
 	}
 }

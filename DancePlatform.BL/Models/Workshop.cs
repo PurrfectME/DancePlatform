@@ -5,13 +5,13 @@ namespace DancePlatform.BL.Models
 	public class Workshop
 	{
 		public int Id { get; set; }
-		public int Number { get; set; }
-		public string Style { get; set; }
-		public string Category { get; set; }
+		public int NumberOfPeople { get; set; }
+		public Style Style { get; set; }
+		public Category Category { get; set; }
 		public DateTimeOffset Date { get; set; }
 		public string Name { get; set; }
 		public float Price { get; set; }
 
-		public User Choreographer { get; set; }
+		public string Choreographer { get; set; }
 	}
 }

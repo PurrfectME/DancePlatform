@@ -9,7 +9,7 @@ namespace DancePlatform.BL.Models
 	public class User : IdentityUser<int>
 	{
 		public List<Registration> Registrations { get; set; }
-	}
+    }
 
 	[Table("Role")]
 	public class Role : IdentityRole<int>

@@ -1,13 +1,12 @@
-﻿using DancePlatform.BL.Interfaces;
-using DancePlatform.BL.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
+using DancePlatform.BL.Interfaces;
+using DancePlatform.BL.Models;
+using DancePlatform.BL.Requests;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace DancePlatform.Controllers
+namespace DancePlatform.API.Controllers
 {
     [Route("workshop")]
     [ApiController]
@@ -20,16 +19,30 @@ namespace DancePlatform.Controllers
             _service = service;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("add")]
-        public async Task<IActionResult> PostWorkshop(Workshop request)
+        public async Task<IActionResult> PostWorkshop(CreateWorkshopRequest request)
         {
             //TEST DATA
-            request.Category = "TERST";
+            //request.Category = Category.Pro;
             request.Date = DateTimeOffset.UtcNow;
             request.Name = "TEST_WORKSHOP";
             request.Price = 42069;
+            request.Style = Style.JazzFunk;
+            request.Choreographer = "TEST_TEACHER";
+            request.NumberOfPeople = 100;
 
-            await _service.Create(request);
+            await _service.Create(
+                new Workshop
+                {
+                    Choreographer = request.Choreographer,
+                    Category = request.Category,
+                    Style = request.Style,
+                    Price = request.Price,
+                    Name = request.Name,
+                    Date = request.Date,
+                    NumberOfPeople = request.NumberOfPeople
+                });
 
             return Ok();
         }
