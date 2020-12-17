@@ -104,8 +104,11 @@ namespace DancePlatform.API
                     policy => policy.RequireRole("ADMIN"));
             });
 
-            services.AddControllers();
-		}
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
+        }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<User> userManager)

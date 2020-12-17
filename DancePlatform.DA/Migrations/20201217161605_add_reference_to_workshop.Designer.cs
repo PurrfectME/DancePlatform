@@ -4,14 +4,16 @@ using DancePlatform.DA;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DancePlatform.DA.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201217161605_add_reference_to_workshop")]
+    partial class add_reference_to_workshop
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,14 +81,14 @@ namespace DancePlatform.DA.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "0b278977-1ea2-4d0f-88ed-124d1db8cb9c",
+                            ConcurrencyStamp = "9e89792d-8142-444b-8dfc-57b9bf5a8fd3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "7702acae-2ad7-4577-bab3-fe51f98b2b71",
+                            ConcurrencyStamp = "6c27e4bf-de34-44e7-8c07-2cfda4f10224",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -174,12 +176,6 @@ namespace DancePlatform.DA.Migrations
 
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("MaximumPeople")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MinimumPeople")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");

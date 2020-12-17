@@ -89,6 +89,13 @@ namespace DancePlatform.API.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet("registered-users/{workshopId}")]
+        public async Task<IActionResult> GetRegisteredUsersOnWorkshop(int workshopId)
+        {
+            var result = await _service.GetWorkshopUsers(workshopId);
 
+            return Ok(result);
+        }
     }
 }

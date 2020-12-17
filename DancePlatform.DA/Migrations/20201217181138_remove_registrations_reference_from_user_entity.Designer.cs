@@ -4,14 +4,16 @@ using DancePlatform.DA;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DancePlatform.DA.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201217181138_remove_registrations_reference_from_user_entity")]
+    partial class remove_registrations_reference_from_user_entity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,14 +81,14 @@ namespace DancePlatform.DA.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "0b278977-1ea2-4d0f-88ed-124d1db8cb9c",
+                            ConcurrencyStamp = "ed69de67-ce74-40e2-8c1f-20776a04993a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "7702acae-2ad7-4577-bab3-fe51f98b2b71",
+                            ConcurrencyStamp = "fcb5cdc2-7539-4f21-91c4-05fdf1171570",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -302,7 +304,7 @@ namespace DancePlatform.DA.Migrations
             modelBuilder.Entity("DancePlatform.BL.Models.Registration", b =>
                 {
                     b.HasOne("DancePlatform.BL.Models.User", "User")
-                        .WithMany("Registrations")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

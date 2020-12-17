@@ -8,6 +8,7 @@ namespace DancePlatform.BL.Interfaces
 	{
 		DbSet<Workshop> Workshops { get; set; }
         DbSet<Registration> Registrations { get; set; }
+        DbSet<User> Users { get; set; }
 
 
 

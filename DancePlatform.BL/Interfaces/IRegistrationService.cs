@@ -12,5 +12,6 @@ namespace DancePlatform.BL.Interfaces
 
 		Task<List<Registration>> GetAll();
 		Task<Registration> GetById(int id);
-	}
+        Task<List<Registration>> GetUserRegistrations(int userId);
+    }
 }

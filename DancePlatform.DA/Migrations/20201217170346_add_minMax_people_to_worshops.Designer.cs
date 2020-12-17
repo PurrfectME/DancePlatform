@@ -4,14 +4,16 @@ using DancePlatform.DA;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DancePlatform.DA.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201217170346_add_minMax_people_to_worshops")]
+    partial class add_minMax_people_to_worshops
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,14 +81,14 @@ namespace DancePlatform.DA.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "0b278977-1ea2-4d0f-88ed-124d1db8cb9c",
+                            ConcurrencyStamp = "cc6aef14-ff3b-4562-b572-abc42b43dc95",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "7702acae-2ad7-4577-bab3-fe51f98b2b71",
+                            ConcurrencyStamp = "7de758c2-6f7f-4e33-bdce-bd93a1771310",
                             Name = "User",
                             NormalizedName = "USER"
                         });

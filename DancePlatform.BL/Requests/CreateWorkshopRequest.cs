@@ -12,7 +12,7 @@ namespace DancePlatform.BL.Requests
         public string Name { get; set; }
         public float Price { get; set; }
         public string Choreographer { get; set; }
-        //public string Password { get; set; }
-
+        public int MaximumPeople { get; set; }
+        public int MinimumPeople { get; set; }
     }
 }

@@ -26,15 +26,17 @@ namespace DancePlatform.API.Controllers
 			//request.Name = "TEST_WORKSHOP";
 			//request.Price = 42069;
 
-			var registration = new Registration
-			{
-				UserId = request.UserId,
-				WorkshopId = request.WorkshopId,
-				IsPresent = request.IsPresent,
-				Coast = request.Coast
-			};
+            for (var i = 0; i < request.WorkshopIds.Length; i++)
+            {
+                await _service.Create(new Registration
+                {
+                    UserId = request.UserId,
+                    WorkshopId = request.WorkshopIds[i],
+                    IsPresent = request.IsPresent,
+                    Coast = request.Coast
+                });
 
-			await _service.Create(registration);
+            }
 
 			return Ok();
 		}

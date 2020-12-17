@@ -8,7 +8,7 @@
 		public bool? IsPresent { get; set; }
 		public int Coast { get; set; }
 
-		public Workshop Workshop { get; set; }
-		public User User { get; set; }
+        public Workshop Workshop { get; set; }
+        public User User { get; set; }
 	}
 }
