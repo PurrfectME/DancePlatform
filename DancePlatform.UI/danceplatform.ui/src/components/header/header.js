@@ -36,7 +36,7 @@ export default function Header(props) {
           <Typography variant="h6" className={classes.title}>
             <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
                 <Button color="inherit">
-                    Главная
+                    Все мастер-классы
                 </Button>
             </Link>
             <Link className={classes.title} to="/workshops" style={{ textDecoration: 'none', color: 'white' }}>

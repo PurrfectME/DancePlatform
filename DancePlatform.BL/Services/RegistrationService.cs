@@ -42,9 +42,9 @@ namespace DancePlatform.BL.Services
             return _context.Registrations.ToListAsync();
         }
 
-        public Task<List<Registration>> GetById(int[] ids)
+        public Task<List<Registration>> GetById(int id)
         {
-            return _context.Registrations.Where(x => ids.Contains(x.Id)).ToListAsync();
+            return _context.Registrations.Where(x => x.Id == id).ToListAsync();
         }
 
         public async Task<List<Registration>> GetUserRegistrations(int userId)

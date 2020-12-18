@@ -22,11 +22,10 @@ const getUserWorkshops = userId => {
     });
 }
 
-const deleteRegistrations = ids => {
+const deleteRegistrations = id => {
     return request({
-        method: 'DELETE',
-        url: `/registration/delete`,
-        body: {ids}
+        method: 'POST',
+        url: `/registration/delete/${id}`,
     });
 }
 

@@ -191,7 +191,7 @@ export default function WorkshopTable(props) {
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  let [rows, setRows] = useState([]);
+  const [rows, setRows] = useState([]);
 
 
   const handleRequestSort = (event, property) => {
@@ -309,11 +309,16 @@ export default function WorkshopTable(props) {
                     return (x.registrations.find(y => y.userId === storageHelper.getCurrentUserId()).id)
                 });
 
-                RegistrationService.deleteRegistrations(ids).then(x => {
-                    RegistrationService.getUserWorkshops(storageHelper.getCurrentUserId()).then(x => {
-                        setRows([...x]);
+                for(let i = 0; i < ids.length; i++){
+                    RegistrationService.deleteRegistrations(ids[i]).then(x => {
+                        setSelected([...selected.filter(x => x === ids[i])]);
+                        setRows([...rows.filter(x => x.id === ids[i])])
+                    }).then(() => {
+                        RegistrationService.getUserWorkshops(storageHelper.getCurrentUserId()).then(w => {
+                            setRows([...w]);
+                        })
                     })
-                })
+                }
             }}
             >
             Отменить бронь

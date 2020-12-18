@@ -48,34 +48,26 @@ namespace DancePlatform.API.Controllers
 			return Ok(await _service.GetAll());
 		}
 
-		[HttpDelete("delete")]
-		public async Task<IActionResult> Delete(DeleteRegistrationsRequest request)
+		[HttpPost("delete/{id}")]
+		public async Task<IActionResult> Delete(int id)
 		{
-            try
+			var registrationsToDelete = await _service.GetById(id);
+
+            if (registrationsToDelete == null)
             {
-                var registrationsToDelete = await _service.GetById(request.Ids);
-
-                if (registrationsToDelete == null)
-                {
-                    return NotFound();
-                }
-
-                await _service.Delete(registrationsToDelete);
-
-                return Ok();
-			}
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
+                return NotFound();
             }
-			
+
+            await _service.Delete(registrationsToDelete);
+
+            return Ok();
+
 		}
 
 		[HttpGet("get/{id}")]
 		public async Task<IActionResult> GetById(int id)
 		{
-			var registrations = await _service.GetById(new int[]{id});
+			var registrations = await _service.GetById(id);
 
 			if (registrations.Count == 0)
 			{

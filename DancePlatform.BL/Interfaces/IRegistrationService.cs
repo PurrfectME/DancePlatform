@@ -12,7 +12,7 @@ namespace DancePlatform.BL.Interfaces
         Task Delete(List<Registration> entities);
 
         Task<List<Registration>> GetAll();
-        Task<List<Registration>> GetById(int[] ids);
+        Task<List<Registration>> GetById(int id);
         Task<List<Registration>> GetUserRegistrations(int userId);
 
         Task<List<Workshop>> GetUserWorkshops(int userId);
