@@ -14,12 +14,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import Button from '@material-ui/core/Button';
 import shortid from 'shortid';
 import RegistrationService from '../../services/registrationService';
@@ -27,7 +22,7 @@ import storageHelper from '../../helpers/storageHelper';
 import WorkshopService from '../../services/workshopService';
 import normalizeDate from '../../helpers/dateHelper';
 import {styles, categories} from '../../constants/commonData';
-
+import UsersAdditionalInfo from './usersAdditionalInfo';
 
 const headCells = [
     { id: 'name', numeric: false,  label: 'Название' },
@@ -167,10 +162,10 @@ export default function WorkshopTable(props) {
   const [orderBy, setOrderBy] = useState('name');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
-  const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [rows, setRows] = useState([]);
-
+  const [isOpenAdditionalInfo, setIsOpenAdditionalInfo] = useState(false);
+  const [workshopIdToPreview, setWorkshopIdToPreview] = useState(-1);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -238,10 +233,6 @@ export default function WorkshopTable(props) {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -270,10 +261,24 @@ export default function WorkshopTable(props) {
       )}
 
       {props.isAdmin ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
+        <Tooltip title="Дополнительно">
+          <Button
+            type="button"
+            variant="contained"
+            color="primary"
+            className={toolBarStyles.submit}
+            onClick={() => {
+                if(selected.length === 1){
+                    setWorkshopIdToPreview(selected[0]);
+                    setIsOpenAdditionalInfo(!isOpenAdditionalInfo);
+                }
+                else{
+                    return;
+                }
+            }}
+            >
+                Просмотреть дополнительно
+            </Button>
         </Tooltip>
       ) : props.fromWorkshops ? (
         <Tooltip title="Отменить бронь">
@@ -342,7 +347,7 @@ export default function WorkshopTable(props) {
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            size={'medium'}
             aria-label="enhanced table"
           >
             <EnhancedTableHead
@@ -389,7 +394,7 @@ export default function WorkshopTable(props) {
                   );
                 })}
               {emptyRows > 0 && (
-                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                <TableRow style={{ height: 53 * emptyRows }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
@@ -406,6 +411,12 @@ export default function WorkshopTable(props) {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
+
+    {isOpenAdditionalInfo ? <UsersAdditionalInfo data={workshopIdToPreview}/> : <></>}
+      
+
+
+
     </div>
   );
 }

@@ -26,6 +26,9 @@ export default function EditableTable() {
     { name: 'price', title: 'Цена, BYN' },
   ]);
   const [rows, setRows] = useState([]);
+  const [editingStateColumnExtensions] = useState([
+    { columnName: 'id', editingEnabled: false },
+  ]);
 
   useEffect(() => {
     if((rows.length === 0)){
@@ -75,6 +78,7 @@ export default function EditableTable() {
       >
         <EditingState
           onCommitChanges={commitChanges}
+          columnExtensions={editingStateColumnExtensions}
         />
         <Table />
         <TableHeaderRow />

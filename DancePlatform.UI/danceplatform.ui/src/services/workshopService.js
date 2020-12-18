@@ -22,7 +22,6 @@ const createWorkshop = data => {
 });}
 
 const editWorkshop = data => {
-    console.log('DATA',data);
     return axios.post("https://localhost:44328/workshop/update", data, 
     {headers: {'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*",'Authorization': `Bearer ${storageHelper.getToken()}`} 
 });}
@@ -34,12 +33,20 @@ const deleteWorkshop = id => {
     });
 }
 
+const getRegisteredUsersOnWorkshop = id => {
+    return request({
+        method: 'GET',
+        url: `/workshop/registered-users/${id}`
+    });
+};
+
 const WorkshopService = {
     getAllWorkshops,
     getAvailableWorkshopsForUser,
     createWorkshop,
     editWorkshop,
     deleteWorkshop,
+    getRegisteredUsersOnWorkshop,
 }
 
 export default WorkshopService;

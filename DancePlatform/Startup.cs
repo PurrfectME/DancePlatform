@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using DancePlatform.BL.Interfaces;
 using DancePlatform.BL.Models;
@@ -14,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Serialization;
 
 namespace DancePlatform.API
 {
@@ -108,7 +105,10 @@ namespace DancePlatform.API
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<User> userManager)
 		{
-			if (env.IsDevelopment())
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            
+            if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 			}
