@@ -30,14 +30,21 @@ namespace DancePlatform.BL.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task Delete(List<Registration> entities)
+        {
+            _context.Registrations.RemoveRange(entities);
+
+            await _context.SaveChangesAsync();
+        }
+
         public Task<List<Registration>> GetAll()
         {
             return _context.Registrations.ToListAsync();
         }
 
-        public Task<Registration> GetById(int id)
+        public Task<List<Registration>> GetById(int[] ids)
         {
-            return _context.Registrations.FirstOrDefaultAsync(x => x.Id == id);
+            return _context.Registrations.Where(x => ids.Contains(x.Id)).ToListAsync();
         }
 
         public async Task<List<Registration>> GetUserRegistrations(int userId)
@@ -48,6 +55,17 @@ namespace DancePlatform.BL.Services
                 .Where(x => x.UserId == userId).ToListAsync());
 
             return registrations.Count == 0 ? null : registrations;
+        }
+
+        public async Task<List<Workshop>> GetUserWorkshops(int userId)
+        {
+            var registrations = (await _context.Registrations
+                .AsNoTracking()
+                .Include(x => x.Workshop)
+                .Include(x => x.User)
+                .Where(x => x.UserId == userId).ToListAsync());
+
+            return registrations.Count == 0 ? null : registrations.Select(x => x.Workshop).ToList();
         }
 
         public async Task Update(Registration entity)

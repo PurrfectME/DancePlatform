@@ -21,13 +21,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header() {
+export default function Header(props) {
   const classes = useStyles();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    setIsAuthenticated(storageHelper.isAuthenticated());
-  })
+  // useEffect(() => {
+  //   setIsAuthenticated(storageHelper.isAuthenticated());
+  // })
 
   return (
     <div className={classes.root}>
@@ -39,32 +39,36 @@ export default function Header() {
                     Главная
                 </Button>
             </Link>
+            <Link className={classes.title} to="/workshops" style={{ textDecoration: 'none', color: 'white' }}>
+                <Button color="inherit">
+                    Мои мастер-классы
+                </Button>
+              </Link>
           </Typography>
             
-            {/* {isAuthenticated ? 
+            {props.isAuthenticated ? 
+              <>
               <Link to="/login" style={{ textDecoration: 'none', color: 'white' }}>
-                <Button onClick={localStorage.clear()} color="inherit">
+                <Button onClick={() => {
+                  localStorage.clear();
+                }} color="inherit">
                     Выйти
                 </Button>
               </Link>
+              </>
             :
             <>
             <Link to="/login" style={{ textDecoration: 'none', color: 'white' }}>
                 <Button color="inherit">
                     Войти
                 </Button>
-            </Link> */}
-            <Link to="/login" style={{ textDecoration: 'none', color: 'white' }}>
-                <Button color="inherit">
-                    Войти
-                </Button>
-            </Link> 
+            </Link>
             <Link to="/register" style={{ textDecoration: 'none', color: 'white' }}>
                 <Button color="inherit">
                     Регистрация
                 </Button>
             </Link>
-            {/* </>} */}
+            </>}
             
         </Toolbar>
       </AppBar>

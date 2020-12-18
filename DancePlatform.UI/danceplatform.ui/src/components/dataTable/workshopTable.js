@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -185,17 +185,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function WorkshopTable(props) {
   const classes = useStyles();
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('name');
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  let rows = [...props.data];
-
-//   const [, updateState] = React.useState();
-//   const forceUpdate = React.useCallback(() => updateState({}), []);
-
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('name');
+  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(0);
+  const [dense, setDense] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  let [rows, setRows] = useState([]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -211,6 +207,28 @@ export default function WorkshopTable(props) {
     }
     setSelected([]);
   };
+
+  useEffect(() => {
+      if(rows.length === 0 && !props.fromWorkshops){
+        WorkshopService.getAllWorkshops().then(workshops => {
+
+        RegistrationService.getAllRegistrations().then(registrations => {
+            if(registrations.length === 0){
+                setRows([...workshops]);
+            }
+            else{
+                setRows([...workshops.filter(x => !registrations.some(y => x.id === y.workshopId))]);
+            }
+        })
+        });
+    }
+    else if(rows.length === 0 && props.fromWorkshops){
+        RegistrationService.getUserWorkshops(storageHelper.getCurrentUserId()).then(x => {
+            setRows([...x]);
+        })
+    }
+  })
+
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -272,13 +290,32 @@ export default function WorkshopTable(props) {
         </Typography>
       )}
 
-      {props.isAdmin && numSelected > 0 ? (
+      {props.isAdmin ? (
         <Tooltip title="Delete">
           <IconButton aria-label="delete">
             <DeleteIcon />
           </IconButton>
         </Tooltip>
+      ) : props.fromWorkshops ? (
+        <Tooltip title="Отменить бронь">
+        <Button
+            type="button"
+            variant="contained"
+            color="primary"
+            className={toolBarStyles.submit}
+            onClick={() => {
+                RegistrationService.deleteRegistrations({ids: selected}).then(x => {
+                    RegistrationService.getUserWorkshops(storageHelper.getCurrentUserId()).then(x => {
+                        setRows([...x]);
+                    })
+                })
+            }}
+            >
+            Отменить бронь
+        </Button>
+    </Tooltip>
       ) : (
+          
         <Tooltip title="Регистрация">
             <Button
                 type="button"
@@ -295,30 +332,18 @@ export default function WorkshopTable(props) {
 
                             RegistrationService.getAllRegistrations().then(registrations => {
                                 if(registrations.length === 0){
-                                    rows = [...workshops];
+                                    setRows([...workshops]);
                                 }
                                 else{
-                                    rows = [...workshops.filter(x => !registrations.some(y => x.id === y.workshopId))];
+                                    setRows([...workshops.filter(x => !registrations.some(y => x.id === y.workshopId))]);
                                 }
-                        setSelected([]);
+                                setSelected([]);
 
                             })
                         });
-
-
-
-
-
-
-
-
-
-
-
-
                     })
                 }}
-            >
+                >
                 Записаться
             </Button>
         </Tooltip>

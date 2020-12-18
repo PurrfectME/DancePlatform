@@ -15,9 +15,26 @@ const getAllRegistrations = () => {
     });
 }
 
+const getUserWorkshops = userId => {
+    return request({
+        method: 'GET',
+        url: `/registration/${userId}`,
+    });
+}
+
+const deleteRegistrations = data => {
+    return request({
+        method: 'DELETE',
+        url: `/registration/delete`,
+        body: data,
+    });
+}
+
 const RegistrationService = {
     registerOnWorkshop,
     getAllRegistrations,
+    getUserWorkshops,
+    deleteRegistrations
 }
 
 export default RegistrationService;

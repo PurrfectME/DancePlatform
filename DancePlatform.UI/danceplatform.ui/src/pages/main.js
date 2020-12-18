@@ -10,7 +10,7 @@ export default function Main(){
     const [workshopData, setWorkshopData] = useState([]);
 
     useEffect(() => {
-        if(workshopData.length === 0)
+        if(workshopData.length === 0 && storageHelper.isAuthenticated())
         WorkshopService.getAllWorkshops().then(workshops => {
 
             RegistrationService.getAllRegistrations().then(registrations => {

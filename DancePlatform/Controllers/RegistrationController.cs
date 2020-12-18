@@ -46,17 +46,17 @@ namespace DancePlatform.API.Controllers
 			return Ok(await _service.GetAll());
 		}
 
-		[HttpDelete("delete/{id}")]
-		public async Task<IActionResult> Delete(int id)
+		[HttpDelete("delete")]
+		public async Task<IActionResult> Delete(DeleteRegistrationsRequest request)
 		{
-			var workshopToDelete = await _service.GetById(id);
+			var registrationsToDelete = await _service.GetById(request.Ids);
 
-			if (workshopToDelete == null)
+			if (registrationsToDelete == null)
 			{
 				return NotFound();
 			}
 
-			await _service.Delete(workshopToDelete);
+			await _service.Delete(registrationsToDelete);
 
 			return Ok();
 		}
@@ -64,7 +64,7 @@ namespace DancePlatform.API.Controllers
 		[HttpGet("get/{id}")]
 		public async Task<IActionResult> GetById(int id)
 		{
-			var workshop = await _service.GetById(id);
+			var workshop = await _service.GetById(new []{id});
 
 			if (workshop == null)
 			{
@@ -81,5 +81,18 @@ namespace DancePlatform.API.Controllers
 
 			return Ok();
 		}
+
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUsersWorkshops(int userId)
+        {
+            var result = await _service.GetUserWorkshops(userId);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+            
+            return Ok(result);
+        }
 	}
 }

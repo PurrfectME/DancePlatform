@@ -1,19 +1,38 @@
-import logo from './logo.svg';
+import React, { useContext } from "react";
 import { Redirect, Switch, BrowserRouter, Route } from 'react-router-dom';
 import Header from './components/header/header';
+import storageHelper from "./helpers/storageHelper";
 import Auth from './pages/auth';
 import Main from './pages/main';
+import Workshops from "./pages/workshops";
 
 function App() {
+
   return (
     <div className="App">
       <BrowserRouter basename='/'>
-        <Header />
-
+        
         <Switch>
-          <Route exact path="/" component={Main} />
-          <Route exact path='/login' render={() => <Auth actionName="Войти" />}/>
-          <Route exact path='/register' render={() => <Auth actionName="Регистрация" />}/>
+          <Route exact path="/" render={() => 
+          <>
+            <Header isAuthenticated={storageHelper.isAuthenticated()} />
+            <Main />
+          </>} />
+          <Route exact path='/login' render={() => 
+          <>
+            <Header isAuthenticated={storageHelper.isAuthenticated()} />
+            <Auth actionName="Войти" />
+          </>}/>
+          <Route exact path='/register' render={() => 
+          <>
+            <Header isAuthenticated={storageHelper.isAuthenticated()} />
+            <Auth actionName="Регистрация" />
+          </>}/>
+          <Route exact path="/workshops" render={() => 
+          <>
+            <Header isAuthenticated={storageHelper.isAuthenticated()} />
+            <Workshops />
+          </>} />
         </Switch>
       </BrowserRouter>
     </div>
