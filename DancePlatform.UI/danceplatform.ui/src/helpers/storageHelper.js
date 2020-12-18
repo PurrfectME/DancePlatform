@@ -8,9 +8,7 @@ const isAuthenticated = () => {
     return isAuthenticated;
 }
 
-// const setAuthToFalse = () => {
-//     return !isAuthenticated();
-// }
+const getToken = () => localStorage.getItem('token');
 
 const isAdmin = () => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -31,6 +29,7 @@ const storageHelper = {
     isAuthenticated,
     isAdmin,
     getCurrentUserId,
+    getToken,
 }
 
 export default storageHelper;

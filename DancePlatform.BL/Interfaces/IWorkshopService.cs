@@ -6,8 +6,8 @@ namespace DancePlatform.BL.Interfaces
 {
 	public interface IWorkshopService
 	{
-		Task Create(Workshop entity);
-		Task Update(Workshop entity);
+		Task<Workshop> Create(Workshop entity);
+		Task<Workshop> Update(Workshop entity);
 		Task Delete(Workshop entity);
 
 		Task<List<Workshop>> GetAll();

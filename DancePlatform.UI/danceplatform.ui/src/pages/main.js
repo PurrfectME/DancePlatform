@@ -4,36 +4,18 @@ import storageHelper from '../helpers/storageHelper';
 import WorkshopTable from '../components/dataTable/workshopTable';
 import WorkshopService from '../services/workshopService';
 import RegistrationService from '../services/registrationService';
+import EditableTable from '../components/dataTable/editableTable';
 
 
 export default function Main(){
-    const [workshopData, setWorkshopData] = useState([]);
-    let regs = [];
 
-    // useEffect(() => {
-    //     if((workshopData.length === 0 && storageHelper.isAuthenticated()) || regs.length !== 0)
-        
-
-    //     WorkshopService.getAllWorkshops().then(workshops => {
-    //         console.log('HERERER');
-
-    //         RegistrationService.getAllRegistrations().then(registrations => {
-    //             if(registrations.length === 0){
-    //                 regs.push([...registrations]);
-    //                 setWorkshopData([...workshops]);
-    //             }
-    //             else{
-    //                 setWorkshopData([...workshops.filter(x => !registrations.some(y => x.id === y.workshopId && y.userId === storageHelper.getCurrentUserId()))]);
-    //             }
-    //         })
-    //     });
-    // })
-
+    const isAdmin = storageHelper.isAdmin();
     return(
         <>
             {storageHelper.isAuthenticated() ? 
                 
-                <WorkshopTable fromWorkshops={false} isAdmin={storageHelper.isAdmin()} />
+                isAdmin ? <EditableTable /> :
+                <WorkshopTable fromWorkshops={false} isAdmin={isAdmin} />
             
             :
                 <Redirect to='/login' />

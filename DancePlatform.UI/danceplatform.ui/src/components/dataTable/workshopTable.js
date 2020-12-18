@@ -25,24 +25,9 @@ import shortid from 'shortid';
 import RegistrationService from '../../services/registrationService';
 import storageHelper from '../../helpers/storageHelper';
 import WorkshopService from '../../services/workshopService';
+import normalizeDate from '../../helpers/dateHelper';
+import {styles, categories} from '../../constants/commonData';
 
-const styles = {
-    0: 'Стиль неизвестен',
-    1: 'HipHop',
-    2: 'HighHeels',
-    3: 'DanceHall',
-    4: 'JazzFunk',
-    5: 'Vogue',
-    6: 'Contemporary',
-    7: 'Choreo',
-};
-
-const categories = {
-    0: 'Уровень неизвестен',
-    1: 'Open',
-    2: 'Beg',
-    3: 'Pro',
-}
 
 const headCells = [
     { id: 'name', numeric: false,  label: 'Название' },
@@ -77,13 +62,6 @@ function stableSort(array, comparator) {
     return a[1] - b[1];
   });
   return stabilizedThis.map((el) => el[0]);
-}
-
-
-function normalizeDate(sharpDate) {
-    const date = new Date(Date.parse(sharpDate));
-
-    return `${date.getFullYear()}/${(date.getMonth() + 1)}/${date.getDay()}`;
 }
 
 function EnhancedTableHead(props) {

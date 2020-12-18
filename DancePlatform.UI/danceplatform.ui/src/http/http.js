@@ -1,12 +1,14 @@
 import axios from 'axios';
 import {AUTH} from '../constants/auth';
+import storageHelper from '../helpers/storageHelper';
 
 
 const client = axios.create({
     baseURL: AUTH.BASE_URL,
     headers: {
     "Access-Control-Allow-Origin": "*",
-    "Content-type": "application/json"  
+    "Content-type": "application/json charset=utf-8",
+    'Authorization': `Bearer ${storageHelper.getToken()}`
     }
 })
 

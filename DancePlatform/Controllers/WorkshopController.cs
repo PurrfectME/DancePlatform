@@ -10,6 +10,7 @@ namespace DancePlatform.API.Controllers
 {
     [Route("workshop")]
     [ApiController]
+    [Produces("application/json")]
     public class WorkshopController : ControllerBase
     {
         private readonly IWorkshopService _service;
@@ -21,18 +22,9 @@ namespace DancePlatform.API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("add")]
-        public async Task<IActionResult> PostWorkshop(CreateWorkshopRequest request)
+        public async Task<IActionResult> PostWorkshop([FromBody] CreateWorkshopRequest request)
         {
-            //TEST DATA
-            request.Category = request.Category;
-            request.Date = DateTimeOffset.UtcNow;
-            request.Name = "TEST_WORKSHOP";
-            request.Price = 42069;
-            request.Style = Style.JazzFunk;
-            request.Choreographer = "TEST_TEACHER";
-            request.NumberOfPeople = 100;
-
-            await _service.Create(
+            return Ok(await _service.Create(
                 new Workshop
                 {
                     Choreographer = request.Choreographer,
@@ -42,9 +34,7 @@ namespace DancePlatform.API.Controllers
                     Name = request.Name,
                     Date = request.Date,
                     NumberOfPeople = request.NumberOfPeople
-                });
-
-            return Ok();
+                }));
         }
 
         [HttpGet("getAll")]
@@ -53,6 +43,7 @@ namespace DancePlatform.API.Controllers
             return Ok(await _service.GetAll());
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -81,10 +72,26 @@ namespace DancePlatform.API.Controllers
             return Ok(workshop);
         }
 
-        [HttpPut("update")]
-        public async Task<IActionResult> Update(Workshop model)
+        [Authorize(Roles = "Admin")]
+        [HttpPost("update")]
+        public async Task<IActionResult> Update([FromBody] UpdateWorkshopRequest request)
         {
-            await _service.Update(model);
+            var workshopToUpdate = await _service.GetById(request.Id);
+
+            if (workshopToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            workshopToUpdate.Category = request.Category;
+            workshopToUpdate.Choreographer = request.Choreographer;
+            workshopToUpdate.Style = request.Style;
+            workshopToUpdate.Price = request.Price;
+            workshopToUpdate.Date = request.Date;
+            workshopToUpdate.NumberOfPeople = request.NumberOfPeople;
+            workshopToUpdate.Name = request.Name;
+
+            await _service.Update(workshopToUpdate);
 
             return Ok();
         }
