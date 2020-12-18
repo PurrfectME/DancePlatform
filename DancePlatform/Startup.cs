@@ -104,6 +104,18 @@ namespace DancePlatform.API
                     policy => policy.RequireRole("ADMIN"));
             });
 
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin();
+                        builder.AllowAnyHeader();
+                        builder.AllowAnyMethod();
+                    });
+            });
+
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -122,6 +134,8 @@ namespace DancePlatform.API
 
 			app.UseRouting();
 
+            app.UseCors();
+            
 			app.UseAuthentication();
 
 			app.UseAuthorization();

@@ -24,7 +24,7 @@ namespace DancePlatform.API.Controllers
         public async Task<IActionResult> PostWorkshop(CreateWorkshopRequest request)
         {
             //TEST DATA
-            //request.Category = Category.Pro;
+            request.Category = request.Category;
             request.Date = DateTimeOffset.UtcNow;
             request.Name = "TEST_WORKSHOP";
             request.Price = 42069;

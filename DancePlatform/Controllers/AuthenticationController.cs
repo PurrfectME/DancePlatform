@@ -32,7 +32,7 @@ namespace DancePlatform.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest model)
         {
-            var user = await _userManager.FindByNameAsync(model.Username);
+            var user = await _userManager.FindByEmailAsync(model.Email);
             
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
                 return Unauthorized();
@@ -58,10 +58,19 @@ namespace DancePlatform.API.Controllers
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );
 
+            var userForResponse = new UserResponse
+            {
+                Email = user.Email,
+                Id = user.Id,
+                UserName = user.UserName,
+                Roles = userRoles
+            };
+            
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
+                expiration = token.ValidTo,
+                user = userForResponse,
             });
         }
 
@@ -70,7 +79,7 @@ namespace DancePlatform.API.Controllers
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse { Status = "Error", Message = "User already exists!" });
+                return StatusCode(StatusCodes.Status400BadRequest, new BaseResponse { Status = "Error", Message = "User already exists!" });
 
             var user = new User
             {
@@ -84,7 +93,7 @@ namespace DancePlatform.API.Controllers
             await _userManager.AddToRoleAsync(user, "User");
             
             return !result.Succeeded
-                ? StatusCode(StatusCodes.Status500InternalServerError,
+                ? StatusCode(StatusCodes.Status400BadRequest,
                     new BaseResponse
                         {Status = "Error", Message = "User creation failed! Please check user details and try again."})
                 : Ok(new BaseResponse {Status = "Success", Message = "User created successfully!"});
