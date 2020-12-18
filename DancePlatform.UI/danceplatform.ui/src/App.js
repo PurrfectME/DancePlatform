@@ -4,6 +4,7 @@ import Header from './components/header/header';
 import storageHelper from "./helpers/storageHelper";
 import Auth from './pages/auth';
 import Main from './pages/main';
+import UsersAccounting from "./pages/usersAccounting";
 import Workshops from "./pages/workshops";
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
         <Switch>
           <Route exact path="/" render={() => 
           <>
-            <Header isAuthenticated={storageHelper.isAuthenticated()} />
+            <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
             <Main />
           </>} />
           <Route exact path='/login' render={() => 
@@ -32,6 +33,11 @@ function App() {
           <>
             <Header isAuthenticated={storageHelper.isAuthenticated()} />
             <Workshops />
+          </>} />
+          <Route exact path="/users-accounting" render={() => 
+          <>
+            <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+            <UsersAccounting />
           </>} />
         </Switch>
       </BrowserRouter>

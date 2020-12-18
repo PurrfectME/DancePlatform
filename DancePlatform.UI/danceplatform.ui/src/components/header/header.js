@@ -23,27 +23,29 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header(props) {
   const classes = useStyles();
-  // const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // useEffect(() => {
-  //   setIsAuthenticated(storageHelper.isAuthenticated());
-  // })
-
+  console.log(props.isAdmin);
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
+              <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
                 <Button color="inherit">
                     Все мастер-классы
                 </Button>
-            </Link>
-            <Link className={classes.title} to="/workshops" style={{ textDecoration: 'none', color: 'white' }}>
+              </Link>
+              {props.isAdmin ? 
+              <Link className={classes.title} to="/users-accounting" style={{ textDecoration: 'none', color: 'white' }}>
+                <Button color="inherit">
+                    Учёт пользователей
+                </Button>
+              </Link>
+              :
+              <Link className={classes.title} to="/workshops" style={{ textDecoration: 'none', color: 'white' }}>
                 <Button color="inherit">
                     Мои мастер-классы
                 </Button>
-              </Link>
+              </Link>}
           </Typography>
             
             {props.isAuthenticated ? 

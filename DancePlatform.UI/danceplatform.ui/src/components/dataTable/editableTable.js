@@ -33,7 +33,7 @@ export default function EditableTable() {
         setRows([...workshops.map(x => {
             x.style = styles[x.style];
             x.category = categories[x.category];
-            x.date = x.date.toString();
+            x.date = normalizeDate(x.date);
             return x;
         })]);
     })}
