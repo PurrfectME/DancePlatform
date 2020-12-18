@@ -44,7 +44,7 @@ namespace DancePlatform.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("delete/{id}")]
+        [HttpPost("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var workshopToDelete = await _service.GetById(id);
@@ -87,13 +87,11 @@ namespace DancePlatform.API.Controllers
             workshopToUpdate.Choreographer = request.Choreographer;
             workshopToUpdate.Style = request.Style;
             workshopToUpdate.Price = request.Price;
-            workshopToUpdate.Date = request.Date;
+            workshopToUpdate.Date = DateTimeOffset.Parse(request.Date.ToString());
             workshopToUpdate.NumberOfPeople = request.NumberOfPeople;
             workshopToUpdate.Name = request.Name;
 
-            await _service.Update(workshopToUpdate);
-
-            return Ok();
+            return Ok(await _service.Update(workshopToUpdate));
         }
 
         [Authorize(Roles = "Admin")]

@@ -5,7 +5,6 @@ using DancePlatform.BL.Interfaces;
 using DancePlatform.BL.Models;
 using DancePlatform.BL.Services;
 using DancePlatform.DA;
-using DancePlatform.DA.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

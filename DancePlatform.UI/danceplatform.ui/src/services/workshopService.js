@@ -27,11 +27,19 @@ const editWorkshop = data => {
     {headers: {'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*",'Authorization': `Bearer ${storageHelper.getToken()}`} 
 });}
 
+const deleteWorkshop = id => {
+    return request({
+        method: 'POST',
+        url: `/workshop/delete/${id}`
+    });
+}
+
 const WorkshopService = {
     getAllWorkshops,
     getAvailableWorkshopsForUser,
     createWorkshop,
-    editWorkshop
+    editWorkshop,
+    deleteWorkshop,
 }
 
 export default WorkshopService;

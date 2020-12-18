@@ -54,15 +54,14 @@ export default function EditableTable() {
         }
         if (changed) {
             changedRows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
-            let index = Object.keys(changed)[0];
-            index = index === 0 ? index : index - 1;
-            console.log(index);
-
-            WorkshopService.editWorkshop(changedRows[index]).then(x => x);
+            let id = Object.keys(changed)[0];
+            WorkshopService.editWorkshop((changedRows.filter(x => x.id == id))[0]).then(x => x);
         }
         if (deleted) {
-        const deletedSet = new Set(deleted);
-        changedRows = rows.filter(row => !deletedSet.has(row.id));
+            const deletedSet = new Set(deleted);
+            changedRows = rows.filter(row => !deletedSet.has(row.id));
+
+            WorkshopService.deleteWorkshop(deleted[0]).then(x => x);
         }
         setRows(changedRows);
   };
