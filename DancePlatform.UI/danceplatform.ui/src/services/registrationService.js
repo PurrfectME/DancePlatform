@@ -1,7 +1,6 @@
 import request from '../http/http';
 
 const registerOnWorkshop = data => {
-    console.log(data);
     return request({
         method: 'POST',
         url: '/registration/add',
@@ -9,8 +8,16 @@ const registerOnWorkshop = data => {
     });
 }
 
+const getAllRegistrations = () => {
+    return request({
+        method: 'GET',
+        url: '/registration/getAll',
+    });
+}
+
 const RegistrationService = {
     registerOnWorkshop,
+    getAllRegistrations,
 }
 
 export default RegistrationService;

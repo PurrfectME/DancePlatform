@@ -97,5 +97,13 @@ namespace DancePlatform.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("available/{userId}")]
+        public async Task<IActionResult> GetAvailableWorkshopsForUser(int userId)
+        {
+            var result = await _service.GetAvailableWorkshopsForUser(userId);
+
+            return Ok(result);
+        }
     }
 }

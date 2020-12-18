@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -24,7 +24,7 @@ import Button from '@material-ui/core/Button';
 import shortid from 'shortid';
 import RegistrationService from '../../services/registrationService';
 import storageHelper from '../../helpers/storageHelper';
-
+import WorkshopService from '../../services/workshopService';
 
 const styles = {
     0: 'Стиль неизвестен',
@@ -159,14 +159,6 @@ const useToolbarStyles = makeStyles((theme) => ({
   },
 }));
 
-// const EnhancedTableToolbar = (props) => {
-//   const { numSelected, isAdmin, selectedWorkshops } = props;
-
-//   return (
-    
-//   );
-// };
-
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -199,7 +191,11 @@ export default function WorkshopTable(props) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const rows = [...props.data];
+  let rows = [...props.data];
+
+//   const [, updateState] = React.useState();
+//   const forceUpdate = React.useCallback(() => updateState({}), []);
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -276,7 +272,7 @@ export default function WorkshopTable(props) {
         </Typography>
       )}
 
-      {isAdmin && numSelected > 0 ? (
+      {props.isAdmin && numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton aria-label="delete">
             <DeleteIcon />
@@ -286,7 +282,6 @@ export default function WorkshopTable(props) {
         <Tooltip title="Регистрация">
             <Button
                 type="button"
-                
                 variant="contained"
                 color="primary"
                 className={toolBarStyles.submit}
@@ -296,7 +291,31 @@ export default function WorkshopTable(props) {
                         userId: storageHelper.getCurrentUserId(),
                         workshopIds: selected
                     }).then(x => {
+                        WorkshopService.getAllWorkshops().then(workshops => {
+
+                            RegistrationService.getAllRegistrations().then(registrations => {
+                                if(registrations.length === 0){
+                                    rows = [...workshops];
+                                }
+                                else{
+                                    rows = [...workshops.filter(x => !registrations.some(y => x.id === y.workshopId))];
+                                }
                         setSelected([]);
+
+                            })
+                        });
+
+
+
+
+
+
+
+
+
+
+
+
                     })
                 }}
             >

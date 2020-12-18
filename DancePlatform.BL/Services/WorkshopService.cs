@@ -51,6 +51,27 @@ namespace DancePlatform.BL.Services
             return _context.Workshops.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<List<Workshop>> GetAvailableWorkshopsForUser(int userId)
+        {
+            var registrations = await _context.Registrations
+                .AsNoTracking()
+                .Include(x => x.Workshop)
+                .Include(x => x.User)
+                .ToListAsync();
+
+            var result = new List<Workshop>();
+            
+            foreach (var registration in registrations)
+            {
+                if (registration.UserId != userId)
+                {
+                    result.Add(registration.Workshop);
+                }
+            }
+
+            return result;
+        }
+
         public async Task Update(Workshop entity)
 		{
 			_context.Workshops.Update(entity);

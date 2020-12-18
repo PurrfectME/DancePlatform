@@ -35,13 +35,12 @@ namespace DancePlatform.API.Controllers
                     IsPresent = request.IsPresent,
                     Coast = request.Coast
                 });
-
             }
 
 			return Ok();
 		}
 
-		[HttpGet("getAll")]
+        [HttpGet("getAll")]
 		public async Task<IActionResult> GetAll()
 		{
 			return Ok(await _service.GetAll());

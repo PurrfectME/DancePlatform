@@ -19,7 +19,7 @@ namespace DancePlatform.BL.Services
         public async Task Create(Registration entity)
         {
             await _context.Registrations.AddAsync(entity);
-
+            
             await _context.SaveChangesAsync();
         }
 

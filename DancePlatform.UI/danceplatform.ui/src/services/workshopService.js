@@ -7,8 +7,16 @@ const getAllWorkshops = () => {
     });
 }
 
+const getAvailableWorkshopsForUser = userId => {
+    return request({
+        method: 'GET',
+        url: `/workshop/available/${userId}`
+    });
+} 
+
 const WorkshopService = {
     getAllWorkshops,
+    getAvailableWorkshopsForUser
 }
 
 export default WorkshopService;
