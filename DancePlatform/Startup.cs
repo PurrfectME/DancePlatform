@@ -5,6 +5,7 @@ using DancePlatform.BL.Interfaces;
 using DancePlatform.BL.Models;
 using DancePlatform.BL.Services;
 using DancePlatform.DA;
+using DancePlatform.DA.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
 
 namespace DancePlatform.API
 {
@@ -41,6 +43,7 @@ namespace DancePlatform.API
 
 			services.AddScoped<IWorkshopService, WorkshopService>();
 			services.AddScoped<IRegistrationService, RegistrationService>();
+            //services.AddTransient<IWorkshopRepository, WorkshopRepository>();
 
 			services.Configure<IdentityOptions>(options =>
 			{
@@ -52,30 +55,6 @@ namespace DancePlatform.API
 				options.Password.RequiredLength = 5;
 				options.Password.RequiredUniqueChars = 0;
 			});
-
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //    .AddJwtBearer(options =>
-            //    {
-            //        options.RequireHttpsMetadata = false;
-            //        options.TokenValidationParameters = new TokenValidationParameters
-            //        {
-            //            // укзывает, будет ли валидироваться издатель при валидации токена
-            //            ValidateIssuer = true,
-            //            // строка, представляющая издателя
-            //            ValidIssuer = Configuration["JWT:ValidIssuer"],
-                        
-            //            // будет ли валидироваться потребитель токена
-            //            ValidateAudience = true,
-            //            // установка потребителя токена
-            //            ValidAudience = Configuration["JWT:ValidAudience"],
-            //            // будет ли валидироваться время существования
-            //            ValidateLifetime = true,
-            //            // установка ключа безопасности
-            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"])),
-            //            // валидация ключа безопасности
-            //            ValidateIssuerSigningKey = true,
-            //        };
-            //    });
 
             services.AddAuthentication(options =>
             {
@@ -116,9 +95,14 @@ namespace DancePlatform.API
                     });
             });
 
-            services.AddControllers()
+            services.AddControllers(options =>
+                {
+                    options.RespectBrowserAcceptHeader = true;
+                })
                 .AddNewtonsoftJson(options =>
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                    {
+                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    }
                 );
         }
 

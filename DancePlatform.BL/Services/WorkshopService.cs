@@ -14,14 +14,16 @@ namespace DancePlatform.BL.Services
 		public WorkshopService(IApplicationContext context)
 		{
 			_context = context;
-		}
+        }
 
-		public async Task Create(Workshop entity)
+		public async Task<Workshop> Create(Workshop entity)
 		{
-			await _context.Workshops.AddAsync(entity);
+			var res = (await _context.Workshops.AddAsync(entity)).Entity;
 
 			await _context.SaveChangesAsync();
-		}
+
+            return res;
+        }
 
 		public async Task Delete(Workshop entity)
 		{
@@ -46,9 +48,11 @@ namespace DancePlatform.BL.Services
             return workshop.Registrations.Select(registration => registration.User).ToList();
         }
 
-        public Task<Workshop> GetById(int id)
+        public async Task<Workshop> GetById(int id)
         {
-            return _context.Workshops.FirstOrDefaultAsync(x => x.Id == id);
+            var t = await _context.Workshops.FirstOrDefaultAsync(x => x.Id == id);
+            _context.Workshops.Attach(t);
+            return t;
         }
 
         public async Task<List<Workshop>> GetAvailableWorkshopsForUser(int userId)
@@ -72,11 +76,12 @@ namespace DancePlatform.BL.Services
             return result;
         }
 
-        public async Task Update(Workshop entity)
-		{
-			_context.Workshops.Update(entity);
+        public async Task<Workshop> Update(Workshop entity)
+        {
+            var res = (_context.Workshops.Update(entity)).Entity;
 
-			await _context.SaveChangesAsync();
-		}
+            await _context.SaveChangesAsync();
+            return res;
+        }
 	}
 }
