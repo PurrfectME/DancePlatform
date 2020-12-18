@@ -17,12 +17,12 @@ const getAvailableWorkshopsForUser = userId => {
 };
 
 const createWorkshop = data => {
-    return axios.post("https://localhost:44328/workshop/add", data, 
+    return axios.post("http://localhost:5000/workshop/add", data, 
     {headers: {'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*",'Authorization': `Bearer ${storageHelper.getToken()}`} 
 });}
 
 const editWorkshop = data => {
-    return axios.post("https://localhost:44328/workshop/update", data, 
+    return axios.post("http://localhost:5000/workshop/update", data, 
     {headers: {'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*",'Authorization': `Bearer ${storageHelper.getToken()}`} 
 });}
 
