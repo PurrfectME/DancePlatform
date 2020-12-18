@@ -193,6 +193,7 @@ export default function WorkshopTable(props) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   let [rows, setRows] = useState([]);
 
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -209,7 +210,7 @@ export default function WorkshopTable(props) {
   };
 
   useEffect(() => {
-      if(rows.length === 0 && !props.fromWorkshops){
+      if((rows.length === 0 && !props.fromWorkshops)){
         WorkshopService.getAllWorkshops().then(workshops => {
 
         RegistrationService.getAllRegistrations().then(registrations => {
@@ -217,7 +218,7 @@ export default function WorkshopTable(props) {
                 setRows([...workshops]);
             }
             else{
-                setRows([...workshops.filter(x => !registrations.some(y => x.id === y.workshopId))]);
+                setRows([...workshops.filter(x => !registrations.some(y => x.id === y.workshopId && y.userId === storageHelper.getCurrentUserId()))]);
             }
         })
         });
@@ -227,7 +228,7 @@ export default function WorkshopTable(props) {
             setRows([...x]);
         })
     }
-  })
+  }, [])
 
 
   const handleClick = (event, name) => {
@@ -304,7 +305,11 @@ export default function WorkshopTable(props) {
             color="primary"
             className={toolBarStyles.submit}
             onClick={() => {
-                RegistrationService.deleteRegistrations({ids: selected}).then(x => {
+                const ids = rows.filter(x => selected.includes(x.id)).map(x => {
+                    return (x.registrations.find(y => y.userId === storageHelper.getCurrentUserId()).id)
+                });
+
+                RegistrationService.deleteRegistrations(ids).then(x => {
                     RegistrationService.getUserWorkshops(storageHelper.getCurrentUserId()).then(x => {
                         setRows([...x]);
                     })
@@ -335,7 +340,7 @@ export default function WorkshopTable(props) {
                                     setRows([...workshops]);
                                 }
                                 else{
-                                    setRows([...workshops.filter(x => !registrations.some(y => x.id === y.workshopId))]);
+                                    setRows([...workshops.filter(x => !registrations.some(y => x.id === y.workshopId && y.userId === storageHelper.getCurrentUserId()))]);
                                 }
                                 setSelected([]);
 

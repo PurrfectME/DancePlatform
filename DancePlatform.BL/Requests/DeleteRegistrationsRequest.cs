@@ -1,4 +1,6 @@
-﻿namespace DancePlatform.BL.Requests
+﻿using System.Collections.Generic;
+
+namespace DancePlatform.BL.Requests
 {
     public class DeleteRegistrationsRequest
     {

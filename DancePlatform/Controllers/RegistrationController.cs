@@ -1,4 +1,6 @@
-﻿using DancePlatform.BL.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using DancePlatform.BL.Interfaces;
 using DancePlatform.BL.Models;
 using DancePlatform.BL.Requests;
 using Microsoft.AspNetCore.Mvc;
@@ -49,29 +51,38 @@ namespace DancePlatform.API.Controllers
 		[HttpDelete("delete")]
 		public async Task<IActionResult> Delete(DeleteRegistrationsRequest request)
 		{
-			var registrationsToDelete = await _service.GetById(request.Ids);
+            try
+            {
+                var registrationsToDelete = await _service.GetById(request.Ids);
 
-			if (registrationsToDelete == null)
-			{
-				return NotFound();
+                if (registrationsToDelete == null)
+                {
+                    return NotFound();
+                }
+
+                await _service.Delete(registrationsToDelete);
+
+                return Ok();
 			}
-
-			await _service.Delete(registrationsToDelete);
-
-			return Ok();
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+			
 		}
 
 		[HttpGet("get/{id}")]
 		public async Task<IActionResult> GetById(int id)
 		{
-			var workshop = await _service.GetById(new []{id});
+			var registrations = await _service.GetById(new int[]{id});
 
-			if (workshop == null)
+			if (registrations.Count == 0)
 			{
 				return NotFound();
 			}
 
-			return Ok(workshop);
+			return Ok(registrations);
 		}
 
 		[HttpPut("update")]

@@ -4,7 +4,10 @@ import {AUTH} from '../constants/auth';
 
 const client = axios.create({
     baseURL: AUTH.BASE_URL,
-    "Access-Control-Allow-Origin": "*"
+    headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Content-type": "application/json"  
+    }
 })
 
 const request = (options) => {
