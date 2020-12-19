@@ -113,7 +113,6 @@ namespace DancePlatform.API
 				app.UseDeveloperExceptionPage();
 			}
 
-			app.UseHttpsRedirection();
 
 			app.UseRouting();
 
