@@ -4,14 +4,16 @@ using DancePlatform.DA;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DancePlatform.DA.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201219030158_kek")]
+    partial class kek
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,14 +78,14 @@ namespace DancePlatform.DA.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "f63f2a07-8de3-466e-a8b8-09f8e914db9c",
+                            ConcurrencyStamp = "69bc22c7-e4d7-4ed3-88b3-0bb4d4fc1f5f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "5ca13576-64c3-4966-83f4-a2fc70e567bc",
+                            ConcurrencyStamp = "5b05005d-6fa5-4f72-9ba9-4ae10082a7cb",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -96,6 +98,9 @@ namespace DancePlatform.DA.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -104,8 +109,14 @@ namespace DancePlatform.DA.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(256)")
@@ -118,8 +129,14 @@ namespace DancePlatform.DA.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(256)")
@@ -153,6 +170,12 @@ namespace DancePlatform.DA.Migrations
 
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("MaximumPeople")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinimumPeople")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");

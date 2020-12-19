@@ -4,14 +4,16 @@ using DancePlatform.DA;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DancePlatform.DA.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201219030359_kek2")]
+    partial class kek2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,14 +78,14 @@ namespace DancePlatform.DA.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "f63f2a07-8de3-466e-a8b8-09f8e914db9c",
+                            ConcurrencyStamp = "5638d00b-322e-4204-b7f2-1b2b37e63f7c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "5ca13576-64c3-4966-83f4-a2fc70e567bc",
+                            ConcurrencyStamp = "753afd49-baa6-46a5-b9c4-1789ad91f8e7",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -153,6 +155,12 @@ namespace DancePlatform.DA.Migrations
 
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("MaximumPeople")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinimumPeople")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");

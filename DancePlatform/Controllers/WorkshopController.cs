@@ -33,7 +33,7 @@ namespace DancePlatform.API.Controllers
                     Price = request.Price,
                     Name = request.Name,
                     Date = request.Date,
-                    NumberOfPeople = request.NumberOfPeople
+                    //NumberOfPeople = request.NumberOfPeople
                 }));
         }
 
@@ -88,7 +88,6 @@ namespace DancePlatform.API.Controllers
             workshopToUpdate.Style = request.Style;
             workshopToUpdate.Price = request.Price;
             workshopToUpdate.Date = DateTimeOffset.Parse(request.Date.ToString());
-            workshopToUpdate.NumberOfPeople = request.NumberOfPeople;
             workshopToUpdate.Name = request.Name;
 
             return Ok(await _service.Update(workshopToUpdate));

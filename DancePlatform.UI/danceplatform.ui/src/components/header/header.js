@@ -50,6 +50,7 @@ export default function Header(props) {
             
             {props.isAuthenticated ? 
               <>
+              <Typography variant="h6" className={classes.menuButton}>Добро пожаловать, {storageHelper.getCurrentUserName()}</Typography>
               <Link to="/login" style={{ textDecoration: 'none', color: 'white' }}>
                 <Button onClick={() => {
                   localStorage.clear();

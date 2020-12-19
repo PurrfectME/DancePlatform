@@ -63,9 +63,19 @@ namespace DancePlatform.BL.Services
                 .AsNoTracking()
                 .Include(x => x.Workshop)
                 .Include(x => x.User)
-                .Where(x => x.UserId == userId).ToListAsync());
+                .Where(x => x.UserId == userId && x.IsPresent == false).ToListAsync());
 
             return registrations.Count == 0 ? null : registrations.Select(x => x.Workshop).ToList();
+        }
+
+        public async Task CheckoutUsers(int userId, int workshopId)
+        {
+            var registration = await _context.Registrations
+                .SingleAsync(x => x.UserId == userId && x.WorkshopId == workshopId);
+
+            registration.IsPresent = true;
+
+            await Update(registration);
         }
 
         public async Task Update(Registration entity)

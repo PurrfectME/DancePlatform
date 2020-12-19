@@ -25,8 +25,14 @@ namespace DancePlatform.DA
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
             base.OnModelCreating(builder);
+            builder.Entity<User>().Ignore(u => u.PhoneNumber);
+			builder.Entity<User>().Ignore(u => u.PhoneNumberConfirmed);
+            builder.Entity<User>().Ignore(u => u.EmailConfirmed);
+            builder.Entity<User>().Ignore(u => u.TwoFactorEnabled);
+			builder.Entity<User>().Ignore(u => u.LockoutEnd);
+            builder.Entity<User>().Ignore(u => u.AccessFailedCount);
 
-            builder.Entity<Role>().HasData(
+			builder.Entity<Role>().HasData(
 				new Role
 				{
 					Id = 1,

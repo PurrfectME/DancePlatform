@@ -25,11 +25,18 @@ const getCurrentUserId = () => {
         return user.id;    
 }
 
+const getCurrentUserName = () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if(user)
+        return user.userName;  
+}
+
 const storageHelper = {
     isAuthenticated,
     isAdmin,
     getCurrentUserId,
     getToken,
+    getCurrentUserName,
 }
 
 export default storageHelper;

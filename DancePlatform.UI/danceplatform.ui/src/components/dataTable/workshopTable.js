@@ -23,6 +23,7 @@ import WorkshopService from '../../services/workshopService';
 import normalizeDate from '../../helpers/dateHelper';
 import {styles, categories} from '../../constants/commonData';
 import UsersAdditionalInfo from './usersAdditionalInfo';
+import DialogBox from '../dialog/dialog';
 
 const headCells = [
     { id: 'name', numeric: false,  label: 'Название' },
@@ -166,6 +167,8 @@ export default function WorkshopTable(props) {
   const [rows, setRows] = useState([]);
   const [isOpenAdditionalInfo, setIsOpenAdditionalInfo] = useState(false);
   const [workshopIdToPreview, setWorkshopIdToPreview] = useState(-1);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -273,7 +276,8 @@ export default function WorkshopTable(props) {
                     setIsOpenAdditionalInfo(!isOpenAdditionalInfo);
                 }
                 else{
-                    return;
+                    setErrorMessage('Просмотреть информацию можно лишь под одному классу за раз');
+                    setIsError(true);
                 }
             }}
             >
@@ -412,7 +416,8 @@ export default function WorkshopTable(props) {
         />
       </Paper>
 
-    {isOpenAdditionalInfo ? <UsersAdditionalInfo data={workshopIdToPreview}/> : <></>}
+    {isError ? <DialogBox isError={isError} message={errorMessage}/> : <></>}
+    {isOpenAdditionalInfo ? <UsersAdditionalInfo workshopId={workshopIdToPreview}/> : <></>}
       
 
 

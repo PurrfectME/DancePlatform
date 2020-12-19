@@ -5,6 +5,7 @@ using DancePlatform.BL.Models;
 using DancePlatform.BL.Requests;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DancePlatform.API.Controllers
 {
@@ -22,12 +23,6 @@ namespace DancePlatform.API.Controllers
 		[HttpPost("add")]
 		public async Task<IActionResult> PostRegistration(CreateRegistrationRequest request)
 		{
-			//TEST DATA
-			//request. = "TERST";
-			//request.Date = DateTimeOffset.UtcNow;
-			//request.Name = "TEST_WORKSHOP";
-			//request.Price = 42069;
-
             for (var i = 0; i < request.WorkshopIds.Length; i++)
             {
                 await _service.Create(new Registration
@@ -35,7 +30,6 @@ namespace DancePlatform.API.Controllers
                     UserId = request.UserId,
                     WorkshopId = request.WorkshopIds[i],
                     IsPresent = request.IsPresent,
-                    Coast = request.Coast
                 });
             }
 
@@ -61,7 +55,6 @@ namespace DancePlatform.API.Controllers
             await _service.Delete(registrationsToDelete);
 
             return Ok();
-
 		}
 
 		[HttpGet("get/{id}")]
@@ -96,6 +89,18 @@ namespace DancePlatform.API.Controllers
             }
             
             return Ok(result);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("checkout-users")]
+        public async Task<IActionResult> CheckoutUsers(List<CheckoutUsersRequest> requests)
+        {
+            foreach (var request in requests)
+            {
+                await _service.CheckoutUsers(request.UserId, request.WorkshopId);
+            }
+
+            return Ok();
         }
 	}
 }

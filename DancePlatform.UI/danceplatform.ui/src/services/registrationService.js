@@ -1,4 +1,6 @@
 import request from '../http/http';
+import axios from 'axios';
+import storageHelper from '../helpers/storageHelper';
 
 const registerOnWorkshop = data => {
     return request({
@@ -29,11 +31,18 @@ const deleteRegistrations = id => {
     });
 }
 
+const checkoutUsers = data => {
+    return axios.post("http://localhost:51928/registration/checkout-users", data, 
+    {headers: {'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*",'Authorization': `Bearer ${storageHelper.getToken()}`} 
+});}
+
+
 const RegistrationService = {
     registerOnWorkshop,
     getAllRegistrations,
     getUserWorkshops,
-    deleteRegistrations
+    deleteRegistrations,
+    checkoutUsers
 }
 
 export default RegistrationService;
