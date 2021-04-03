@@ -103,7 +103,7 @@ namespace DancePlatform.API
         }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<User> userManager)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
             app.UseDefaultFiles();
             app.UseStaticFiles();

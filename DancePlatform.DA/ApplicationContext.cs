@@ -2,6 +2,7 @@
 using DancePlatform.BL.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Threading.Tasks;
 
 namespace DancePlatform.DA
@@ -24,13 +25,17 @@ namespace DancePlatform.DA
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
-            base.OnModelCreating(builder);
-            builder.Entity<User>().Ignore(u => u.PhoneNumber);
+			base.OnModelCreating(builder);
+
+			builder.Entity<User>().Ignore(u => u.PhoneNumber);
 			builder.Entity<User>().Ignore(u => u.PhoneNumberConfirmed);
             builder.Entity<User>().Ignore(u => u.EmailConfirmed);
             builder.Entity<User>().Ignore(u => u.TwoFactorEnabled);
 			builder.Entity<User>().Ignore(u => u.LockoutEnd);
             builder.Entity<User>().Ignore(u => u.AccessFailedCount);
+
+			//builder.Entity<User>().HasIndex(u => u.UserName).IsUnique(false);
+			//builder.Entity<User>().HasIndex(u => u.NormalizedUserName).IsUnique(false);
 
 			builder.Entity<Role>().HasData(
 				new Role
@@ -46,6 +51,8 @@ namespace DancePlatform.DA
 					NormalizedName = "USER"
 				}
 			);
+
+
 		}
 	}
 }

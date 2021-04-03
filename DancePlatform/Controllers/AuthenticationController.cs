@@ -77,7 +77,7 @@ namespace DancePlatform.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest model)
         {
-            var userExists = await _userManager.FindByNameAsync(model.Username);
+            var userExists = await _userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
                 return StatusCode(StatusCodes.Status400BadRequest, new BaseResponse { Status = "Error", Message = "User already exists!" });
 
