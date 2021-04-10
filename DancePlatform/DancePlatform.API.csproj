@@ -9,7 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="static\index.html" />
+    <Compile Remove="static\**" />
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="static\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="static\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="static\**" />
+    <None Remove="wwwroot\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,10 +33,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DancePlatform.DA\DancePlatform.DA.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 

@@ -3,6 +3,9 @@ import MUIDataTable from "mui-datatables";
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import WorkshopForm from '../forms/workshopForm';
+import WorkshopService from '../../services/workshopService';
+import { categories, styles } from '../../constants/commonData';
+import normalizeDate from '../../helpers/dateHelper';
 
 const columns = [
     { name: 'id', label: 'Номер' },
@@ -26,10 +29,29 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AdminTable(props) {
     const classes = useStyles();
+
+    const [showForm, setShowForm] = useState(false);
+    const [workshops, setWorkshops] = useState([]);
+
+    const showFormCallback = (show) => {
+        setShowForm(!show);
+    }
+
+    useEffect(() => {
+          WorkshopService.getAllWorkshops().then(workshops => {
+            setWorkshops([...workshops.map(x => {
+                x.style = styles[x.style];
+                x.category = categories[x.category];
+                x.date = normalizeDate(x.date);
+                return x;
+            })]);
+        })
+    }, [])
+
     return(
         <>
         <div className={classes.root}>
-            <Button onClick={() => alert('idi nahyu')} type="button" variant="contained" color="primary">
+            <Button onClick={() => setShowForm(!showForm)} type="button" variant="contained" color="primary">
                 Создать
             </Button>
             <Button onClick={() => alert('idi nahyu')} type="button" variant="contained" color="primary">
@@ -42,10 +64,13 @@ export default function AdminTable(props) {
         
             <MUIDataTable
                 title={"WORKSHOPS"}
-                data={[]}
+                data={workshops}
                 columns={columns}
                 options={{}}
             />
+
+
+            <WorkshopForm categories={categories} styles={styles} showForm={showForm} showFormCallback={showFormCallback}/>
         </>
     );
 }
