@@ -4,14 +4,16 @@ using DancePlatform.DA;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DancePlatform.DA.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210410162741_update_db_model_2")]
+    partial class update_db_model_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,22 +128,15 @@ namespace DancePlatform.DA.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 3,
-                            ConcurrencyStamp = "d6e74f3f-ea7f-4232-a171-90810d5ba6c8",
-                            Name = "Organizer",
-                            NormalizedName = "ORGANIZER"
-                        },
-                        new
-                        {
                             Id = 1,
-                            ConcurrencyStamp = "90ed0877-a28a-496b-a5ae-c915a09f3cf9",
+                            ConcurrencyStamp = "a25b485c-c0b0-472a-a5c2-e0eebd8b5196",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "352c54f0-2d5f-4dd7-94ed-f9596f3b30a0",
+                            ConcurrencyStamp = "d184b3f3-709a-494e-a5c6-aed634d845d7",
                             Name = "User",
                             NormalizedName = "USER"
                         });

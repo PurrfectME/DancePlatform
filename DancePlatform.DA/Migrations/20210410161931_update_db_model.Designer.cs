@@ -4,14 +4,16 @@ using DancePlatform.DA;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DancePlatform.DA.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210410161931_update_db_model")]
+    partial class update_db_model
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,25 +48,7 @@ namespace DancePlatform.DA.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Choreographers");
-                });
-
-            modelBuilder.Entity("DancePlatform.BL.Models.Place", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StudioName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Places");
+                    b.ToTable("Choreographer");
                 });
 
             modelBuilder.Entity("DancePlatform.BL.Models.Registration", b =>
@@ -126,22 +110,15 @@ namespace DancePlatform.DA.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 3,
-                            ConcurrencyStamp = "d6e74f3f-ea7f-4232-a171-90810d5ba6c8",
-                            Name = "Organizer",
-                            NormalizedName = "ORGANIZER"
-                        },
-                        new
-                        {
                             Id = 1,
-                            ConcurrencyStamp = "90ed0877-a28a-496b-a5ae-c915a09f3cf9",
+                            ConcurrencyStamp = "c65253aa-3da6-4490-bc94-4c02622b2114",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "352c54f0-2d5f-4dd7-94ed-f9596f3b30a0",
+                            ConcurrencyStamp = "a5712ac2-a6b4-4c9d-87ae-659899c55efa",
                             Name = "User",
                             NormalizedName = "USER"
                         });

@@ -27,7 +27,7 @@ namespace DancePlatform.API.Controllers
             return Ok(await _service.Create(
                 new Workshop
                 {
-                    Choreographer = request.Choreographer,
+                    ChoreographerId = request.ChoreographerId,
                     Category = request.Category,
                     Style = request.Style,
                     Price = request.Price,
@@ -84,7 +84,7 @@ namespace DancePlatform.API.Controllers
             }
 
             workshopToUpdate.Category = request.Category;
-            workshopToUpdate.Choreographer = request.Choreographer;
+            workshopToUpdate.ChoreographerId = request.ChoreographerId;
             workshopToUpdate.Style = request.Style;
             workshopToUpdate.Price = request.Price;
             workshopToUpdate.Date = DateTimeOffset.Parse(request.Date.ToString());

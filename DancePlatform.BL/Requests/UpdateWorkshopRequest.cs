@@ -12,7 +12,7 @@ namespace DancePlatform.BL.Requests
         public DateTimeOffset Date { get; set; }
         public string Place { get; set; }
         public float Price { get; set; }
-        public string Choreographer { get; set; }
+        public int ChoreographerId { get; set; }
 
     }
 }

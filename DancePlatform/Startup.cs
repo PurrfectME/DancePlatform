@@ -77,6 +77,9 @@ namespace DancePlatform.API
             {
                 options.AddPolicy("ADMIN",
                     policy => policy.RequireRole("ADMIN"));
+
+                //options.AddPolicy("ORGANIZER",
+                //    policy => policy.RequireRole("ORGANIZER"));
             });
 
 

@@ -11,8 +11,13 @@ namespace DancePlatform.BL.Models
         public DateTimeOffset Date { get; set; }
         public string Place { get; set; }
         public float Price { get; set; }
-        public string Choreographer { get; set; }
+        public int MinAge { get; set; }
+        public int MaxUsers { get; set; }
+        public bool IsApprovedByAdmin { get; set; }
+        public string CreatedBy { get; set; }
 
+        public int ChoreographerId { get; set; }
+        public Choreographer Choreographer { get; set; }
         public List<Registration> Registrations { get; set; }
     }
 }
