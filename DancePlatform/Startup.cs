@@ -39,9 +39,10 @@ namespace DancePlatform.API
 
 			services.AddScoped<IWorkshopService, WorkshopService>();
 			services.AddScoped<IRegistrationService, RegistrationService>();
-            //services.AddTransient<IWorkshopRepository, WorkshopRepository>();
+            services.AddScoped<IChoreographerService, ChoreographerService>();
+            services.AddScoped<IPlaceService, PlaceService>();
 
-			services.Configure<IdentityOptions>(options =>
+            services.Configure<IdentityOptions>(options =>
 			{
 				// Default Password settings.
 				options.Password.RequireDigit = false;
@@ -78,8 +79,8 @@ namespace DancePlatform.API
                 options.AddPolicy("ADMIN",
                     policy => policy.RequireRole("ADMIN"));
 
-                //options.AddPolicy("ORGANIZER",
-                //    policy => policy.RequireRole("ORGANIZER"));
+                options.AddPolicy("ORGANIZER",
+                    policy => policy.RequireRole("ORGANIZER"));
             });
 
 
@@ -116,7 +117,6 @@ namespace DancePlatform.API
 				app.UseDeveloperExceptionPage();
 			}
 
-
 			app.UseRouting();
 
             app.UseCors();
@@ -126,7 +126,6 @@ namespace DancePlatform.API
 			app.UseAuthorization();
 
             SeedUsers(userManager);
-
 
             app.UseEndpoints(endpoints =>
 			{
