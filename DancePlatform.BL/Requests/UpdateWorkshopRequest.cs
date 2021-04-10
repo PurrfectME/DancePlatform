@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using DancePlatform.BL.Models;
 
 namespace DancePlatform.BL.Requests
@@ -12,7 +10,7 @@ namespace DancePlatform.BL.Requests
         public Style Style { get; set; }
         public Category Category { get; set; }
         public DateTimeOffset Date { get; set; }
-        public string Name { get; set; }
+        public string Place { get; set; }
         public float Price { get; set; }
         public string Choreographer { get; set; }
 

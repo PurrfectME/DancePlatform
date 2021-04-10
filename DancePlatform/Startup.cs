@@ -103,7 +103,7 @@ namespace DancePlatform.API
         }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<User> userManager)
 		{
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -122,28 +122,28 @@ namespace DancePlatform.API
 
 			app.UseAuthorization();
 
-			//SeedUsers(userManager);
+            SeedUsers(userManager);
 
 
-			app.UseEndpoints(endpoints =>
+            app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
 			});
 		}
 
-		//private static void SeedUsers(UserManager<User> manager)
-  //      {
-  //          if (manager.FindByNameAsync("Admin").Result != null) return;
-  //          var admin = new User
-  //          {
-  //              UserName = "Admin",
-  //          };
+        private static void SeedUsers(UserManager<User> manager)
+        {
+            if (manager.FindByNameAsync("Admin").Result != null) return;
+            var admin = new User
+            {
+                UserName = "Admin",
+            };
 
-  //          if((manager.CreateAsync(admin, "admin").Result).Succeeded)
-  //          {
-  //              manager.AddToRoleAsync(admin,
-  //                  "Admin").Wait();
-  //          }
-  //      }
-	}
+            if ((manager.CreateAsync(admin, "admin").Result).Succeeded)
+            {
+                manager.AddToRoleAsync(admin,
+                    "Admin").Wait();
+            }
+        }
+    }
 }

@@ -63,8 +63,13 @@ namespace DancePlatform.BL.Services
                 .Include(x => x.User)
                 .ToListAsync();
 
+            if (registrations.Count == 0)
+            {
+                return await _context.Workshops.ToListAsync();
+            }
+
             var result = new List<Workshop>();
-            
+
             foreach (var registration in registrations)
             {
                 if (registration.UserId != userId)

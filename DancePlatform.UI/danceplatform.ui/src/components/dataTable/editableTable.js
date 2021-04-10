@@ -45,6 +45,7 @@ export default function EditableTable() {
   const commitChanges = ({ added, changed, deleted }) => {
     let changedRows;
     if (added) {
+
         const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
         changedRows = [
             ...rows,
@@ -82,7 +83,11 @@ export default function EditableTable() {
         />
         <Table />
         <TableHeaderRow />
-        <TableEditRow />
+        <TableEditRow
+        showAddCommand
+        showEditCommand
+        showDeleteCommand
+        />
         <TableEditColumn
           showAddCommand
           showEditCommand

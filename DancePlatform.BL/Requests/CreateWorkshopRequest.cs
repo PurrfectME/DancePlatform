@@ -9,7 +9,7 @@ namespace DancePlatform.BL.Requests
         public Category Category { get; set; }
         public Style Style { get; set; }
         public DateTimeOffset Date { get; set; }
-        public string Name { get; set; }
+        public string Place { get; set; }
         public float Price { get; set; }
         public string Choreographer { get; set; }
         public int MaximumPeople { get; set; }
