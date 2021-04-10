@@ -139,6 +139,7 @@ namespace DancePlatform.API
             var admin = new User
             {
                 UserName = "Admin",
+                Email = "admin@gmail.com",
             };
 
             if ((manager.CreateAsync(admin, "admin").Result).Succeeded)
