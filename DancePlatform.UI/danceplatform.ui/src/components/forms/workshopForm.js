@@ -22,6 +22,8 @@ import {
   TimePicker,
   DatePicker,
 } from '@material-ui/pickers';
+import WorkshopService from '../../services/workshopService';
+import {styles} from '../../constants/commonData'
 
 function DatePickerWrapper(props) {
   const {
@@ -73,9 +75,6 @@ function TimePickerWrapper(props) {
   );
 }
 
-
-
-//ADD VALIDATION
 const validate = values => {
   const errors = {};
   if (!values.place) {
@@ -90,8 +89,8 @@ const validate = values => {
   if (!values.category) {
     errors.category = 'Required';
   }
-  if (!values.choreographer) {
-    errors.choreographer = 'Required';
+  if (!values.choreographerId) {
+    errors.choreographerId = 'Required';
   }
   if (!values.price) {
     errors.price = 'Required';
@@ -107,41 +106,51 @@ const validate = values => {
 
 export default function WorkshopForm(props) {
 
-  const onFormSubmit = () => {
-    props.showFormCallback(props.showForm);
-    // event.preventDefault();
-  }
-
   const onSubmit = values => {
-    console.log('values', values)
-    onFormSubmit();
+    values.date = new Date(values.date);
+    if(!props.editing){
+        WorkshopService.createWorkshop(values).then(response => props.showFormCallback(props.showForm, response.data));
+    }
+    else{
+        WorkshopService.editWorkshop(values).then(response => props.showFormCallback(props.showForm, response.data, props.editing))
+    }
+    
   };
 
-  const stylesData = [];
+  let stylesData = [];
+  let categoriesData = [];
 
-  for (const [key, value] of Object.entries(props.styles)) {
-    stylesData.push(
-      <MenuItem value={key}>{value}</MenuItem>
-    )
-  }
-
-  const categoriesData = [];
-
-  for (const [key, value] of Object.entries(props.categories)) {
-    categoriesData.push(
-      <MenuItem value={key}>{value}</MenuItem>
-    )
-  }
+//   if(props.initialData){
+    
+//     for (const [key, value] of Object.entries(props.styles)) {
+//         if(value !== props.styles[props.initialData.style])
+//         stylesData.push(
+//           <MenuItem value={key}>{value}</MenuItem>
+//         )
+//     }
+//     categoriesData = props.categories[props.initialData.category];
+//   }
+//   else{
+    for (const [key, value] of Object.entries(props.styles)) {
+        let i = 0;
+        stylesData.push(
+            <MenuItem key={i++} value={key}>{value}</MenuItem>
+        )
+    }
+    for (const [key, value] of Object.entries(props.categories)) {
+        let i = 0;
+        categoriesData.push(
+          <MenuItem key={i++} value={key}>{value}</MenuItem>
+        )
+    }
+//    }
 
   const choreographersData = [
-    <MenuItem value={1}>{'value1'}</MenuItem>,
-    <MenuItem value={2}>{'value1'}</MenuItem>,
-    <MenuItem value={3}>{'value1'}</MenuItem>
-  ];
+        <MenuItem value={1}>{'TOHA'}</MenuItem>,
+        <MenuItem value={2}>{'value1'}</MenuItem>,
+        <MenuItem value={3}>{'value1'}</MenuItem>
+    ];
 
-  useEffect(() => {
-
-  });
 
   return(
     props.showForm ?
@@ -149,7 +158,7 @@ export default function WorkshopForm(props) {
       <CssBaseline />
       <Form
         onSubmit={onSubmit}
-        // initialValues={}
+        initialValues={props.initialData}
         validate={validate}
         render={({ handleSubmit, reset, submitting, pristine, values }) => (
           <form onSubmit={handleSubmit} noValidate>
@@ -183,7 +192,7 @@ export default function WorkshopForm(props) {
                     name="style"
                     component={Select}
                     label="Выберите стиль"
-                    formControlProps={{ fullWidth: true }}
+                    formControlProps={{ fullWidth: true}}
                   >
                     {stylesData}
                   </Field>
@@ -202,7 +211,7 @@ export default function WorkshopForm(props) {
                 <Grid item xs={12}>
                   <Field
                     fullWidth
-                    name="choreographer"
+                    name="choreographerId"
                     component={Select}
                     label="Выберите хореографа"
                     formControlProps={{ fullWidth: true }}
@@ -252,15 +261,23 @@ export default function WorkshopForm(props) {
                   </Button>
                 </Grid> */}
                 <Grid item style={{ marginTop: 16 }}>
+                  {props.editing ? <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    disabled={submitting}
+                  >
+                    Сохранить
+                  </Button>
+                  :
                   <Button
                     variant="contained"
                     color="primary"
                     type="submit"
                     disabled={submitting}
-                    // onClick={(e) => onFormSubmit(e)}
                   >
                     Добавить
-                  </Button>
+                  </Button>}
                 </Grid>
               </Grid>
             </Paper>

@@ -20,10 +20,12 @@ namespace DancePlatform.API.Controllers
             _service = service;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Organizer")]
         [HttpPost("add")]
         public async Task<IActionResult> PostWorkshop([FromBody] CreateWorkshopRequest request)
         {
+            var isAdmin = HttpContext.User.IsInRole("Admin");
+
             return Ok(await _service.Create(
                 new Workshop
                 {
@@ -33,7 +35,10 @@ namespace DancePlatform.API.Controllers
                     Price = request.Price,
                     Place = request.Place,
                     Date = request.Date,
-                    //NumberOfPeople = request.NumberOfPeople
+                    MaxUsers = request.MaxUsers,
+                    MinAge = request.MinAge,
+                    CreatedBy = isAdmin ? "Admin" : "Organizer",
+                    IsApprovedByAdmin = isAdmin
                 }));
         }
 

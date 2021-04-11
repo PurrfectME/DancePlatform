@@ -1,3 +1,3 @@
 export const AUTH = {
-    BASE_URL: 'https://localhost:44364'
+    BASE_URL: 'http://localhost:51928/'
 }
