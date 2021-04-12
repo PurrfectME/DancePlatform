@@ -6,8 +6,6 @@ import WorkshopForm from '../forms/workshopForm';
 import WorkshopService from '../../services/workshopService';
 import { categories, styles } from '../../constants/commonData';
 import timeHelper from '../../helpers/dateHelper';
-import DialogBox from '../dialog/dialog';
-
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -24,7 +22,7 @@ export default function AdminTable(props) {
 
     const [showForm, setShowForm] = useState(false);
     const [workshops, setWorkshops] = useState([]);
-    const [selectedRowToEdit, setSelectedRowToEdit] = useState();
+    const [selectedRowToEdit, setSelectedRowToEdit] = useState(null);
     const [selectedStyle, setSelectedStyle] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [editing, setEditing] = useState(false);
@@ -72,7 +70,12 @@ export default function AdminTable(props) {
         { name: 'place', label: 'Место' },
         { name: 'date', label: 'Дата' },
         { name: 'time', label: 'Время' },
-        { name: 'choreographer', label: 'Хореограф' },
+        //
+        //
+        //СТРААААААННАЯ НАХУЙ АЙДИШКА ХОРЕОГРАФА!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //
+        //
+        { name: 'choreographerId', label: 'Хореограф' },
         { name: 'style', label: 'Стиль' },
         { name: 'category', label: 'Уровень' },
         { name: 'price', label: 'Цена, BYN' },
@@ -82,8 +85,9 @@ export default function AdminTable(props) {
 
     const handleRowClick = (rowData, rowMeta) => {
         setSelectedRowToEdit(rowMeta.dataIndex);
-        setSelectedStyle(rowData[6]);
-        setSelectedCategory(rowData[7]);
+        console.log('ROWDATA', rowData)
+        setSelectedStyle(rowData[7]);
+        setSelectedCategory(rowData[8]);
     };
 
     const options = {
@@ -128,6 +132,7 @@ export default function AdminTable(props) {
             setWorkshops([...workshops, {
                 place: addedWorkshop.place,
                 date: timeHelper.normalizeDate(addedWorkshop.date),
+                time: timeHelper.normalizeTime(addedWorkshop.time),
                 choreographer: addedWorkshop.choreographerId,
                 style: styles[addedWorkshop.style],
                 category: categories[addedWorkshop.category],
@@ -142,6 +147,7 @@ export default function AdminTable(props) {
             newArr.push({
                 place: addedWorkshop.place,
                 date: timeHelper.normalizeDate(addedWorkshop.date),
+                time: timeHelper.normalizeTime(addedWorkshop.time),
                 choreographer: addedWorkshop.choreographerId,
                 style: styles[addedWorkshop.style],
                 category: categories[addedWorkshop.category],
@@ -162,9 +168,11 @@ export default function AdminTable(props) {
     useEffect(() => {
           WorkshopService.getAllWorkshops().then(workshops => {
             setWorkshops([...workshops.map(x => {
+                //console.log('X', x)
                 x.style = styles[x.style];
                 x.category = categories[x.category];
                 x.date = timeHelper.normalizeDate(x.date);
+                x.time = timeHelper.normalizeTime(x.time);
                 return x;
             })]);
         });
