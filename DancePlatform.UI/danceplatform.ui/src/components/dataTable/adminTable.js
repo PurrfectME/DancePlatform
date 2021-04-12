@@ -27,6 +27,7 @@ export default function AdminTable(props) {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [editing, setEditing] = useState(false);
 
+
     const columns = [
         {
             name: " ",
@@ -125,45 +126,45 @@ export default function AdminTable(props) {
         }
     };
 
-    const showFormCallback = (show, addedWorkshop, editing) => {
-        setShowForm(!show);
-        
-        if(!editing)
-            setWorkshops([...workshops, {
-                place: addedWorkshop.place,
-                date: timeHelper.normalizeDate(addedWorkshop.date),
-                time: timeHelper.normalizeTime(addedWorkshop.time),
-                choreographer: addedWorkshop.choreographerId,
-                style: styles[addedWorkshop.style],
-                category: categories[addedWorkshop.category],
-                price: addedWorkshop.price,
-                minAge: addedWorkshop.minAge,
-                maxUsers: addedWorkshop.maxUsers,
-                id: addedWorkshop.id
-            }]);
-        else{
-            var index = workshops.map(x => x.id).indexOf(addedWorkshop.id);
-            const newArr = workshops.slice(0, index);
-            newArr.push({
-                place: addedWorkshop.place,
-                date: timeHelper.normalizeDate(addedWorkshop.date),
-                time: timeHelper.normalizeTime(addedWorkshop.time),
-                choreographer: addedWorkshop.choreographerId,
-                style: styles[addedWorkshop.style],
-                category: categories[addedWorkshop.category],
-                price: addedWorkshop.price,
-                minAge: addedWorkshop.minAge,
-                maxUsers: addedWorkshop.maxUsers,
-                id: addedWorkshop.id
-            });
+const showFormCallback = (show, addedWorkshop, editing, isError) => {
+    setShowForm(!show);
+    
+    if(!editing)
+        setWorkshops([...workshops, {
+            place: addedWorkshop.place,
+            date: timeHelper.normalizeDate(addedWorkshop.date),
+            time: timeHelper.normalizeTime(addedWorkshop.time),
+            choreographer: addedWorkshop.choreographerId,
+            style: styles[addedWorkshop.style],
+            category: categories[addedWorkshop.category],
+            price: addedWorkshop.price,
+            minAge: addedWorkshop.minAge,
+            maxUsers: addedWorkshop.maxUsers,
+            id: addedWorkshop.id
+        }]);
+    else{
+        var index = workshops.map(x => x.id).indexOf(addedWorkshop.id);
+        const newArr = workshops.slice(0, index);
+        newArr.push({
+            place: addedWorkshop.place,
+            date: timeHelper.normalizeDate(addedWorkshop.date),
+            time: timeHelper.normalizeTime(addedWorkshop.time),
+            choreographer: addedWorkshop.choreographerId,
+            style: styles[addedWorkshop.style],
+            category: categories[addedWorkshop.category],
+            price: addedWorkshop.price,
+            minAge: addedWorkshop.minAge,
+            maxUsers: addedWorkshop.maxUsers,
+            id: addedWorkshop.id
+        });
 
-            const secArr = workshops.slice(index + 1, workshops.length);
+        const secArr = workshops.slice(index + 1, workshops.length);
 
-            const res = newArr.concat(secArr);
-            setWorkshops(res);
-            setEditing(!editing);
-        }
+        const res = newArr.concat(secArr);
+        setWorkshops(res);
+        setEditing(!editing);
     }
+}
 
     useEffect(() => {
           WorkshopService.getAllWorkshops().then(workshops => {
@@ -200,7 +201,15 @@ export default function AdminTable(props) {
                 options={options}
             />
 
-            <WorkshopForm categories={categories} styles={styles} showForm={showForm} editing={editing} initialData={editing ? currentWorkshop : {}} showFormCallback={showFormCallback}/>
+            <WorkshopForm
+                categories={categories}
+                styles={styles}
+                showForm={showForm}
+                diting={editing}
+                initialData={editing ? currentWorkshop : {}}
+                showFormCallback={showFormCallback}
+            />
+            
         </>
     );
 }

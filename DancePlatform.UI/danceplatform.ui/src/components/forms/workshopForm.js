@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Form, Field } from 'react-final-form';
 import { TextField, Checkbox, Radio, Select } from 'final-form-material-ui';
@@ -25,6 +25,9 @@ import {
 import WorkshopService from '../../services/workshopService';
 import {styles} from '../../constants/commonData';
 import ruLocale from "date-fns/locale/ru";
+import DialogBox from '../dialog/dialog';
+import moment from 'moment';
+import timeHelper from '../../helpers/dateHelper';
 
 function DatePickerWrapper(props) {
   const {
@@ -109,10 +112,26 @@ const validate = values => {
 };
 
 export default function WorkshopForm(props) {
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const onSubmit = values => {
-    values.date = new Date(values.date);
+    
+    var today = moment();
+    
+    debugger;
     if(!props.editing){
+        if(timeHelper.normalizeDate(today) > timeHelper.normalizeDate(values.date)){
+          setError(true);
+          setErrorMessage('Некорректная дата');
+          return;
+        }
+        else if(timeHelper.normalizeDate(today) === timeHelper.normalizeDate(values.date) &&
+                timeHelper.normalizeTime(today) > timeHelper.normalizeTime(values.time)){
+          setError(true);
+          setErrorMessage('Некорректное время');
+          return;
+        }
         WorkshopService.createWorkshop(values).then(response => props.showFormCallback(props.showForm, response.data));
     }
     else{
@@ -140,12 +159,16 @@ export default function WorkshopForm(props) {
         <MenuItem value={1}>{'TOHA'}</MenuItem>,
         <MenuItem value={2}>{'value1'}</MenuItem>,
         <MenuItem value={3}>{'value1'}</MenuItem>
-    ];
+  ];
 
+  const errorCallback = error => {
+    setError(error);
+  }
 
   return(
     props.showForm ?
     <div style={{ padding: 16, margin: 'auto', maxWidth: 700 }}>
+        {error ? <DialogBox callback={errorCallback} isError={error} message={errorMessage}/> : <></>}
       <CssBaseline />
       <Form
         onSubmit={onSubmit}
@@ -285,8 +308,12 @@ export default function WorkshopForm(props) {
               </Grid>
             </Paper>
           </form>
+          
         )}
+
+
       />
+
     </div>
     :
     <></>
