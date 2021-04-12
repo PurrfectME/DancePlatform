@@ -40,7 +40,7 @@ function App() {
             <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
             <UsersAccounting />
           </>} />
-          <Route exact path="/workshop-info" render={() => 
+          <Route exact path="/workshop-info/:id" render={() => 
           <>
             <Header isAuthenticated={storageHelper.isAuthenticated()} />
             <WorkshopInfo />

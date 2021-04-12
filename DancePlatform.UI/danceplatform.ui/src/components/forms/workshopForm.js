@@ -23,7 +23,8 @@ import {
   DatePicker,
 } from '@material-ui/pickers';
 import WorkshopService from '../../services/workshopService';
-import {styles} from '../../constants/commonData'
+import {styles} from '../../constants/commonData';
+import ruLocale from "date-fns/locale/ru";
 
 function DatePickerWrapper(props) {
   const {
@@ -78,28 +79,31 @@ function TimePickerWrapper(props) {
 const validate = values => {
   const errors = {};
   if (!values.place) {
-    errors.place = 'Required';
+    errors.place = 'Обязательно';
   }
   if (!values.date) {
-    errors.date = 'Required';
+    errors.date = 'Обязательно';
+  }
+  if (!values.time) {
+    errors.time = 'Обязательно';
   }
   if (!values.style) {
-    errors.style = 'Required';
+    errors.style = 'Обязательно';
   }
   if (!values.category) {
-    errors.category = 'Required';
+    errors.category = 'Обязательно';
   }
   if (!values.choreographerId) {
-    errors.choreographerId = 'Required';
+    errors.choreographerId = 'Обязательно';
   }
   if (!values.price) {
-    errors.price = 'Required';
+    errors.price = 'Обязательно';
   }
   if (!values.minAge) {
-    errors.minAge = 'Required';
+    errors.minAge = 'Обязательно';
   }
   if (!values.maxUsers) {
-    errors.maxUsers = 'Required';
+    errors.maxUsers = 'Обязательно';
   }
   return errors;
 };
@@ -114,36 +118,23 @@ export default function WorkshopForm(props) {
     else{
         WorkshopService.editWorkshop(values).then(response => props.showFormCallback(props.showForm, response.data, props.editing))
     }
-    
   };
 
   let stylesData = [];
   let categoriesData = [];
 
-//   if(props.initialData){
-    
-//     for (const [key, value] of Object.entries(props.styles)) {
-//         if(value !== props.styles[props.initialData.style])
-//         stylesData.push(
-//           <MenuItem value={key}>{value}</MenuItem>
-//         )
-//     }
-//     categoriesData = props.categories[props.initialData.category];
-//   }
-//   else{
-    for (const [key, value] of Object.entries(props.styles)) {
-        let i = 0;
-        stylesData.push(
-            <MenuItem key={i++} value={key}>{value}</MenuItem>
-        )
-    }
-    for (const [key, value] of Object.entries(props.categories)) {
-        let i = 0;
-        categoriesData.push(
+  for (const [key, value] of Object.entries(props.styles)) {
+      let i = 0;
+      stylesData.push(
           <MenuItem key={i++} value={key}>{value}</MenuItem>
-        )
-    }
-//    }
+      )
+  }
+  for (const [key, value] of Object.entries(props.categories)) {
+      let i = 0;
+      categoriesData.push(
+        <MenuItem key={i++} value={key}>{value}</MenuItem>
+      )
+  }
 
   const choreographersData = [
         <MenuItem value={1}>{'TOHA'}</MenuItem>,
@@ -164,7 +155,7 @@ export default function WorkshopForm(props) {
           <form onSubmit={handleSubmit} noValidate>
             <Paper style={{ padding: 16 }}>
               <Grid container alignItems="flex-start" spacing={2}>
-                <Grid item xs={6}>
+                <Grid item xs={4}>
                   <Field
                     fullWidth
                     required
@@ -174,8 +165,8 @@ export default function WorkshopForm(props) {
                     label="Место"
                   />
                 </Grid>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <Grid item xs={6}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
+                  <Grid item xs={4}>
                     <Field
                     fullWidth
                     required
@@ -183,6 +174,18 @@ export default function WorkshopForm(props) {
                     component={DatePickerWrapper}
                     type="text"
                     label="Дата"
+                  />
+                  </Grid>
+                </MuiPickersUtilsProvider>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <Grid item xs={4}>
+                    <Field
+                    fullWidth
+                    required
+                    name="time"
+                    component={TimePickerWrapper}
+                    type="text"
+                    label="Время"
                   />
                   </Grid>
                 </MuiPickersUtilsProvider>

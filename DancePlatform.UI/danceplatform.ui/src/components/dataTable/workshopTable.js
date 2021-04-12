@@ -20,18 +20,21 @@ import shortid from 'shortid';
 import RegistrationService from '../../services/registrationService';
 import storageHelper from '../../helpers/storageHelper';
 import WorkshopService from '../../services/workshopService';
-import normalizeDate from '../../helpers/dateHelper';
+import timeHelper from '../../helpers/dateHelper';
 import {styles, categories} from '../../constants/commonData';
 import UsersAdditionalInfo from './usersAdditionalInfo';
 import DialogBox from '../dialog/dialog';
 
 const headCells = [
-    { id: 'name', numeric: false,  label: 'Название' },
-    { id: 'date', numeric: true,  label: 'Время' },
+    { id: 'place', numeric: false,  label: 'Место' },
+    { id: 'date', date: true,  label: 'Дата' },
+    { id: 'time', date: true,  label: 'Время' },
     { id: 'choreographer', numeric: false, label: 'Хореограф' },
     { id: 'style', numeric: false, label: 'Стиль' },
     { id: 'category', numeric: false, label: 'Уровень' },
     { id: 'price', numeric: true, label: 'Цена, BYN' },
+    { id: 'minAge', numeric: false, label: 'Мин. возраст' },
+    { id: 'maxUsers', numeric: false, label: 'Макс. людей' },
 ];
   
 function descendingComparator(a, b, orderBy) {
@@ -386,14 +389,17 @@ export default function WorkshopTable(props) {
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.name}
+                      <TableCell id={labelId} align="right" scope="row">
+                        {row.place}
                       </TableCell>
-                      <TableCell align="right">{normalizeDate(row.date)}</TableCell>
+                      <TableCell align="right">{timeHelper.normalizeDate(row.date)}</TableCell>
+                      <TableCell align="right">{timeHelper.normalizeTime(row.time)}</TableCell>
                       <TableCell align="right">{row.choreographer}</TableCell>
                       <TableCell align="right">{styles[row.style]}</TableCell>
                       <TableCell align="right">{categories[row.category]}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>
+                      <TableCell align="right">{row.minAge}</TableCell>
+                      <TableCell align="right">{row.maxUsers}</TableCell>
                     </TableRow>
                   );
                 })}

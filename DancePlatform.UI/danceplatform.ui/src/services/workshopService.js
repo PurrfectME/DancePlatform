@@ -40,6 +40,14 @@ const getRegisteredUsersOnWorkshop = id => {
     });
 };
 
+const getById = id => {
+    return request({
+        method: 'GET',
+        url: `/workshop/get/${id}`
+    });
+}
+
+
 const WorkshopService = {
     getAllWorkshops,
     getAvailableWorkshopsForUser,
@@ -47,6 +55,7 @@ const WorkshopService = {
     editWorkshop,
     deleteWorkshop,
     getRegisteredUsersOnWorkshop,
+    getById,
 }
 
 export default WorkshopService;

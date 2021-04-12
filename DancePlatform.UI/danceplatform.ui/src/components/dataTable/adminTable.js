@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import WorkshopForm from '../forms/workshopForm';
 import WorkshopService from '../../services/workshopService';
 import { categories, styles } from '../../constants/commonData';
-import normalizeDate from '../../helpers/dateHelper';
+import timeHelper from '../../helpers/dateHelper';
 import DialogBox from '../dialog/dialog';
 
 
@@ -33,27 +33,34 @@ export default function AdminTable(props) {
         {
             name: " ",
             options: {
-              customBodyRender: (value, tableMeta, updateValue) => {
-                return (
-                    <Button disabled={showForm} onClick={() => 
-                    {
-                        setShowForm(!showForm);
-                        setEditing(true);
-                    }} type="button" variant="contained" color="primary">
-                        Редактировать
-                    </Button>
-                );
-              }
-            }
+                filter: false,
+                sort: false,
+                customBodyRender: (value, tableMeta, updateValue) => {
+                    return (
+                        <Button disabled={showForm} onClick={() => 
+                        {
+                            setShowForm(!showForm);
+                            setEditing(true);
+                        }} type="button" variant="contained" color="primary">
+                            Редактировать
+                        </Button>
+                    );
+                }
+                }
         },
         {
             name: " ",
             options: {
+              filter: false,
+              sort: false,
               customBodyRender: (value, tableMeta, updateValue) => {
                 return (
                     <Button onClick={() => {
-                        setShowForm(!showForm);
-                        
+                        const idToDelete = workshops[tableMeta.rowIndex].id;
+
+                        WorkshopService.deleteWorkshop(idToDelete).then(response => {
+                            setWorkshops([...workshops.filter(x => x.id !== idToDelete)])
+                        });
                         }} type="button" variant="contained" color="primary">
                         Удалить
                     </Button>
@@ -63,7 +70,8 @@ export default function AdminTable(props) {
         },
         { name: 'id', label: 'Номер' },
         { name: 'place', label: 'Место' },
-        { name: 'date', label: 'Время' },
+        { name: 'date', label: 'Дата' },
+        { name: 'time', label: 'Время' },
         { name: 'choreographer', label: 'Хореограф' },
         { name: 'style', label: 'Стиль' },
         { name: 'category', label: 'Уровень' },
@@ -82,10 +90,35 @@ export default function AdminTable(props) {
         filterType: 'dropdown',
         responsive: 'standard',
         onRowClick: handleRowClick,
-        selectableRows: 'none'
-        // expandableRowsHeader: true,
-        // expandableRowsOnClick: true,
-        // expandableRows: true
+        onDownload: (buildHead, buildBody, columns, data) => {
+            return "\uFEFF" + buildHead(columns) + buildBody(data); 
+        },
+        selectableRows: 'none',
+        textLabels: {
+            body: {
+              noMatch: "Извините, данных нет",
+              toolTip: "Sort",
+              columnHeaderTooltip: column => `Сортировать по ${column.label}`
+            },
+            toolbar: {
+                search: "Поиск",
+                downloadCsv: "Скачать CSV",
+                print: "Распечатать",
+                viewColumns: "Показать колонки",
+                filterTable: "Фильтр таблицы",
+            },
+            pagination: {
+                next: "Следующая страница",
+                previous: "Предыдущая страница",
+                rowsPerPage: "Строк на странице:",
+                displayRows: "из",
+            },
+            filter: {
+                all: "ВСЕ",
+                title: "ФИЛЬТРЫ",
+                reset: "СБРОСИТЬ",
+              },
+        }
     };
 
     const showFormCallback = (show, addedWorkshop, editing) => {
@@ -94,7 +127,7 @@ export default function AdminTable(props) {
         if(!editing)
             setWorkshops([...workshops, {
                 place: addedWorkshop.place,
-                date: normalizeDate(addedWorkshop.date),
+                date: timeHelper.normalizeDate(addedWorkshop.date),
                 choreographer: addedWorkshop.choreographerId,
                 style: styles[addedWorkshop.style],
                 category: categories[addedWorkshop.category],
@@ -105,11 +138,10 @@ export default function AdminTable(props) {
             }]);
         else{
             var index = workshops.map(x => x.id).indexOf(addedWorkshop.id);
-
             const newArr = workshops.slice(0, index);
             newArr.push({
                 place: addedWorkshop.place,
-                date: normalizeDate(addedWorkshop.date),
+                date: timeHelper.normalizeDate(addedWorkshop.date),
                 choreographer: addedWorkshop.choreographerId,
                 style: styles[addedWorkshop.style],
                 category: categories[addedWorkshop.category],
@@ -119,7 +151,7 @@ export default function AdminTable(props) {
                 id: addedWorkshop.id
             });
 
-            const secArr = workshops.slice(index + 1, workshops.length - 1);
+            const secArr = workshops.slice(index + 1, workshops.length);
 
             const res = newArr.concat(secArr);
             setWorkshops(res);
@@ -132,7 +164,7 @@ export default function AdminTable(props) {
             setWorkshops([...workshops.map(x => {
                 x.style = styles[x.style];
                 x.category = categories[x.category];
-                x.date = normalizeDate(x.date);
+                x.date = timeHelper.normalizeDate(x.date);
                 return x;
             })]);
         });
@@ -159,9 +191,6 @@ export default function AdminTable(props) {
                 columns={columns}
                 options={options}
             />
-
-            {/* <DialogBox isError={true} message={'HEHE'}/> */}
-
 
             <WorkshopForm categories={categories} styles={styles} showForm={showForm} editing={editing} initialData={editing ? currentWorkshop : {}} showFormCallback={showFormCallback}/>
         </>

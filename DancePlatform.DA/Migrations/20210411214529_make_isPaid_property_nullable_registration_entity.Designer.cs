@@ -4,14 +4,16 @@ using DancePlatform.DA;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DancePlatform.DA.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210411214529_make_isPaid_property_nullable_registration_entity")]
+    partial class make_isPaid_property_nullable_registration_entity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,10 +76,10 @@ namespace DancePlatform.DA.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("IsPaid")
+                    b.Property<bool?>("IsPaid")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsPresent")
+                    b.Property<bool?>("IsPresent")
                         .HasColumnType("bit");
 
                     b.Property<int>("UserId")
@@ -127,21 +129,21 @@ namespace DancePlatform.DA.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "f309da0a-568d-4115-a977-c4d42d9c13b4",
+                            ConcurrencyStamp = "710a2888-f247-4b9a-a839-03ecd7663d6a",
                             Name = "Organizer",
                             NormalizedName = "ORGANIZER"
                         },
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "dd420ad3-3017-45fa-a46e-fdb017d3ec89",
+                            ConcurrencyStamp = "0ed7256c-c70b-4ccb-b0b4-f6233dfead2e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "03d72442-0585-4ed1-acac-3a102b996b54",
+                            ConcurrencyStamp = "8fe81718-3746-42f9-9723-23217fc3194b",
                             Name = "User",
                             NormalizedName = "USER"
                         });

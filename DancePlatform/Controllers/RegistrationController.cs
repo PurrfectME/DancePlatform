@@ -23,15 +23,11 @@ namespace DancePlatform.API.Controllers
 		[HttpPost("add")]
 		public async Task<IActionResult> PostRegistration(CreateRegistrationRequest request)
 		{
-            for (var i = 0; i < request.WorkshopIds.Length; i++)
-            {
                 await _service.Create(new Registration
                 {
                     UserId = request.UserId,
-                    WorkshopId = request.WorkshopIds[i],
-                    IsPresent = request.IsPresent,
+                    WorkshopId = request.WorkshopId,
                 });
-            }
 
 			return Ok();
 		}

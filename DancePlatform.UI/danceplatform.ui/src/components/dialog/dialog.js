@@ -23,9 +23,13 @@ export default function DialogBox(props) {
       >
         <DialogTitle id="alert-dialog-title">{"Ошибка!"}</DialogTitle>
         <DialogContent>
+          {props.isForm ?
+            props.formComponent
+        :
           <DialogContentText id="alert-dialog-description">
             {props.message}
           </DialogContentText>
+        }
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary" autoFocus>

@@ -57,26 +57,52 @@ namespace DancePlatform.BL.Services
 
         public async Task<List<Workshop>> GetAvailableWorkshopsForUser(int userId)
         {
-            var registrations = await _context.Registrations
+            var works = await _context.Workshops
                 .AsNoTracking()
-                .Include(x => x.Workshop)
-                .Include(x => x.User)
+                .Include(x => x.Choreographer)
+                .Include(x => x.Registrations)
                 .ToListAsync();
-
-            if (registrations.Count == 0)
-            {
-                return await _context.Workshops.ToListAsync();
-            }
 
             var result = new List<Workshop>();
 
-            foreach (var registration in registrations)
+            foreach (var item in works)
             {
-                if (registration.UserId != userId)
+                if (item.Registrations.Count == 0)
                 {
-                    result.Add(registration.Workshop);
+                    result.Add(item);
+                }
+                else
+                {
+                    foreach (var reg in item.Registrations)
+                    {
+                        if (reg.UserId != userId)
+                        {
+                            result.Add(item);
+                        }
+                    }
                 }
             }
+
+            //var registrations = await _context.Registrations
+            //    .AsNoTracking()
+            //    .Include(x => x.Workshop)
+            //    .Include(x => x.User)
+            //    .Where(x => x.UserId != userId)
+            //    .ToListAsync();
+
+            //if (registrations.Count == 0)
+            //{
+            //    return await _context.Workshops.ToListAsync();
+            //}
+
+
+            //foreach (var registration in registrations)
+            //{
+            //    if (registration.UserId != userId)
+            //    {
+            //        result.Add(registration.Workshop);
+            //    }
+            //}
 
             return result;
         }

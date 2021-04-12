@@ -52,14 +52,17 @@ export default function WorkshopContainer() {
     const [workshops, setWorkshops] = useState([]);
 
     useEffect(() => {
-        WorkshopService.getAvailableWorkshopsForUser(storageHelper.getCurrentUserId()).then(data => {
-            setWorkshops(data);
+        WorkshopService.getAvailableWorkshopsForUser(storageHelper.getCurrentUserId()).then(response => {
+            console.log('1', response)
+
+            setWorkshops(response);
+            console.log('2', workshops)
         })
     }, []);
 
     return(
         <div className={classes.root}>
-            {workshops.map(workshop => 
+            {workshops.length === 0 ? <h1>НЕТ ДОСТУПНЫХ МАСТЕР-КЛАССОВ</h1> : workshops.map(workshop => 
                 <WorkshopBox workshop={workshop} classes={classes}/>)
             }
         </div>

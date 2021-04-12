@@ -35,6 +35,7 @@ namespace DancePlatform.API.Controllers
                     Price = request.Price,
                     Place = request.Place,
                     Date = request.Date,
+                    Time = request.Time,
                     MaxUsers = request.MaxUsers,
                     MinAge = request.MinAge,
                     CreatedBy = isAdmin ? "Admin" : "Organizer",
@@ -93,7 +94,10 @@ namespace DancePlatform.API.Controllers
             workshopToUpdate.Style = request.Style;
             workshopToUpdate.Price = request.Price;
             workshopToUpdate.Date = DateTimeOffset.Parse(request.Date.ToString());
+            workshopToUpdate.Time = DateTimeOffset.Parse(request.Time.ToString());
             workshopToUpdate.Place = request.Place;
+            workshopToUpdate.MinAge = request.MinAge;
+            workshopToUpdate.MaxUsers = request.MaxUsers;
 
             return Ok(await _service.Update(workshopToUpdate));
         }
