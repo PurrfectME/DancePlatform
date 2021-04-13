@@ -147,8 +147,10 @@ const showFormCallback = (show, addedWorkshop, editing) => {
     else if(addedWorkshop){
         var index = workshops.map(x => x.id).indexOf(addedWorkshop.id);
         const newArr = workshops.slice(0, index);
+        console.log('1131231232', addedWorkshop)
+        const y = places.find(x => x.id === addedWorkshop.placeId).studioName;
         newArr.push({
-            place: places.find(x => x.id === addedWorkshop.placeId).studioName,
+            placeId: y,
             date: timeHelper.normalizeDate(addedWorkshop.date),
             time: timeHelper.normalizeTime(addedWorkshop.time),
             choreographer: addedWorkshop.choreographerId,
@@ -175,7 +177,7 @@ const showFormCallback = (show, addedWorkshop, editing) => {
                 x.category = categories[x.category];
                 x.date = timeHelper.normalizeDate(x.date);
                 x.time = timeHelper.normalizeTime(x.time);
-                x.place = x.place.studioName
+                x.place = x.place
                 return x;
             })]);
 
@@ -189,6 +191,7 @@ const showFormCallback = (show, addedWorkshop, editing) => {
     let currentWorkshop = {...workshops[selectedRowToEdit]};
     currentWorkshop.style = Object.keys(styles).find(key => styles[key] === selectedStyle);
     currentWorkshop.category = Object.keys(categories).find(key => categories[key] === selectedCategory);
+
 
     console.log('WORK',currentWorkshop);
 
