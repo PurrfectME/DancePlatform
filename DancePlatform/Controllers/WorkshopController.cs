@@ -33,7 +33,7 @@ namespace DancePlatform.API.Controllers
                     Category = request.Category,
                     Style = request.Style,
                     Price = request.Price,
-                    Place = request.Place,
+                    PlaceId = request.PlaceId,
                     Date = request.Date,
                     Time = request.Time,
                     MaxUsers = request.MaxUsers,
@@ -95,7 +95,7 @@ namespace DancePlatform.API.Controllers
             workshopToUpdate.Price = request.Price;
             workshopToUpdate.Date = DateTimeOffset.Parse(request.Date.ToString());
             workshopToUpdate.Time = DateTimeOffset.Parse(request.Time.ToString());
-            workshopToUpdate.Place = request.Place;
+            workshopToUpdate.PlaceId = request.PlaceId;
             workshopToUpdate.MinAge = request.MinAge;
             workshopToUpdate.MaxUsers = request.MaxUsers;
 

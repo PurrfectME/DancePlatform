@@ -6,6 +6,7 @@ import WorkshopForm from '../forms/workshopForm';
 import WorkshopService from '../../services/workshopService';
 import { categories, styles } from '../../constants/commonData';
 import timeHelper from '../../helpers/dateHelper';
+import PlaceService from '../../services/placeService';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,7 +27,7 @@ export default function AdminTable(props) {
     const [selectedStyle, setSelectedStyle] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [editing, setEditing] = useState(false);
-
+    const [places, setPlaces] = useState([]);
 
     const columns = [
         {
@@ -94,6 +95,7 @@ export default function AdminTable(props) {
     const options = {
         filterType: 'dropdown',
         responsive: 'standard',
+        viewColumns: false,
         onRowClick: handleRowClick,
         onDownload: (buildHead, buildBody, columns, data) => {
             return "\uFEFF" + buildHead(columns) + buildBody(data); 
@@ -126,12 +128,12 @@ export default function AdminTable(props) {
         }
     };
 
-const showFormCallback = (show, addedWorkshop, editing, isError) => {
+const showFormCallback = (show, addedWorkshop, editing) => {
     setShowForm(!show);
     
-    if(!editing)
+    if(!editing && addedWorkshop)
         setWorkshops([...workshops, {
-            place: addedWorkshop.place,
+            place: places.find(x => x.id === addedWorkshop.placeId).studioName,
             date: timeHelper.normalizeDate(addedWorkshop.date),
             time: timeHelper.normalizeTime(addedWorkshop.time),
             choreographer: addedWorkshop.choreographerId,
@@ -142,11 +144,11 @@ const showFormCallback = (show, addedWorkshop, editing, isError) => {
             maxUsers: addedWorkshop.maxUsers,
             id: addedWorkshop.id
         }]);
-    else{
+    else if(addedWorkshop){
         var index = workshops.map(x => x.id).indexOf(addedWorkshop.id);
         const newArr = workshops.slice(0, index);
         newArr.push({
-            place: addedWorkshop.place,
+            place: places.find(x => x.id === addedWorkshop.placeId).studioName,
             date: timeHelper.normalizeDate(addedWorkshop.date),
             time: timeHelper.normalizeTime(addedWorkshop.time),
             choreographer: addedWorkshop.choreographerId,
@@ -169,13 +171,18 @@ const showFormCallback = (show, addedWorkshop, editing, isError) => {
     useEffect(() => {
           WorkshopService.getAllWorkshops().then(workshops => {
             setWorkshops([...workshops.map(x => {
-                //console.log('X', x)
                 x.style = styles[x.style];
                 x.category = categories[x.category];
                 x.date = timeHelper.normalizeDate(x.date);
                 x.time = timeHelper.normalizeTime(x.time);
+                x.place = x.place.studioName
                 return x;
             })]);
+
+
+            PlaceService.getAllPlaces().then(places => {
+                setPlaces(places);
+            });
         });
     }, []);
 
@@ -183,11 +190,13 @@ const showFormCallback = (show, addedWorkshop, editing, isError) => {
     currentWorkshop.style = Object.keys(styles).find(key => styles[key] === selectedStyle);
     currentWorkshop.category = Object.keys(categories).find(key => categories[key] === selectedCategory);
 
+    console.log('WORK',currentWorkshop);
+
     return(
         <>
         <div className={classes.root}>
-            <Button onClick={() => {
-                setShowForm(!showForm);
+            <Button disabled={showForm} onClick={() => {
+                setShowForm(true);
                 setEditing(false);
             }} type="button" variant="contained" color="primary">
                 Создать
@@ -205,9 +214,10 @@ const showFormCallback = (show, addedWorkshop, editing, isError) => {
                 categories={categories}
                 styles={styles}
                 showForm={showForm}
-                diting={editing}
+                editing={editing}
                 initialData={editing ? currentWorkshop : {}}
                 showFormCallback={showFormCallback}
+                places={places}
             />
             
         </>

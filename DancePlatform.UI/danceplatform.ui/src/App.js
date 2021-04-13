@@ -4,6 +4,7 @@ import Header from './components/header/header';
 import storageHelper from "./helpers/storageHelper";
 import Auth from './pages/auth';
 import Main from './pages/main';
+import Places from "./pages/places";
 import UsersAccounting from "./pages/usersAccounting";
 import WorkshopInfo from "./pages/workshopInfo";
 import Workshops from "./pages/workshops";
@@ -44,6 +45,11 @@ function App() {
           <>
             <Header isAuthenticated={storageHelper.isAuthenticated()} />
             <WorkshopInfo />
+          </>} />
+          <Route exact path="/places" render={() => 
+          <>
+            <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+            <Places />
           </>} />
         </Switch>
       </BrowserRouter>

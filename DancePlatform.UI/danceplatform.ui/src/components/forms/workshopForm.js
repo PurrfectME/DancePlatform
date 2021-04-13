@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
 import { Form, Field } from 'react-final-form';
-import { TextField, Checkbox, Radio, Select } from 'final-form-material-ui';
+import { TextField, Select } from 'final-form-material-ui';
 import {
-  Typography,
   Paper,
-  Link,
   Grid,
   Button,
   CssBaseline,
-  RadioGroup,
-  FormLabel,
   MenuItem,
-  FormGroup,
-  FormControl,
-  FormControlLabel,
 } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -23,7 +15,6 @@ import {
   DatePicker,
 } from '@material-ui/pickers';
 import WorkshopService from '../../services/workshopService';
-import {styles} from '../../constants/commonData';
 import ruLocale from "date-fns/locale/ru";
 import DialogBox from '../dialog/dialog';
 import moment from 'moment';
@@ -51,7 +42,7 @@ function DatePickerWrapper(props) {
       placeholder="dd/MM/yyyy"
       cancelLabel="Закрыть"
       mask="__/__/____"
-      clearLabel="Очистить"
+      disablePast={true}
     />
   );
 }
@@ -78,6 +69,8 @@ function TimePickerWrapper(props) {
     />
   );
 }
+
+
 
 const validate = values => {
   const errors = {};
@@ -119,7 +112,6 @@ export default function WorkshopForm(props) {
     
     var today = moment();
     
-    debugger;
     if(!props.editing){
         if(timeHelper.normalizeDate(today) > timeHelper.normalizeDate(values.date)){
           setError(true);
@@ -132,6 +124,8 @@ export default function WorkshopForm(props) {
           setErrorMessage('Некорректное время');
           return;
         }
+        
+        values.placeId = values.place;
         WorkshopService.createWorkshop(values).then(response => props.showFormCallback(props.showForm, response.data));
     }
     else{
@@ -141,19 +135,24 @@ export default function WorkshopForm(props) {
 
   let stylesData = [];
   let categoriesData = [];
+  let placesData = [];
+  let i = 0;
 
   for (const [key, value] of Object.entries(props.styles)) {
-      let i = 0;
       stylesData.push(
           <MenuItem key={i++} value={key}>{value}</MenuItem>
       )
   }
   for (const [key, value] of Object.entries(props.categories)) {
-      let i = 0;
       categoriesData.push(
         <MenuItem key={i++} value={key}>{value}</MenuItem>
       )
   }
+  for (const x of props.places) {
+    placesData.push(
+      <MenuItem key={x.id} value={x.id}>{x.studioName}</MenuItem>
+    )
+}
 
   const choreographersData = [
         <MenuItem value={1}>{'TOHA'}</MenuItem>,
@@ -163,6 +162,10 @@ export default function WorkshopForm(props) {
 
   const errorCallback = error => {
     setError(error);
+  }
+
+  const onCloseClick = () => {
+    props.showFormCallback(props.showForm, null, props.editing)
   }
 
   return(
@@ -180,13 +183,14 @@ export default function WorkshopForm(props) {
               <Grid container alignItems="flex-start" spacing={2}>
                 <Grid item xs={4}>
                   <Field
-                    fullWidth
                     required
-                    name="place"
-                    component={TextField}
-                    type="text"
-                    label="Место"
-                  />
+                    name="placeId"
+                    component={Select}
+                    label="Место *"
+                    formControlProps={{ fullWidth: true}}
+                  >
+                    {placesData}
+                  </Field>
                 </Grid>
                 <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
                   <Grid item xs={4}>
@@ -203,13 +207,13 @@ export default function WorkshopForm(props) {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <Grid item xs={4}>
                     <Field
-                    fullWidth
-                    required
-                    name="time"
-                    component={TimePickerWrapper}
-                    type="text"
-                    label="Время"
-                  />
+                      fullWidth
+                      required
+                      name="time"
+                      component={TimePickerWrapper}
+                      type="text"
+                      label="Время"
+                    />
                   </Grid>
                 </MuiPickersUtilsProvider>
                 <Grid item xs={12}>
@@ -217,7 +221,7 @@ export default function WorkshopForm(props) {
                     fullWidth
                     name="style"
                     component={Select}
-                    label="Выберите стиль"
+                    label="Выберите стиль *"
                     formControlProps={{ fullWidth: true}}
                   >
                     {stylesData}
@@ -228,7 +232,7 @@ export default function WorkshopForm(props) {
                     fullWidth
                     name="category"
                     component={Select}
-                    label="Выберите категорию"
+                    label="Выберите категорию *"
                     formControlProps={{ fullWidth: true }}
                   >
                     {categoriesData}
@@ -287,7 +291,9 @@ export default function WorkshopForm(props) {
                   </Button>
                 </Grid> */}
                 <Grid item style={{ marginTop: 16 }}>
-                  {props.editing ? <Button
+                  {props.editing ? 
+                  <>
+                  <Button
                     variant="contained"
                     color="primary"
                     type="submit"
@@ -295,15 +301,36 @@ export default function WorkshopForm(props) {
                   >
                     Сохранить
                   </Button>
-                  :
                   <Button
                     variant="contained"
                     color="primary"
-                    type="submit"
+                    type="button"
+                    onClick={onCloseClick}
                     disabled={submitting}
                   >
-                    Добавить
-                  </Button>}
+                    Закрыть
+                  </Button>
+                  </>
+                  :
+                  <>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                      disabled={submitting}
+                    >
+                      Добавить
+                    </Button>
+                    <Button
+                    variant="contained"
+                    color="primary"
+                    type="button"
+                    onClick={onCloseClick}
+                    disabled={submitting}
+                  >
+                    Закрыть
+                  </Button>
+                  </>}
                 </Grid>
               </Grid>
             </Paper>

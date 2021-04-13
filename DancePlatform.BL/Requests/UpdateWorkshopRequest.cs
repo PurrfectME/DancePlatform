@@ -11,7 +11,7 @@ namespace DancePlatform.BL.Requests
         public Category Category { get; set; }
         public DateTimeOffset Date { get; set; }
         public DateTimeOffset Time { get; set; }
-        public string Place { get; set; }
+        public int PlaceId { get; set; }
         public float Price { get; set; }
         public int ChoreographerId { get; set; }
         public int MinAge { get; set; }

@@ -34,7 +34,11 @@ namespace DancePlatform.BL.Services
 
 		public Task<List<Workshop>> GetAll()
 		{
-			return _context.Workshops.ToListAsync();
+			return _context.Workshops
+                .Include(X => X.Place)
+                .Include(X => X.Choreographer)
+                .Include(X => X.Registrations)
+                .ToListAsync();
 		}
 
         public async Task<List<User>> GetWorkshopUsers(int workshopId)
@@ -61,6 +65,7 @@ namespace DancePlatform.BL.Services
                 .AsNoTracking()
                 .Include(x => x.Choreographer)
                 .Include(x => x.Registrations)
+                .Include(x => x.Place)
                 .ToListAsync();
 
             var result = new List<Workshop>();

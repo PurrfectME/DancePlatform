@@ -1,5 +1,6 @@
 ﻿using DancePlatform.BL.Interfaces;
 using DancePlatform.BL.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,11 +15,13 @@ namespace DancePlatform.BL.Services
             _context = context;
         }
 
-        public async Task Create(Place entity)
+        public async Task<Place> Create(Place entity)
         {
-            await _context.Places.AddAsync(entity);
+            var res = (await _context.Places.AddAsync(entity)).Entity;
 
             await _context.SaveChangesAsync();
+
+            return res;
         }
 
         public async Task Delete(Place entity)
@@ -35,11 +38,22 @@ namespace DancePlatform.BL.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task Update(Place entity)
+        public Task<List<Place>> GetAll()
         {
-            _context.Places.Update(entity);
+            return _context.Places.ToListAsync();
+        }
+
+        public Task<Place> GetById(int id)
+        {
+            return _context.Places.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Place> Update(Place entity)
+        {
+            var res = (_context.Places.Update(entity)).Entity;
 
             await _context.SaveChangesAsync();
+            return res;
         }
     }
 }
