@@ -74,8 +74,8 @@ function TimePickerWrapper(props) {
 
 const validate = values => {
   const errors = {};
-  if (!values.place) {
-    errors.place = 'Обязательно';
+  if (!values.placeId) {
+    errors.placeId = 'Обязательно';
   }
   if (!values.date) {
     errors.date = 'Обязательно';
@@ -109,7 +109,7 @@ export default function WorkshopForm(props) {
   const [errorMessage, setErrorMessage] = useState('');
 
   const onSubmit = values => {
-    
+    console.log('AOISDHIASDIAGHFUIAS', values)
     var today = moment();
     
     if(!props.editing){
@@ -178,12 +178,11 @@ export default function WorkshopForm(props) {
         initialValues={props.initialData}
         validate={validate}
         render={({ handleSubmit, reset, submitting, pristine, values }) => (
-          <form onSubmit={handleSubmit} noValidate>
+          <form onSubmit={handleSubmit}>
             <Paper style={{ padding: 16 }}>
               <Grid container alignItems="flex-start" spacing={2}>
                 <Grid item xs={4}>
                   <Field
-                    required
                     name="placeId"
                     component={Select}
                     label="Место *"

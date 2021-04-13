@@ -36,7 +36,7 @@ namespace DancePlatform.BL.Services
 		{
 			return _context.Workshops
                 .Include(X => X.Place)
-                .Include(X => X.Choreographer)
+                //.Include(X => X.Choreographer)
                 .Include(X => X.Registrations)
                 .ToListAsync();
 		}

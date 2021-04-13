@@ -390,11 +390,11 @@ export default function WorkshopTable(props) {
                         />
                       </TableCell>
                       <TableCell id={labelId} align="right" scope="row">
-                        {row.place}
+                        {row.place.studioName}
                       </TableCell>
                       <TableCell align="right">{timeHelper.normalizeDate(row.date)}</TableCell>
                       <TableCell align="right">{timeHelper.normalizeTime(row.time)}</TableCell>
-                      <TableCell align="right">{row.choreographer}</TableCell>
+                      <TableCell align="right">{row.choreographerId}</TableCell>
                       <TableCell align="right">{styles[row.style]}</TableCell>
                       <TableCell align="right">{categories[row.category]}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>

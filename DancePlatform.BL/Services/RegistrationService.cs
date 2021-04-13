@@ -62,6 +62,7 @@ namespace DancePlatform.BL.Services
             var registrations = (await _context.Registrations
                 .AsNoTracking()
                 .Include(x => x.Workshop)
+                .ThenInclude(x => x.Place)
                 .Include(x => x.User)
                 .Where(x => x.UserId == userId && x.IsPresent == false).ToListAsync());
 
