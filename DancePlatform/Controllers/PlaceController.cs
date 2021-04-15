@@ -18,8 +18,8 @@ namespace DancePlatform.API.Controllers
             _service = service;
         }
 
-        [Authorize(Roles = "Admin,Organizer")]
         [HttpGet("getAll")]
+        [Authorize(Roles = "Admin, Organizer")]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _service.GetAll());

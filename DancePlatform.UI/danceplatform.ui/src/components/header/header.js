@@ -71,7 +71,7 @@ export default function Header(props) {
                       </Button>
                   </MenuItem>
                   <MenuItem onClick={handleClose}>
-                    <Button href='/profile' color="inherit">
+                    <Button href='/profile-info' color="inherit">
                       Личный кабинет
                     </Button>
                   </MenuItem>

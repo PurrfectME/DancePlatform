@@ -28,6 +28,7 @@ export default function AdminTable(props) {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [editing, setEditing] = useState(false);
     const [places, setPlaces] = useState([]);
+    const [tableData, setTableData] = useState([]);
 
     const columns = [
         {
@@ -55,7 +56,7 @@ export default function AdminTable(props) {
               sort: false,
               customBodyRender: (value, tableMeta, updateValue) => {
                 return (
-                    <Button onClick={() => {
+                    <Button disabled={showForm} onClick={() => {
                         const idToDelete = workshops[tableMeta.rowIndex].id;
 
                         WorkshopService.deleteWorkshop(idToDelete).then(response => {
@@ -69,7 +70,7 @@ export default function AdminTable(props) {
             }
         },
         { name: 'id', label: 'Номер' },
-        { name: 'place', label: 'Место' },
+        { name: 'studioName', label: 'Место' },
         { name: 'date', label: 'Дата' },
         { name: 'time', label: 'Время' },
         //
@@ -128,38 +129,38 @@ export default function AdminTable(props) {
         }
     };
 
-const showFormCallback = (show, addedWorkshop, editing) => {
+const showFormCallback = (show, workshop, editing) => {
     setShowForm(!show);
     
-    if(!editing && addedWorkshop)
+    if(!editing && workshop)
         setWorkshops([...workshops, {
-            place: places.find(x => x.id === addedWorkshop.placeId).studioName,
-            date: timeHelper.normalizeDate(addedWorkshop.date),
-            time: timeHelper.normalizeTime(addedWorkshop.time),
-            choreographer: addedWorkshop.choreographerId,
-            style: styles[addedWorkshop.style],
-            category: categories[addedWorkshop.category],
-            price: addedWorkshop.price,
-            minAge: addedWorkshop.minAge,
-            maxUsers: addedWorkshop.maxUsers,
-            id: addedWorkshop.id
+            studioName: places.find(x => x.id === workshop.placeId).studioName,
+            date: timeHelper.normalizeDate(workshop.date),
+            time: timeHelper.normalizeTime(workshop.time),
+            choreographer: workshop.choreographerId,
+            style: styles[workshop.style],
+            category: categories[workshop.category],
+            price: workshop.price,
+            minAge: workshop.minAge,
+            maxUsers: workshop.maxUsers,
+            id: workshop.id
         }]);
-    else if(addedWorkshop){
-        var index = workshops.map(x => x.id).indexOf(addedWorkshop.id);
+    else if(workshop){
+        var index = workshops.map(x => x.id).indexOf(workshop.id);
         const newArr = workshops.slice(0, index);
-        console.log('1131231232', addedWorkshop)
-        const y = places.find(x => x.id === addedWorkshop.placeId).studioName;
+        console.log('1131231232', workshop)
+        const y = places.find(x => x.id === workshop.placeId).studioName;
         newArr.push({
-            placeId: y,
-            date: timeHelper.normalizeDate(addedWorkshop.date),
-            time: timeHelper.normalizeTime(addedWorkshop.time),
-            choreographer: addedWorkshop.choreographerId,
-            style: styles[addedWorkshop.style],
-            category: categories[addedWorkshop.category],
-            price: addedWorkshop.price,
-            minAge: addedWorkshop.minAge,
-            maxUsers: addedWorkshop.maxUsers,
-            id: addedWorkshop.id
+            studioName: y,
+            date: timeHelper.normalizeDate(workshop.date),
+            time: timeHelper.normalizeTime(workshop.time),
+            choreographer: workshop.choreographerId,
+            style: styles[workshop.style],
+            category: categories[workshop.category],
+            price: workshop.price,
+            minAge: workshop.minAge,
+            maxUsers: workshop.maxUsers,
+            id: workshop.id
         });
 
         const secArr = workshops.slice(index + 1, workshops.length);
@@ -171,15 +172,15 @@ const showFormCallback = (show, addedWorkshop, editing) => {
 }
 
     useEffect(() => {
-          WorkshopService.getAllWorkshops().then(workshops => {
-            setWorkshops([...workshops.map(x => {
+          WorkshopService.getAllWorkshops().then(response => {
+            setWorkshops(response.map(x => {
                 x.style = styles[x.style];
                 x.category = categories[x.category];
                 x.date = timeHelper.normalizeDate(x.date);
                 x.time = timeHelper.normalizeTime(x.time);
-                x.place = x.place
+                x.studioName = x.place.studioName;
                 return x;
-            })]);
+            }));
 
 
             PlaceService.getAllPlaces().then(places => {
@@ -192,8 +193,7 @@ const showFormCallback = (show, addedWorkshop, editing) => {
     currentWorkshop.style = Object.keys(styles).find(key => styles[key] === selectedStyle);
     currentWorkshop.category = Object.keys(categories).find(key => categories[key] === selectedCategory);
 
-
-    console.log('WORK',currentWorkshop);
+    console.log('CURENT',currentWorkshop)
 
     return(
         <>

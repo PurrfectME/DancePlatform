@@ -60,6 +60,7 @@ function TimePickerWrapper(props) {
   return (
     <TimePicker
       {...rest}
+      ampm={false}
       name={name}
       helperText={showError ? meta.error || meta.submitError : undefined}
       error={showError}
@@ -71,11 +72,10 @@ function TimePickerWrapper(props) {
 }
 
 
-
 const validate = values => {
   const errors = {};
-  if (!values.placeId) {
-    errors.placeId = 'Обязательно';
+  if (!values.studioName) {
+    errors.studioName = 'Обязательно';
   }
   if (!values.date) {
     errors.date = 'Обязательно';
@@ -101,6 +101,9 @@ const validate = values => {
   if (!values.maxUsers) {
     errors.maxUsers = 'Обязательно';
   }
+  if (!values.photo) {
+    errors.photo = 'Обязательно';
+  }
   return errors;
 };
 
@@ -109,26 +112,36 @@ export default function WorkshopForm(props) {
   const [errorMessage, setErrorMessage] = useState('');
 
   const onSubmit = values => {
-    console.log('AOISDHIASDIAGHFUIAS', values)
     var today = moment();
-    
+    values.placeId = props.places.find(x => x.studioName === values.studioName).id;
+
+
+    let a = timeHelper.normalizeDate(today) === timeHelper.normalizeDate(values.date);
+    let y = timeHelper.normalizeTime(today) > timeHelper.normalizeTime(values.time);
+
+    debugger;
     if(!props.editing){
         if(timeHelper.normalizeDate(today) > timeHelper.normalizeDate(values.date)){
           setError(true);
           setErrorMessage('Некорректная дата');
           return;
         }
-        else if(timeHelper.normalizeDate(today) === timeHelper.normalizeDate(values.date) &&
+        if(timeHelper.normalizeDate(today) === timeHelper.normalizeDate(values.date) &&
                 timeHelper.normalizeTime(today) > timeHelper.normalizeTime(values.time)){
           setError(true);
           setErrorMessage('Некорректное время');
           return;
         }
         
-        values.placeId = values.place;
         WorkshopService.createWorkshop(values).then(response => props.showFormCallback(props.showForm, response.data));
     }
     else{
+      if(timeHelper.normalizeDate(today) === timeHelper.normalizeDate(values.date) &&
+                timeHelper.normalizeTime(today) > timeHelper.normalizeTime(values.time)){
+          setError(true);
+          setErrorMessage('Некорректное время');
+          return;
+        }
         WorkshopService.editWorkshop(values).then(response => props.showFormCallback(props.showForm, response.data, props.editing))
     }
   };
@@ -150,7 +163,7 @@ export default function WorkshopForm(props) {
   }
   for (const x of props.places) {
     placesData.push(
-      <MenuItem key={x.id} value={x.id}>{x.studioName}</MenuItem>
+      <MenuItem key={x.id} value={x.studioName}>{x.studioName}</MenuItem>
     )
 }
 
@@ -183,9 +196,10 @@ export default function WorkshopForm(props) {
               <Grid container alignItems="flex-start" spacing={2}>
                 <Grid item xs={4}>
                   <Field
-                    name="placeId"
+                    name="studioName"
                     component={Select}
                     label="Место *"
+                    type="text"
                     formControlProps={{ fullWidth: true}}
                   >
                     {placesData}
@@ -215,7 +229,7 @@ export default function WorkshopForm(props) {
                     />
                   </Grid>
                 </MuiPickersUtilsProvider>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <Field
                     fullWidth
                     name="style"
@@ -225,6 +239,24 @@ export default function WorkshopForm(props) {
                   >
                     {stylesData}
                   </Field>
+                </Grid>
+                <Grid item xs={3}>
+                  <Field
+                    fullWidth
+                    name="photo"
+                    component={TextField}
+                    label="Выберите фото"
+                    formcontrolProps={{ fullWidth: true, required: true }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                  >
+                    Добавить фото
+                  </Button>
                 </Grid>
                 <Grid item xs={12}>
                   <Field
@@ -251,44 +283,33 @@ export default function WorkshopForm(props) {
                 <Grid item xs={6}>
                   <Field
                     fullWidth
-                    required
                     name="price"
                     component={TextField}
                     type="number"
                     label="Цена"
+                    formControlProps={{ fullWidth: true, required: true }}
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <Field
                     fullWidth
-                    required
                     name="maxUsers"
                     component={TextField}
                     type="number"
                     label="Максимальное количество участников"
+                    formControlProps={{ fullWidth: true, required: true }}
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <Field
                     fullWidth
-                    required
                     name="minAge"
                     component={TextField}
                     type="number"
                     label="Минимальный возраст"
-                    onChange={()=> {}}
+                    formControlProps={{ fullWidth: true, required: true }}
                   />
                 </Grid>
-                {/* <Grid item style={{ marginTop: 16 }}>
-                  <Button
-                    type="button"
-                    variant="contained"
-                    onClick={reset}
-                    disabled={submitting || pristine}
-                  >
-                    Reset
-                  </Button>
-                </Grid> */}
                 <Grid item style={{ marginTop: 16 }}>
                   {props.editing ? 
                   <>

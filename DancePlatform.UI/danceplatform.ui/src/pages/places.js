@@ -49,7 +49,7 @@ export default function Places(props) {
               sort: false,
               customBodyRender: (value, tableMeta, updateValue) => {
                 return (
-                    <Button onClick={() => {
+                    <Button disabled={showForm} onClick={() => {
                         const idToDelete = places[tableMeta.rowIndex].id;
 
                         PlaceService.deletePlace(idToDelete).then(response => {

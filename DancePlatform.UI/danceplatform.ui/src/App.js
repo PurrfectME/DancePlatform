@@ -5,6 +5,7 @@ import storageHelper from "./helpers/storageHelper";
 import Auth from './pages/auth';
 import Main from './pages/main';
 import Places from "./pages/places";
+import ProfileInfo from "./pages/profileInfo";
 import UsersAccounting from "./pages/usersAccounting";
 import WorkshopInfo from "./pages/workshopInfo";
 import Workshops from "./pages/workshops";
@@ -50,6 +51,11 @@ function App() {
           <>
             <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
             <Places />
+          </>} />
+          <Route exact path="/profile-info" render={() => 
+          <>
+            <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+            <ProfileInfo />
           </>} />
         </Switch>
       </BrowserRouter>
