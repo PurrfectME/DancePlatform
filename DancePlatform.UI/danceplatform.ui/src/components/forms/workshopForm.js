@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Field } from 'react-final-form';
-import { TextField, Select } from 'final-form-material-ui';
+import { TextField, Select, Input } from 'final-form-material-ui';
 import {
   Paper,
   Grid,
   Button,
   CssBaseline,
   MenuItem,
+  makeStyles
 } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -19,6 +20,9 @@ import ruLocale from "date-fns/locale/ru";
 import DialogBox from '../dialog/dialog';
 import moment from 'moment';
 import timeHelper from '../../helpers/dateHelper';
+import ImageUploading from 'react-images-uploading';
+import '../../styles/profileInfo.css';
+
 
 function DatePickerWrapper(props) {
   const {
@@ -89,8 +93,8 @@ const validate = values => {
   if (!values.category) {
     errors.category = 'Обязательно';
   }
-  if (!values.choreographerId) {
-    errors.choreographerId = 'Обязательно';
+  if (!values.choreographerName) {
+    errors.choreographerName = 'Обязательно';
   }
   if (!values.price) {
     errors.price = 'Обязательно';
@@ -101,25 +105,47 @@ const validate = values => {
   if (!values.maxUsers) {
     errors.maxUsers = 'Обязательно';
   }
-  if (!values.photo) {
-    errors.photo = 'Обязательно';
-  }
+  // if (!values.photo) {
+  //   errors.photo = 'Обязательно';
+  // }
   return errors;
 };
 
+
+const useStyles = makeStyles((theme) => ({
+  photoContainer: {
+    flexGrow: 1,
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
+  photoButton: {
+    lineHeight: 1.3,
+  },
+  photoField: {
+    marginTop: 16,
+  },
+  photoFieldContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    color: 'red'
+  }
+}));
+
+
 export default function WorkshopForm(props) {
+  const classes = useStyles();
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [imageName, setImageName] = useState('');
 
   const onSubmit = values => {
+    console.log('VALUES', values)
     var today = moment();
+    values.photo = imageName;
     values.placeId = props.places.find(x => x.studioName === values.studioName).id;
+    values.choreographerId = props.choreographers.find(x => x.name === values.choreographerName).id;
 
-
-    let a = timeHelper.normalizeDate(today) === timeHelper.normalizeDate(values.date);
-    let y = timeHelper.normalizeTime(today) > timeHelper.normalizeTime(values.time);
-
-    debugger;
     if(!props.editing){
         if(timeHelper.normalizeDate(today) > timeHelper.normalizeDate(values.date)){
           setError(true);
@@ -149,6 +175,7 @@ export default function WorkshopForm(props) {
   let stylesData = [];
   let categoriesData = [];
   let placesData = [];
+  let choreographersData = [];
   let i = 0;
 
   for (const [key, value] of Object.entries(props.styles)) {
@@ -165,13 +192,12 @@ export default function WorkshopForm(props) {
     placesData.push(
       <MenuItem key={x.id} value={x.studioName}>{x.studioName}</MenuItem>
     )
-}
-
-  const choreographersData = [
-        <MenuItem value={1}>{'TOHA'}</MenuItem>,
-        <MenuItem value={2}>{'value1'}</MenuItem>,
-        <MenuItem value={3}>{'value1'}</MenuItem>
-  ];
+  }
+  for (const x of props.choreographers) {
+    choreographersData.push(
+      <MenuItem key={x.id} value={x.name}>{x.name}</MenuItem>
+    )
+  }
 
   const errorCallback = error => {
     setError(error);
@@ -180,6 +206,14 @@ export default function WorkshopForm(props) {
   const onCloseClick = () => {
     props.showFormCallback(props.showForm, null, props.editing)
   }
+
+
+  const onChange = (imageList, addedIndex) => {
+    setImageName(imageList[0].file.name);
+  }
+
+  
+  console.log('form data', props.initialData)
 
   return(
     props.showForm ?
@@ -240,23 +274,43 @@ export default function WorkshopForm(props) {
                     {stylesData}
                   </Field>
                 </Grid>
-                <Grid item xs={3}>
-                  <Field
-                    fullWidth
-                    name="photo"
-                    component={TextField}
-                    label="Выберите фото"
-                    formcontrolProps={{ fullWidth: true, required: true }}
-                  />
+                <Grid item xs={3} className={classes.photoFieldContainer}>
+                    {/* <div>{imageName}</div> */}
+                    <Field
+                      name="photo"
+                      component={TextField}
+                      type="text"
+                      disabled={true}
+                      label={imageName}
+                      className={classes.photoField}
+                      defaultValue={imageName}
+                      validate={false}
+                    ></Field>
+                    
                 </Grid>
-                <Grid item xs={3}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
+                <Grid item xs={3} className={classes.photoContainer}>
+                  <ImageUploading
+                    onChange={onChange}
+                    dataURLKey="base64Img"
                   >
-                    Добавить фото
-                  </Button>
+                    {({
+                    onImageUpload,
+                    isDragging,
+                    dragProps,
+                    }) => (
+                    // write your building UI
+                      <div className={classes.imageButtons}>
+                        <Button
+                              type="button" variant="contained" color="primary"
+                              style={isDragging ? { color: 'red' } : undefined}
+                              onClick={onImageUpload}
+                              {...dragProps}
+                              >
+                          Добавить фото
+                        </Button>
+                      </div>
+                    )}
+                  </ImageUploading>
                 </Grid>
                 <Grid item xs={12}>
                   <Field
@@ -272,7 +326,7 @@ export default function WorkshopForm(props) {
                 <Grid item xs={12}>
                   <Field
                     fullWidth
-                    name="choreographerId"
+                    name="choreographerName"
                     component={Select}
                     label="Выберите хореографа"
                     formControlProps={{ fullWidth: true }}

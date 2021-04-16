@@ -71,6 +71,16 @@ export default function Header(props) {
                       </Button>
                   </MenuItem>
                   <MenuItem onClick={handleClose}>
+                    <Button href='/choreographers' color="inherit">
+                      Управление хореографами
+                    </Button>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>
+                      <Button href='/events' color="inherit">
+                        Календарь событий
+                      </Button>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>
                     <Button href='/profile-info' color="inherit">
                       Личный кабинет
                     </Button>

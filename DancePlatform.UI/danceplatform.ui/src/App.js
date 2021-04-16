@@ -3,6 +3,8 @@ import { Redirect, Switch, BrowserRouter, Route } from 'react-router-dom';
 import Header from './components/header/header';
 import storageHelper from "./helpers/storageHelper";
 import Auth from './pages/auth';
+import Choregraphers from "./pages/choreographers";
+import Events from "./pages/events";
 import Main from './pages/main';
 import Places from "./pages/places";
 import ProfileInfo from "./pages/profileInfo";
@@ -56,6 +58,16 @@ function App() {
           <>
             <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
             <ProfileInfo />
+          </>} />
+          <Route exact path="/events" render={() => 
+          <>
+            <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+            <Events />
+          </>} />
+          <Route exact path="/choreographers" render={() => 
+          <>
+            <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+            <Choregraphers />
           </>} />
         </Switch>
       </BrowserRouter>

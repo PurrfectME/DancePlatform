@@ -113,51 +113,45 @@ export default function ProfileInfo(){
             <Paper className={classes.paper}>
                 <Grid className={classes.grid} container>
                 <Grid className={classes.img} item>
-                
-                <ImageUploading
-                    value={images}
-                    onChange={onChange}
-                    dataURLKey="base64Img"
-                    
-                >
-                    {({
-                    imageList,
-                    onImageUpload,
-                    onImageRemove,
-                    isDragging,
-                    dragProps,
-                    }) => (
-                    // write your building UI
-                    <Grid container>
-                    <div className="upload__image-wrapper">
-                        <div className={classes.imageButtons}>
-                            <Button
-                            type="button" variant="contained" color="primary"
-                            style={isDragging ? { color: 'red' } : undefined}
-                            onClick={onImageUpload}
-                            {...dragProps}
-                            >
-                                Загрузить
-                            </Button>
-                            <Button type="button" variant="contained" color="primary" onClick={onImageRemove}>Удалить</Button>
+                    <ImageUploading
+                        value={images}
+                        onChange={onChange}
+                        dataURLKey="base64Img"
+                    >
+                        {({
+                        imageList,
+                        onImageUpload,
+                        onImageRemove,
+                        isDragging,
+                        dragProps,
+                        }) => (
+                        // write your building UI
+                        <Grid container>
+                        <div className="upload__image-wrapper">
+                            {images.length !== 0 ? <></> :
+                                defaultImg.length === 0 ? <></> :
+                                <img src={defaultImg[0].base64Img} alt="" width="200" height="200"/>
+                            }
+                            {imageList.map((image, index) => (
+                            <div key={index} className="image-item">
+                                <img src={image['base64Img']} alt="" width="200" height="200" />
+                            </div>
+                            ))}
+                            <div className={classes.imageButtons}>
+                                <Button
+                                type="button" variant="contained" color="primary"
+                                style={isDragging ? { color: 'red' } : undefined}
+                                onClick={onImageUpload}
+                                {...dragProps}
+                                >
+                                    Загрузить
+                                </Button>
+                                <Button type="button" variant="contained" color="primary" onClick={onImageRemove}>Удалить</Button>
+                            </div>
                         </div>
-                        {images.length !== 0 ? <></> :
-                            defaultImg.length === 0 ? <></> :
-                            <img src={defaultImg[0].base64Img} alt="" width="200" height="200"/>
-                        }
-                        {imageList.map((image, index) => (
-                        <div key={index} className="image-item">
-                            <img src={image['base64Img']} alt="" width="200" height="200" />
-                            <Grid className="image-item__btn-wrapper" item>
-                            {/* <Button type="button" variant="contained" color="primary" onClick={() => onImageUpdate(index)}>Update</Button>
-                            <Button type="button" variant="contained" color="primary" onClick={() => onImageRemove(index)}>Remove</Button> */}
-                            </Grid>
-                        </div>
-                        ))}
-                    </div>
-                    </Grid>
-                    )}
-                </ImageUploading>
+                        </Grid>
+                        )}
+                    </ImageUploading>
                 </Grid>
                 <Grid item>
                         <Typography className={classes.userName}>

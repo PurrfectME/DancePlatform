@@ -20,7 +20,7 @@ return (
                     </Grid>
                     <Grid item>
                         <Typography variant="subtitle1">
-                            {workshop.choreographerId}
+                            {workshop.choreographer.name}
                         </Typography>
                     </Grid>
                     <Grid item>

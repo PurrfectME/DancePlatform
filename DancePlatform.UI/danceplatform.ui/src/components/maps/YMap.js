@@ -4,7 +4,7 @@ import { YMaps, Map } from 'react-yandex-maps';
 export default class YMap extends Component{
     init = () => {
     // Создание карты.
-    window.ymaps.geocode('Минск, 8, Аранская').then(res => {
+    window.ymaps.geocode(this.props.address).then(res => {
         const coords = res.geoObjects.get(0).geometry.getCoordinates();
 
         var myMap = new window.ymaps.Map("map", {
