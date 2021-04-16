@@ -15,11 +15,13 @@ namespace DancePlatform.BL.Services
             _context = context;
         }
 
-        public Task Create(Choreographer entity)
+        public async Task<Choreographer> Create(Choreographer entity)
         {
-            _context.Choreographers.AddAsync(entity);
+            var res = (await _context.Choreographers.AddAsync(entity)).Entity;
 
-            return _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+
+            return res;
         }
 
         public Task Delete(Choreographer entity)

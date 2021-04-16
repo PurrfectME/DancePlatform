@@ -28,7 +28,6 @@ namespace DancePlatform.DA
 		{
 			base.OnModelCreating(builder);
 
-			builder.Entity<User>().Ignore(u => u.PhoneNumber);
 			builder.Entity<User>().Ignore(u => u.PhoneNumberConfirmed);
             builder.Entity<User>().Ignore(u => u.EmailConfirmed);
             builder.Entity<User>().Ignore(u => u.TwoFactorEnabled);

@@ -41,6 +41,7 @@ namespace DancePlatform.API
 			services.AddScoped<IRegistrationService, RegistrationService>();
             services.AddScoped<IChoreographerService, ChoreographerService>();
             services.AddScoped<IPlaceService, PlaceService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.Configure<IdentityOptions>(options =>
 			{
@@ -66,10 +67,12 @@ namespace DancePlatform.API
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = false,
+                    ValidateIssuerSigningKey = false,
                     ValidateAudience = false,
                     ValidAudience = Configuration["JWT:ValidAudience"],
                     ValidIssuer = Configuration["JWT:ValidIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"])),
+                    ValidateLifetime = false,
                 };
             });
 

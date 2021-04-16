@@ -15,7 +15,7 @@ function normalizeTime(sharpDate) {
 
     const h = date.hours();
     const m = date.minutes();
-    return date.format('hh:mm A');
+    return date.format('HH:mm');
 };
 
 

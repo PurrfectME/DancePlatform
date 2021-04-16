@@ -12,6 +12,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import AuthService from '../services/authService';
 import DialogBox from '../components/dialog/dialog';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Tooltip from '@material-ui/core/Tooltip';
 
 function Copyright() {
   return (
@@ -55,6 +58,11 @@ export default function Auth(props) {
   const [username, setUsername] = useState('');
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [checked, setChecked] = useState(false);
+
+  const handleChange = (event) => {
+    setChecked(event.target.checked);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -98,6 +106,19 @@ export default function Auth(props) {
             id="password"
             onChange={e => setPassword(e.target.value)}
           />
+          <Tooltip title="Если вы хотите предлагать свои мероприятия, то поставьте галочку" placement="right-start">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={checked}
+                  onChange={handleChange}
+                  name="checkedB"
+                  color="primary"
+                />
+              }
+              label="Хотите стать организатором?"
+            />
+          </Tooltip>
           <Button
             type="button"
             fullWidth

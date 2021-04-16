@@ -51,9 +51,9 @@ namespace DancePlatform.API.Controllers
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["JWT:ValidIssuer"],
-                audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddHours(3),
+                issuer: "issuer",
+                audience: "audience",
+                expires: DateTime.Now.AddDays(10),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );
@@ -63,7 +63,11 @@ namespace DancePlatform.API.Controllers
                 Email = user.Email,
                 Id = user.Id,
                 UserName = user.UserName,
-                Roles = userRoles
+                Roles = userRoles,
+                DateOfBirth = user.DateOfBirth,
+                FullName = $"{user.Name} {user.Surname}",
+                PhoneNumber = user.PhoneNumber,
+                Photo = user.Photo == null ? null : Convert.ToBase64String(user.Photo),
             };
             
             return Ok(new

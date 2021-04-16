@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace DancePlatform.API.Controllers
 {
-    [Authorize(Roles = "Admin,Organizer")]
     [Route("place")]
     [ApiController]
     public class PlaceController : ControllerBase
@@ -20,6 +19,7 @@ namespace DancePlatform.API.Controllers
         }
 
         [HttpGet("getAll")]
+        [Authorize(Roles = "Admin, Organizer")]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _service.GetAll());

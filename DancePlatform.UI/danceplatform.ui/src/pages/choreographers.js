@@ -2,8 +2,9 @@ import {React, useEffect, useState} from 'react';
 import MUIDataTable from "mui-datatables";
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import PlaceForm from '../components/forms/placeForm';
-import PlaceService from '../services/placeService';
+import ChoreographerService from '../services/choreographerService';
+import ChoreographerForm from '../components/forms/choreographerForm';
+import {styles} from '../constants/commonData';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -15,11 +16,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function Places(props) {
+
+export default function Choregraphers(){
     const classes = useStyles();
 
     const [showForm, setShowForm] = useState(false);
-    const [places, setPlaces] = useState([]);
+    const [choreographers, setChoreographers] = useState([]);
     const [selectedRowToEdit, setSelectedRowToEdit] = useState(null);
     const [editing, setEditing] = useState(false);
 
@@ -50,10 +52,10 @@ export default function Places(props) {
         //       customBodyRender: (value, tableMeta, updateValue) => {
         //         return (
         //             <Button disabled={showForm} onClick={() => {
-        //                 const idToDelete = places[tableMeta.rowIndex].id;
+        //                 const idToDelete = choreographers[tableMeta.rowIndex].id;
 
-        //                 PlaceService.deletePlace(idToDelete).then(response => {
-        //                     setPlaces([...places.filter(x => x.id !== idToDelete)])
+        //                 ChoreographerService.deleteChoreographer(idToDelete).then(response => {
+        //                     setChoreographers([...choreographers.filter(x => x.id !== idToDelete)])
         //                 });
         //                 }} type="button" variant="contained" color="primary">
         //                 Удалить
@@ -63,8 +65,11 @@ export default function Places(props) {
         //     }
         // },
         { name: 'id', label: 'Номер' },
-        { name: 'studioName', label: 'Студия' },
-        { name: 'address', label: 'Адрес' },
+        { name: 'name', label: 'Имя' },
+        { name: 'dateOfBirth', label: 'Дата рождения' },
+        { name: 'description', label: 'Описание' },
+        // { name: 'link', label: 'Соцсети' },
+        { name: 'style', label: 'Стиль' },
     ];
 
     const handleRowClick = (rowData, rowMeta) => {
@@ -107,67 +112,73 @@ export default function Places(props) {
         }
     };
 
-const showFormCallback = (show, addedPlace, editing) => {
-    setShowForm(!show);
+    const showFormCallback = (show, choreographer, editing) => {
+        setShowForm(!show);
+        
+        if(!editing && choreographer)
+            setChoreographers([...choreographers, {
+                name: choreographer.name,
+                dateOfBirth: choreographer.dateOfBirth,
+                description: choreographer.description,
+                link: choreographer.link,
+                id: choreographer.id,
+                style: styles[choreographer.style],
+            }]);
+        else if(choreographer){
+            var index = choreographers.map(x => x.id).indexOf(choreographer.id);
+            const newArr = choreographers.slice(0, index);
+            newArr.push({
+                studioName: choreographer.studioName,
+                address: choreographer.address,
+                id: choreographer.id,
+                style: styles[choreographer.style],
+            });
     
-    if(!editing && addedPlace)
-        setPlaces([...places, {
-            studioName: addedPlace.studioName,
-            address: addedPlace.address,
-            id: addedPlace.id
-        }]);
-    else if(addedPlace){
-        var index = places.map(x => x.id).indexOf(addedPlace.id);
-        const newArr = places.slice(0, index);
-        newArr.push({
-            studioName: addedPlace.studioName,
-            address: addedPlace.address,
-            id: addedPlace.id
-        });
-
-        const secArr = places.slice(index + 1, places.length);
-
-        const res = newArr.concat(secArr);
-        setPlaces(res);
-        setEditing(!editing);
+            const secArr = choreographers.slice(index + 1, choreographers.length);
+    
+            const res = newArr.concat(secArr);
+            setChoreographers(res);
+            setEditing(!editing);
+        }
     }
-}
 
+    
+    
     useEffect(() => {
-          PlaceService.getAllPlaces().then(places => {
-            setPlaces([...places]);
-        });
+        ChoreographerService.getAll().then(response => {
+            setChoreographers(response.map(x => {
+                x.style = styles[x.style];
+                return x;
+            }));
+    });
     }, []);
-
-    const currentPlace = {...places[selectedRowToEdit]};
-    // currentWorkshop.style = Object.keys(styles).find(key => styles[key] === selectedStyle);
-    // currentWorkshop.category = Object.keys(categories).find(key => categories[key] === selectedCategory);
+    
+    const currentChoreographer = {...choreographers[selectedRowToEdit]};
 
     return(
         <>
-        <div className={classes.root}>
-            <Button disabled={showForm} onClick={() => {
-                setShowForm(true);
-                setEditing(false);
-            }} type="button" variant="contained" color="primary">
-                Создать
-            </Button>
-        </div>
-        
-            <MUIDataTable
-                title={"Студии"}
-                data={places}
-                columns={columns}
-                options={options}
-            />
-
-            <PlaceForm
-                showForm={showForm}
-                editing={editing}
-                initialData={editing ? currentPlace : {}}
-                showFormCallback={showFormCallback}
-            />
+            <div className={classes.root}>
+                <Button disabled={showForm} onClick={() => {
+                    setShowForm(true);
+                    setEditing(false);
+                }} type="button" variant="contained" color="primary">
+                    Создать
+                </Button>
+            </div>
             
+                <MUIDataTable
+                    title={"Хореографы"}
+                    data={choreographers}
+                    columns={columns}
+                    options={options}
+                />
+
+                <ChoreographerForm
+                    showForm={showForm}
+                    editing={editing}
+                    initialData={editing ? currentChoreographer : {}}
+                    showFormCallback={showFormCallback}
+                />
         </>
     );
 }

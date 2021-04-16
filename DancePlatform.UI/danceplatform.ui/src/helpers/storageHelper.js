@@ -31,12 +31,19 @@ const getCurrentUserName = () => {
         return user.userName;  
 }
 
+const getCurrentUser = () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if(user)
+        return user;
+}
+
 const storageHelper = {
     isAuthenticated,
     isAdmin,
     getCurrentUserId,
     getToken,
     getCurrentUserName,
+    getCurrentUser,
 }
 
 export default storageHelper;

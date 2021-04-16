@@ -4,14 +4,16 @@ using DancePlatform.DA;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DancePlatform.DA.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210413211208_add_photo_workshop_entity")]
+    partial class add_photo_workshop_entity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,21 +129,21 @@ namespace DancePlatform.DA.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "8e673642-ca68-4c97-813d-8f8a8d41dcf5",
+                            ConcurrencyStamp = "b6f615cd-7ce7-42db-b91c-52ac7651fec2",
                             Name = "Organizer",
                             NormalizedName = "ORGANIZER"
                         },
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "ad40a9d2-deb5-4181-8d78-d99ccd7bbd46",
+                            ConcurrencyStamp = "106da533-862c-4cae-a05c-b098030a43df",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "22053083-9b40-4b3e-a0f0-f0f498f73677",
+                            ConcurrencyStamp = "ef433a03-3974-4d25-8253-0368f057f50a",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -180,9 +182,6 @@ namespace DancePlatform.DA.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Photo")

@@ -54,7 +54,10 @@ namespace DancePlatform.BL.Services
 
         public async Task<Workshop> GetById(int id)
         {
-            var t = await _context.Workshops.FirstOrDefaultAsync(x => x.Id == id);
+            var t = await _context.Workshops
+                .Include(x => x.Choreographer)
+                .Include(x => x.Place)
+                .FirstOrDefaultAsync(x => x.Id == id);
             _context.Workshops.Attach(t);
             return t;
         }

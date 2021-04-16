@@ -13,6 +13,7 @@ import _ from 'lodash';
 import YMap from '../components/maps/YMap';
 import RegistrationService from '../services/registrationService';
 import storageHelper from '../helpers/storageHelper';
+import {categories, styles} from '../constants/commonData';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,8 +42,8 @@ const useStyles = makeStyles((theme) => ({
     img: {
       margin: 'auto',
       display: 'block',
-      minWidth: 1000,
-      minHeight: 300,
+      minWidth: 550,
+      minHeight: 550,
       backgroundImage: `url(${sex})`,
       backgroundPosition: 'center', 
       backgroundSize: 'cover', 
@@ -61,7 +62,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function WorkshopInfo(props){
     const classes = useStyles();
-    const [workshop, setWorkshop] = useState({});
+    const [workshop, setWorkshop] = useState({
+        minAge: 0,
+        maxUsers: 0,
+        choreographer: {
+            name: '',
+            description: '',
+        },
+        place: {
+            address: '',
+        }
+    });
 
     useEffect(() => {
         var pathname = window.location.pathname.split("/");
@@ -82,21 +93,42 @@ export default function WorkshopInfo(props){
         <>
             <Paper className={classes.paper}>
                 <Grid className={classes.grid} container>
+                    
                     <Grid className={classes.img} item />
                     <Grid className={classes.gridInfo} item xs={12} sm container>
+                    
+                    <Grid item>
+                        <Typography variant="subtitle1">{styles[workshop.style]}</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="subtitle1">{categories[workshop.category]}</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="subtitle1">Минимальный возраст: {workshop.minAge}</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="subtitle1">Максимум участников: {workshop.maxUsers}</Typography>
+                    </Grid>
 
+                    <Grid item>
+                        <Typography variant="subtitle1">Хореограф: {workshop.choreographer.name}</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="subtitle1">{workshop.choreographer.description}</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="subtitle1">{workshop.place.address}</Typography>
+                    </Grid>
 
+                    <Grid xs={12} item >
+                        <YMap address={workshop.place.address}/>
+                    </Grid>
 
                     <Grid item>
                         <Button href='/' onClick={register} className={classes.registerButton} type="button" variant="contained" color="primary">
                             Зарегистрироваться
                         </Button>
                     </Grid>
-
-                    <Grid item>
-                        <YMap />
-                    </Grid>
-
 
                     </Grid>
                 </Grid>
