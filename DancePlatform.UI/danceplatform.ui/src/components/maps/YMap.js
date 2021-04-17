@@ -31,19 +31,15 @@ export default class YMap extends Component{
     })
 }
     componentDidMount(){
+        if(!window.ymaps){
+            return;
+        }
         window.ymaps.ready(this.init);
     }
 render(){
     return(
-        // <YMaps>
-        //     <div>
-        //     My awesome application with maps!
-        //     <Map defaultState={{ center: [53.8999964, 27.5666644], zoom: 9 }} />
-        //     </div>
-        // </YMaps>
         <>
-        <div id="map" style={{width: 1198, height: 400}}></div>
-
+            <div id="map" style={{width: 1198, height: 400}}></div>
         </>
     );
 }

@@ -42,6 +42,7 @@ namespace DancePlatform.API
             services.AddScoped<IChoreographerService, ChoreographerService>();
             services.AddScoped<IPlaceService, PlaceService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             services.Configure<IdentityOptions>(options =>
 			{

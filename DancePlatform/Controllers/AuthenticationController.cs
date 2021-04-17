@@ -13,6 +13,9 @@ using DancePlatform.BL.Responses;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using DancePlatform.BL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using System.Web;
 
 namespace DancePlatform.API.Controllers
 {
@@ -22,21 +25,30 @@ namespace DancePlatform.API.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
 
-        public AuthenticationController(UserManager<User> userManager, IConfiguration configuration)
+        public AuthenticationController(UserManager<User> userManager, IConfiguration configuration, IEmailService emailService)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _emailService = emailService;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-            
+
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
                 return Unauthorized();
-            
+
+            if (!user.EmailConfirmed)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized,
+                    new BaseResponse
+                    { Status = "Error", Message = "Подтвердите свою почту" });
+            }
+
             var userRoles = await _userManager.GetRolesAsync(user);
 
             var authClaims = new List<Claim>
@@ -69,7 +81,7 @@ namespace DancePlatform.API.Controllers
                 PhoneNumber = user.PhoneNumber,
                 Photo = user.Photo == null ? null : Convert.ToBase64String(user.Photo),
             };
-            
+
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -91,16 +103,68 @@ namespace DancePlatform.API.Controllers
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username
             };
-            
+
             var result = await _userManager.CreateAsync(user, model.Password);
 
-            await _userManager.AddToRoleAsync(user, "User");
-            
-            return !result.Succeeded
-                ? StatusCode(StatusCodes.Status400BadRequest,
+            if (!result.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest,
                     new BaseResponse
-                        {Status = "Error", Message = "User creation failed! Please check user details and try again."})
-                : Ok(new BaseResponse {Status = "Success", Message = "User created successfully!"});
+                    { Status = "Error", Message = "Такой пользователь уже существует" });
+            }
+
+            await _userManager.AddToRoleAsync(user, "User");
+
+            // генерация токена для пользователя
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            var token = HttpUtility.UrlEncode(code);
+
+            //var callbackUrl = Url.ActionLink(
+            //    "ConfirmEmail",
+            //    "auth",
+            //    new { userId = user.Id, code },
+            //    protocol: HttpContext.Request.Scheme);
+
+            var link = $"http://localhost:51928/auth/confirm-email?userId={user.Id}&code={token}";
+
+            await _emailService.SendEmail(model.Email, "Confirm your account",
+                $"Подтвердите регистрацию, перейдя по ссылке: <a href='{link}'>link</a>");
+
+            return Ok(new BaseResponse
+            { Status = "Success", Message = "Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме!" });
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string code)
+        {
+            //var correctCode = code.Replace(' ', '+');
+
+            if (userId == null || code == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    new BaseResponse
+                    { Status = "Error", Message = "Ошибка подтверждения почты" });
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest,
+                   new BaseResponse
+                   { Status = "Error", Message = "Такого пользователя нет" });
+            }
+
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+
+            if (!result.Succeeded)
+                return StatusCode(StatusCodes.Status400BadRequest,
+                   new BaseResponse
+                   { Status = "Error", Message = "Ошибка подтверждения почты" });
+
+            return Ok();
         }
 
     }
