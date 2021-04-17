@@ -17,7 +17,7 @@ import {
 } from '@material-ui/pickers';
 import WorkshopService from '../../services/workshopService';
 import ruLocale from "date-fns/locale/ru";
-import DialogBox from '../dialog/dialog';
+import ErrorBox from '../dialog/errorBox';
 import moment from 'moment';
 import timeHelper from '../../helpers/dateHelper';
 import ImageUploading from 'react-images-uploading';
@@ -212,13 +212,10 @@ export default function WorkshopForm(props) {
     setImageName(imageList[0].file.name);
   }
 
-  
-  console.log('form data', props.initialData)
-
   return(
     props.showForm ?
     <div style={{ padding: 16, margin: 'auto', maxWidth: 700 }}>
-        {error ? <DialogBox callback={errorCallback} isError={error} message={errorMessage}/> : <></>}
+        {error ? <ErrorBox callback={errorCallback} isOpen={error} message={errorMessage}/> : <></>}
       <CssBaseline />
       <Form
         onSubmit={onSubmit}

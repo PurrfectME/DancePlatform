@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import AuthService from '../services/authService';
-import DialogBox from '../components/dialog/dialog';
+import ErrorBox from '../components/dialog/errorBox';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -59,6 +59,7 @@ export default function Auth(props) {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [checked, setChecked] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -81,7 +82,7 @@ export default function Auth(props) {
             required
             fullWidth
             id="username"
-            label="Имя пользователя"
+            label="Логин"
             name="username"
             onChange={e => setUsername(e.target.value)}
           /> : <></>}
@@ -172,7 +173,7 @@ export default function Auth(props) {
             {props.actionName}
           </Button>
         </form>
-        {isError ? <DialogBox isError={isError} message={errorMessage}/> : <></>}
+        {isError ? <ErrorBox isError={isError} message={errorMessage}/> : <></>}
         
       </div>
       <Box mt={8}>
