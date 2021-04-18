@@ -3,16 +3,17 @@ import {AUTH} from '../constants/auth';
 import storageHelper from '../helpers/storageHelper';
 
 
-const client = axios.create({
+
+
+const request = async (options) => {
+  const client = axios.create({
     baseURL: AUTH.BASE_URL,
     headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-type": "application/json charset=utf-8",
     'Authorization': `Bearer ${storageHelper.getToken()}`
     }
-})
-
-const request = (options) => {
+});
     const onSuccess = (response) => {
         console.log('Request Successful!', response);
         return response.data;
@@ -37,9 +38,12 @@ const request = (options) => {
         return Promise.reject(error.response || error.message);
       }
     
-      return client(options)
-                .then(onSuccess)
-                .catch(onError);
+      try {
+    const response = await client(options);
+    return onSuccess(response);
+  } catch (error) {
+    return onError(error);
+  }
 };
 
 export default request;

@@ -15,6 +15,7 @@ import ErrorBox from '../components/dialog/errorBox';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Tooltip from '@material-ui/core/Tooltip';
+import NotificationBox from '../components/dialog/notificationBox';
 
 function Copyright() {
   return (
@@ -60,10 +61,66 @@ export default function Auth(props) {
   const [errorMessage, setErrorMessage] = useState('');
   const [checked, setChecked] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const [closeNotification, setCloseNotification] = useState(false);
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
+
+  const notificationBoxCallback = open => {
+    console.log('HERE', open)
+
+    setCloseNotification(open);
+  }
+
+  const register = () => {
+    if(props.actionName === 'Регистрация'){
+      setIsError(false);
+      AuthService.register({email, password, username}).then(x => {
+        setShowNotification(true);
+        if(closeNotification){
+          
+          history.push('/login');
+        }
+      }).catch(err => {
+        console.log('aFSafaFSDAF')
+        if(err.status == 400){
+          setErrorMessage('Вы ввели неверные данные для регистрации');
+          setIsError(true);
+        }
+        if(err.status == 403){
+          setErrorMessage('Вам запрещено делать этот запрос');
+          setIsError(true);
+      }
+        else if(err.status == 500){
+          setErrorMessage('Непредвиденная ошибка. Обратитесь к Администратору');
+          setIsError(true);
+        }
+    })
+  }
+    
+    else{
+      setIsError(false);
+      AuthService.login({email, password}).then(x => {
+        localStorage.setItem('token', x.token);
+        localStorage.setItem('user', JSON.stringify(x.user));
+        history.push('/');
+      }).catch(err => {
+        if(err.status == 401){
+          setErrorMessage('Вы ввели неверные данные для аутентификации');
+          setIsError(true);
+        }
+        if(err.status == 403){
+          setErrorMessage('Вам запрещено делать этот запрос');
+          setIsError(true);
+      }
+        else if(err.status == 500){
+          setErrorMessage('Непредвиденная ошибка. Обратитесь к Администратору');
+          setIsError(true);
+        }
+    });
+    }
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -107,7 +164,7 @@ export default function Auth(props) {
             id="password"
             onChange={e => setPassword(e.target.value)}
           />
-          <Tooltip title="Если вы хотите предлагать свои мероприятия, то поставьте галочку" placement="right-start">
+          {/* <Tooltip title="Если вы хотите предлагать свои мероприятия, то поставьте галочку" placement="right-start">
             <FormControlLabel
               control={
                 <Checkbox
@@ -119,62 +176,20 @@ export default function Auth(props) {
               }
               label="Хотите стать организатором?"
             />
-          </Tooltip>
+          </Tooltip> */}
           <Button
             type="button"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={() => {
-              if(props.actionName === 'Регистрация'){
-                setIsError(false);
-                AuthService.register({email, password, username}).then(x => {
-                  history.push('/login');
-                }).catch(err => {
-                  if(err.status == 400){
-                    setErrorMessage('Вы ввели неверные данные для регистрации');
-                    setIsError(true);
-                  }
-                  if(err.status == 403){
-                    setErrorMessage('Вам запрещено делать этот запрос');
-                    setIsError(true);
-                }
-                  else if(err.status == 500){
-                    setErrorMessage('Непредвиденная ошибка. Обратитесь к Администратору');
-                    setIsError(true);
-                  }
-              })
-            }
-              
-              else{
-                setIsError(false);
-                AuthService.login({email, password}).then(x => {
-                  localStorage.setItem('token', x.token);
-                  localStorage.setItem('user', JSON.stringify(x.user));
-                  history.push('/');
-                }).catch(err => {
-                  if(err.status == 401){
-                    setErrorMessage('Вы ввели неверные данные для аутентификации');
-                    setIsError(true);
-                  }
-                  if(err.status == 403){
-                    setErrorMessage('Вам запрещено делать этот запрос');
-                    setIsError(true);
-                }
-                  else if(err.status == 500){
-                    setErrorMessage('Непредвиденная ошибка. Обратитесь к Администратору');
-                    setIsError(true);
-                  }
-              });
-              }
-            }}
+            onClick={register}
           >
             {props.actionName}
           </Button>
         </form>
         {isError ? <ErrorBox isError={isError} message={errorMessage}/> : <></>}
-        
+        {showNotification ? <NotificationBox closeCallback={notificationBoxCallback} isNotify={showNotification} message={'Подтвердите Вашу почту'}/> : <></>}
       </div>
       <Box mt={8}>
         <Copyright />

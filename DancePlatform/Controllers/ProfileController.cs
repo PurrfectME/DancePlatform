@@ -8,12 +8,12 @@ namespace DancePlatform.API.Controllers
 {
     [Route("user")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class ProfileController : ControllerBase
     {
         private readonly IRegistrationService _registrationService;
-        private readonly IUserService _userService;
+        private readonly IProfileService _userService;
 
-        public UserController(IRegistrationService registrationService, IUserService userService)
+        public ProfileController(IRegistrationService registrationService, IProfileService userService)
         {
             _registrationService = registrationService;
             _userService = userService;

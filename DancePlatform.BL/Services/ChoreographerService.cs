@@ -48,11 +48,13 @@ namespace DancePlatform.BL.Services
             return _context.Choreographers.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task Update(Choreographer entity)
+        public async Task<Choreographer> Update(Choreographer entity)
         {
-            _context.Choreographers.Update(entity);
+            var res = (_context.Choreographers.Update(entity)).Entity;
 
-            return _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+
+            return res;
         }
     }
 }

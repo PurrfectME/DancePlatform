@@ -12,6 +12,7 @@ export default function ErrorBox(props) {
   const handleClose = () => {
     if(props.callback){
       props.callback(false);
+      console.log('asdasdasd')
     }
     else{
       setIsOpen(false);

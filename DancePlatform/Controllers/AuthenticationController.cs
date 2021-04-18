@@ -110,7 +110,7 @@ namespace DancePlatform.API.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest,
                     new BaseResponse
-                    { Status = "Error", Message = "Такой пользователь уже существует" });
+                    { Status = "Error", Message = "Ошибка создания пользователя, проверьте введённые данные" });
             }
 
             await _userManager.AddToRoleAsync(user, "User");
@@ -119,12 +119,6 @@ namespace DancePlatform.API.Controllers
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
             var token = HttpUtility.UrlEncode(code);
-
-            //var callbackUrl = Url.ActionLink(
-            //    "ConfirmEmail",
-            //    "auth",
-            //    new { userId = user.Id, code },
-            //    protocol: HttpContext.Request.Scheme);
 
             var link = $"http://localhost:51928/auth/confirm-email?userId={user.Id}&code={token}";
 

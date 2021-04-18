@@ -8,7 +8,7 @@ import {
   CssBaseline,
   MenuItem,
 } from '@material-ui/core';
-import DialogBox from '../dialog/dialog';
+import ErrorBox from '../dialog/errorBox';
 import ChoreographerService from '../../services/choreographerService';
 
 const validate = values => {
@@ -34,7 +34,7 @@ export default function ChoreographerForm(props) {
   const [errorMessage, setErrorMessage] = useState('');
 
   const onSubmit = values => {
-    
+    console.log('VALUES', values)
     if(!props.editing){
         ChoreographerService.create(values).then(response => props.showFormCallback(props.showForm, response));
     }
@@ -51,11 +51,19 @@ export default function ChoreographerForm(props) {
     props.showFormCallback(props.showForm, null, props.editing)
   }
 
+  let stylesData = [];
+  let i = 0;
+
+  for (const [key, value] of Object.entries(props.styles)) {
+    stylesData.push(
+        <MenuItem key={i++} value={key}>{value}</MenuItem>
+    )
+  }
 
   return(
     props.showForm ?
     <div style={{ padding: 16, margin: 'auto', maxWidth: 700 }}>
-        {error ? <DialogBox callback={errorCallback} isError={error} message={errorMessage}/> : <></>}
+        {error ? <ErrorBox callback={errorCallback} isError={error} message={errorMessage}/> : <></>}
       <CssBaseline />
       <Form
         onSubmit={onSubmit}
@@ -88,16 +96,19 @@ export default function ChoreographerForm(props) {
                     fullWidth
                     name="dateOfBirth"
                     component={TextField}
-                    label="Возраст"
+                    label="Дата рождения"
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <Field
+                <Field
                     fullWidth
                     name="style"
-                    component={TextField}
+                    component={Select}
                     label="Стиль"
-                  />
+                    formControlProps={{ fullWidth: true}}
+                  >
+                    {stylesData}
+                  </Field>
                 </Grid>
                 <Grid item style={{ marginTop: 16 }}>
                   {props.editing ? 

@@ -41,7 +41,7 @@ namespace DancePlatform.API
 			services.AddScoped<IRegistrationService, RegistrationService>();
             services.AddScoped<IChoreographerService, ChoreographerService>();
             services.AddScoped<IPlaceService, PlaceService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IEmailService, EmailService>();
 
             services.Configure<IdentityOptions>(options =>
@@ -100,14 +100,14 @@ namespace DancePlatform.API
             });
 
             services.AddControllers(options =>
+            {
+                options.RespectBrowserAcceptHeader = true;
+            })
+            .AddNewtonsoftJson(options =>
                 {
-                    options.RespectBrowserAcceptHeader = true;
-                })
-                .AddNewtonsoftJson(options =>
-                    {
-                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                    }
-                );
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                }
+            );
         }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

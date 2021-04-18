@@ -20,7 +20,7 @@ namespace DancePlatform.API.Controllers
             _service = service;
         }
 
-        [Authorize(Roles = "Admin, Organizer")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("add")]
         public async Task<IActionResult> PostWorkshop([FromBody] CreateWorkshopRequest request)
         {

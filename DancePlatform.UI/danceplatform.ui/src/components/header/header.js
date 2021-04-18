@@ -80,20 +80,24 @@ export default function Header(props) {
                         Календарь событий
                       </Button>
                   </MenuItem>
-                  <MenuItem onClick={handleClose}>
-                    <Button href='/profile-info' color="inherit">
-                      Личный кабинет
-                    </Button>
-                  </MenuItem>
                 </Menu>
 
               </>
               :
-              <Link className={classes.title} to="/workshops" style={{ textDecoration: 'none', color: 'white' }}>
-                <Button color="inherit">
-                    Мои мастер-классы
-                </Button>
-              </Link>}
+              <>
+                <Link className={classes.title} to="/workshops" style={{ textDecoration: 'none', color: 'white' }}>
+                  <Button color="inherit">
+                      Мои мастер-классы
+                  </Button>
+                </Link>
+                
+                <Link className={classes.title} to="/profile-info" style={{ textDecoration: 'none', color: 'white' }}>
+                  <Button color="inherit">
+                        Личный кабинет
+                      </Button>
+                </Link>
+              </>
+                    }
           </Typography>
             
             {props.isAuthenticated ? 
