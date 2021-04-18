@@ -1,6 +1,9 @@
 .upload__image-wrapper {
     height: 350px;
     width: 386px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .image-item {

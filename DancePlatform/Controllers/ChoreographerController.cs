@@ -1,5 +1,6 @@
 ﻿using DancePlatform.BL.Interfaces;
 using DancePlatform.BL.Models;
+using DancePlatform.BL.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -44,6 +45,25 @@ namespace DancePlatform.API.Controllers
             await _service.Delete(choreographerToDelete);
 
             return Ok();
+        }
+
+        [HttpPost("update")]
+        public async Task<IActionResult> Update(UpdateChoreographerRequest request)
+        {
+            var choreoToUpdate = await _service.GetById(request.Id);
+
+            if (choreoToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            choreoToUpdate.DateOfBirth = request.DateOfBirth;
+            choreoToUpdate.Description = request.Description;
+            choreoToUpdate.Link = request.Link;
+            choreoToUpdate.Name = request.Name;
+            choreoToUpdate.Style = request.Style;
+
+            return Ok(await _service.Update(choreoToUpdate));
         }
     }
 }

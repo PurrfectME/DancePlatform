@@ -9,7 +9,7 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import WorkshopService from '../../services/workshopService';
-import DialogBox from '../dialog/dialog';
+import ErrorBox from '../dialog/errorBox';
 import PlaceService from '../../services/placeService';
 
 const validate = values => {
@@ -50,7 +50,7 @@ export default function PlaceForm(props) {
   return(
     props.showForm ?
     <div style={{ padding: 16, margin: 'auto', maxWidth: 700 }}>
-        {error ? <DialogBox callback={errorCallback} isError={error} message={errorMessage}/> : <></>}
+        {error ? <ErrorBox callback={errorCallback} isError={error} message={errorMessage}/> : <></>}
       <CssBaseline />
       <Form
         onSubmit={onSubmit}

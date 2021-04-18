@@ -15,7 +15,6 @@ namespace DancePlatform.API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseWebRoot("static");
                 });
     }
 }

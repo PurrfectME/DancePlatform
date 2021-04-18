@@ -23,7 +23,7 @@ import WorkshopService from '../../services/workshopService';
 import timeHelper from '../../helpers/dateHelper';
 import {styles, categories} from '../../constants/commonData';
 import UsersAdditionalInfo from './usersAdditionalInfo';
-import DialogBox from '../dialog/dialog';
+import ErrorBox from '../dialog/errorBox.js';
 
 const headCells = [
     { id: 'place', numeric: false,  label: 'Место' },
@@ -422,7 +422,7 @@ export default function WorkshopTable(props) {
         />
       </Paper>
 
-    {isError ? <DialogBox isError={isError} message={errorMessage}/> : <></>}
+    {isError ? <ErrorBox isError={isError} message={errorMessage}/> : <></>}
     {isOpenAdditionalInfo ? <UsersAdditionalInfo workshopId={workshopIdToPreview}/> : <></>}
       
 

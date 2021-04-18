@@ -24,6 +24,7 @@ export default function Choregraphers(){
     const [choreographers, setChoreographers] = useState([]);
     const [selectedRowToEdit, setSelectedRowToEdit] = useState(null);
     const [editing, setEditing] = useState(false);
+    const [selectedStyle, setSelectedStyle] = useState('');
 
     const columns = [
         {
@@ -44,26 +45,6 @@ export default function Choregraphers(){
                 }
                 }
         },
-        // {
-        //     name: " ",
-        //     options: {
-        //       filter: false,
-        //       sort: false,
-        //       customBodyRender: (value, tableMeta, updateValue) => {
-        //         return (
-        //             <Button disabled={showForm} onClick={() => {
-        //                 const idToDelete = choreographers[tableMeta.rowIndex].id;
-
-        //                 ChoreographerService.deleteChoreographer(idToDelete).then(response => {
-        //                     setChoreographers([...choreographers.filter(x => x.id !== idToDelete)])
-        //                 });
-        //                 }} type="button" variant="contained" color="primary">
-        //                 Удалить
-        //             </Button>
-        //         );
-        //       }
-        //     }
-        // },
         { name: 'id', label: 'Номер' },
         { name: 'name', label: 'Имя' },
         { name: 'dateOfBirth', label: 'Дата рождения' },
@@ -74,6 +55,7 @@ export default function Choregraphers(){
 
     const handleRowClick = (rowData, rowMeta) => {
         setSelectedRowToEdit(rowMeta.dataIndex);
+        setSelectedStyle(rowData[5]);
     };
 
     const options = {
@@ -128,8 +110,10 @@ export default function Choregraphers(){
             var index = choreographers.map(x => x.id).indexOf(choreographer.id);
             const newArr = choreographers.slice(0, index);
             newArr.push({
-                studioName: choreographer.studioName,
-                address: choreographer.address,
+                name: choreographer.name,
+                dateOfBirth: choreographer.dateOfBirth,
+                description: choreographer.description,
+                link: choreographer.link,
                 id: choreographer.id,
                 style: styles[choreographer.style],
             });
@@ -142,8 +126,6 @@ export default function Choregraphers(){
         }
     }
 
-    
-    
     useEffect(() => {
         ChoreographerService.getAll().then(response => {
             setChoreographers(response.map(x => {
@@ -154,6 +136,7 @@ export default function Choregraphers(){
     }, []);
     
     const currentChoreographer = {...choreographers[selectedRowToEdit]};
+    currentChoreographer.style = Object.keys(styles).find(key => styles[key] === selectedStyle);
 
     return(
         <>
@@ -178,6 +161,7 @@ export default function Choregraphers(){
                     editing={editing}
                     initialData={editing ? currentChoreographer : {}}
                     showFormCallback={showFormCallback}
+                    styles={styles}
                 />
         </>
     );

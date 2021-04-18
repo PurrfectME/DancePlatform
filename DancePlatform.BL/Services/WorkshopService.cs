@@ -91,27 +91,6 @@ namespace DancePlatform.BL.Services
                 }
             }
 
-            //var registrations = await _context.Registrations
-            //    .AsNoTracking()
-            //    .Include(x => x.Workshop)
-            //    .Include(x => x.User)
-            //    .Where(x => x.UserId != userId)
-            //    .ToListAsync();
-
-            //if (registrations.Count == 0)
-            //{
-            //    return await _context.Workshops.ToListAsync();
-            //}
-
-
-            //foreach (var registration in registrations)
-            //{
-            //    if (registration.UserId != userId)
-            //    {
-            //        result.Add(registration.Workshop);
-            //    }
-            //}
-
             return result;
         }
 

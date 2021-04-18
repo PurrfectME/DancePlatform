@@ -2,7 +2,7 @@
 
 namespace DancePlatform.BL.Interfaces
 {
-    public interface IUserService
+    public interface IProfileService
     {
         Task UploadImage(byte[] imgBytes, int userId);
         Task<byte[]> GetUserPhoto(int id);

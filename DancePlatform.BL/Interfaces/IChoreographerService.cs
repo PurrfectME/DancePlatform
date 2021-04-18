@@ -7,7 +7,7 @@ namespace DancePlatform.BL.Interfaces
     public interface IChoreographerService
     {
         Task<Choreographer> Create(Choreographer entity);
-        Task Update(Choreographer entity);
+        Task<Choreographer> Update(Choreographer entity);
         Task Delete(Choreographer entity);
         Task Delete(List<Choreographer> entities);
 

@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace DancePlatform.BL.Services
 {
-    public class UserService : IUserService
+    public class ProfileService : IProfileService
     {
         private readonly IApplicationContext _context;
 
-        public UserService(IApplicationContext context)
+        public ProfileService(IApplicationContext context)
         {
             _context = context;
         }

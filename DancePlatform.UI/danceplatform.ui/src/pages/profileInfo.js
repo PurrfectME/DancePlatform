@@ -5,6 +5,7 @@ import {
     Button,
     CssBaseline,
     MenuItem,
+    TextField,
     makeStyles,
     Typography
   } from '@material-ui/core';
@@ -70,6 +71,7 @@ export default function ProfileInfo(){
     const [images, setImages] = useState([]);
     const [defaultImg, setDefaultImg] = useState([]);
     const [user] = useState(storageHelper.getCurrentUser());
+    const [editing, setEditing] = useState(false);
 
     useEffect(() => {
         UserService.getImage().then(response => {
@@ -106,7 +108,15 @@ export default function ProfileInfo(){
         UserService.deleteImage().then(x => {
             setImages([]);
         });
-      };
+    };
+
+    const editHandle = () => {
+        setEditing(true);
+    }
+
+    const updateHandle = () => {
+        setEditing(false);
+    }
 
     return(
         <>
@@ -154,6 +164,8 @@ export default function ProfileInfo(){
                     </ImageUploading>
                 </Grid>
                 <Grid item>
+                    {!editing ?
+                    <>
                         <Typography className={classes.userName}>
                             {user.userName}
                         </Typography>
@@ -166,7 +178,19 @@ export default function ProfileInfo(){
                         <Typography className={classes.dob}>
                             {user.phoneNumber}
                         </Typography>
-                    </Grid>
+                        <Button onClick={editHandle}>Редактировать</Button>
+
+                    </>
+                    :
+                    <>
+                        <TextField style={{display: 'block'}} value={user.userName} className={classes.userName} />
+                        <TextField style={{display: 'block'}} value={user.fullName} className={classes.fullName} />
+                        <TextField style={{display: 'block'}} value={timeHelper.normalizeDate(user.dateOfBirth)} className={classes.dob} />
+                        <TextField style={{display: 'block'}} value={user.phoneNumber} className={classes.dob} />
+                        <Button onClick={updateHandle}>Сохранить</Button>
+                    </>
+                    }
+                </Grid>
                 </Grid>
             </Paper>
         </>

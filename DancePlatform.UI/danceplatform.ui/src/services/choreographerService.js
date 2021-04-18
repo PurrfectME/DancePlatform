@@ -22,10 +22,19 @@ const deleteChoreographer = id => {
     });
 }
 
+const update = data => {
+    return request({
+        method: 'POST',
+        url: `/choreographer/update`,
+        data: data
+    });
+}
+
 const ChoreographerService = {
     getAll,
     create,
-    deleteChoreographer
+    deleteChoreographer,
+    update
 }
 
 export default ChoreographerService;
