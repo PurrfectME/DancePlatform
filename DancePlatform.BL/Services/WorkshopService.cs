@@ -38,6 +38,7 @@ namespace DancePlatform.BL.Services
                 .Include(X => X.Place)
                 .Include(X => X.Choreographer)
                 .Include(X => X.Registrations)
+                .Where(x => x.IsClosed != true)
                 .ToListAsync();
 		}
 
@@ -69,6 +70,7 @@ namespace DancePlatform.BL.Services
                 .Include(x => x.Choreographer)
                 .Include(x => x.Registrations)
                 .Include(x => x.Place)
+                .Where(x => x.IsClosed != true)
                 .ToListAsync();
 
             var result = new List<Workshop>();
@@ -101,5 +103,15 @@ namespace DancePlatform.BL.Services
             await _context.SaveChangesAsync();
             return res;
         }
-	}
+
+        public Task<List<Workshop>> GetClosed()
+        {
+            return _context.Workshops
+                .Include(X => X.Place)
+                .Include(X => X.Choreographer)
+                .Include(X => X.Registrations)
+                .Where(x => x.IsClosed == true)
+                .ToListAsync();
+        }
+    }
 }

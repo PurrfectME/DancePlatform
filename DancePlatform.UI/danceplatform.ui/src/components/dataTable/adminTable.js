@@ -11,12 +11,8 @@ import ChoreographerService from '../../services/choreographerService';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      flexGrow: 1,
-      display: 'flex',
-      justifyContent: 'space-evenly',
-      maxWidth: 1198,
-      margin: 'auto',
-    }
+      margin: 22,
+    },
 }));
 
 export default function AdminTable(props) {
@@ -127,8 +123,11 @@ export default function AdminTable(props) {
 
 const showFormCallback = (show, workshop, editing) => {
     setShowForm(!show);
+
+    if(workshop === null){
+        return;
+    }
     
-    console.log('ADD', workshop)
     const choreographer = choreographers.find(x => x.id === workshop.choreographerId);
 
     if(!editing && workshop)

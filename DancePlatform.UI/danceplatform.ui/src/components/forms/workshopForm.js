@@ -22,6 +22,7 @@ import moment from 'moment';
 import timeHelper from '../../helpers/dateHelper';
 import ImageUploading from 'react-images-uploading';
 import '../../styles/profileInfo.css';
+import ProfileService from '../../services/profileService'
 
 
 function DatePickerWrapper(props) {
@@ -138,11 +139,13 @@ export default function WorkshopForm(props) {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [imageName, setImageName] = useState('');
+  const [images, setImages] = useState([]);
 
   const onSubmit = values => {
-    console.log('VALUES', values)
     var today = moment();
-    values.photo = imageName;
+    values.photo = images[0].base64Img
+    console.log('VALUES', values)
+
     values.placeId = props.places.find(x => x.studioName === values.studioName).id;
     values.choreographerId = props.choreographers.find(x => x.name === values.choreographerName).id;
 
@@ -210,6 +213,15 @@ export default function WorkshopForm(props) {
 
   const onChange = (imageList, addedIndex) => {
     setImageName(imageList[0].file.name);
+    console.log('LIST', imageList[0].base64Img)
+    setImages(imageList);
+    // data for submit
+  //   if(imageList.length){
+  //     ProfileService.uploadImage(imageList[0]).then(x => {
+  //         setImages(imageList);
+  //     });
+  //     return;
+  // }
   }
 
   return(
@@ -287,6 +299,7 @@ export default function WorkshopForm(props) {
                 </Grid>
                 <Grid item xs={3} className={classes.photoContainer}>
                   <ImageUploading
+                    value={images}
                     onChange={onChange}
                     dataURLKey="base64Img"
                   >

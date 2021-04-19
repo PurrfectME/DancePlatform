@@ -7,12 +7,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function ErrorBox(props) {
-  const [isOpen, setIsOpen] = useState(props.isError);
+  const [isOpen, setIsOpen] = useState(props.isOpen);
 
   const handleClose = () => {
     if(props.callback){
       props.callback(false);
-      console.log('asdasdasd')
     }
     else{
       setIsOpen(false);

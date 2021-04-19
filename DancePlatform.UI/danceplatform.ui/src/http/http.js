@@ -2,9 +2,6 @@ import axios from 'axios';
 import {AUTH} from '../constants/auth';
 import storageHelper from '../helpers/storageHelper';
 
-
-
-
 const request = async (options) => {
   const client = axios.create({
     baseURL: AUTH.BASE_URL,

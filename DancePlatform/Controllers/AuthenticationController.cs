@@ -85,7 +85,6 @@ namespace DancePlatform.API.Controllers
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo,
                 user = userForResponse,
             });
         }
@@ -95,7 +94,7 @@ namespace DancePlatform.API.Controllers
         {
             var userExists = await _userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
-                return StatusCode(StatusCodes.Status400BadRequest, new BaseResponse { Status = "Error", Message = "User already exists!" });
+                return StatusCode(StatusCodes.Status400BadRequest, new BaseResponse { Status = "Error", Message = "Пользователь уже существует!" });
 
             var user = new User
             {

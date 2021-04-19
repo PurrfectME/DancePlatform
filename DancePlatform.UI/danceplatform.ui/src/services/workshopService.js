@@ -47,6 +47,13 @@ const getById = id => {
     });
 }
 
+const getClosed = () => {
+    return request({
+        method: 'GET',
+        url: `/workshop/workshops-history`
+    });
+}
+
 
 const WorkshopService = {
     getAllWorkshops,
@@ -56,6 +63,7 @@ const WorkshopService = {
     deleteWorkshop,
     getRegisteredUsersOnWorkshop,
     getById,
+    getClosed,
 }
 
 export default WorkshopService;

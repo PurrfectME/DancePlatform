@@ -172,6 +172,7 @@ export default function WorkshopTable(props) {
   const [workshopIdToPreview, setWorkshopIdToPreview] = useState(-1);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isCloseButtonDisabled, setIsCloseButtonDisabled] = useState(true);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -189,6 +190,20 @@ export default function WorkshopTable(props) {
   };
 
   useEffect(() => {
+      if(props.workshopId){
+        WorkshopService.getById(props.workshopId).then(response => {
+          setRows([response])
+        });
+        return;
+      }
+
+      if(props.isHistory){
+        WorkshopService.getClosed().then(response => {
+          setRows([...response]);
+        })
+        return;
+      }
+
       if((rows.length === 0 && !props.fromWorkshops)){
         WorkshopService.getAllWorkshops().then(workshops => {
 
@@ -228,6 +243,7 @@ export default function WorkshopTable(props) {
     }
 
     setSelected(newSelected);
+    setIsCloseButtonDisabled(false);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -261,13 +277,19 @@ export default function WorkshopTable(props) {
           {numSelected} выбрано
         </Typography>
       ) : (
+        !props.isHistory ?
         <Typography className={toolBarStyles.title} variant="h6" id="tableTitle" component="div">
           Мастер-классы
+        </Typography>
+        :
+        <Typography className={toolBarStyles.title} variant="h6" id="tableTitle" component="div">
+          История мастер-классов
         </Typography>
       )}
 
       {props.isAdmin ? (
-        <Tooltip title="Дополнительно">
+        props.isHistory ? <></> :
+        <>
           <Button
             type="button"
             variant="contained"
@@ -286,7 +308,46 @@ export default function WorkshopTable(props) {
             >
                 Просмотреть дополнительно
             </Button>
-        </Tooltip>
+            <Button
+              disabled={isCloseButtonDisabled}
+              type="button"
+              variant="contained"
+              color="primary"
+              className={toolBarStyles.submit}
+              onClick={() => {
+                  if(selected.length !== 0){
+                    setSelected([]);
+                    setIsOpenAdditionalInfo(false);
+                    setIsCloseButtonDisabled(true);
+                  }
+              }}
+              >
+              Сбросить выбранное
+            </Button>
+            <Button
+              disabled={isCloseButtonDisabled}
+              type="button"
+              variant="contained"
+              color="primary"
+              className={toolBarStyles.submit}
+              onClick={() => {
+                  if(selected.length !== 0){
+                    setIsOpenAdditionalInfo(false);
+                    setIsCloseButtonDisabled(true);
+                    
+                    const data = rows.find(x => x.id === selected[0]);
+                    data.isClosed = true;
+                    WorkshopService.editWorkshop(data).then(response => {
+                      setRows([...rows.filter(x => x.id !== selected[0])]);
+                      setSelected([]);
+                    });
+
+                  }
+              }}
+              >
+              Закрыть мастер-класс
+            </Button>
+        </>
       ) : props.fromWorkshops ? (
         <Tooltip title="Отменить бронь">
         <Button
@@ -370,6 +431,7 @@ export default function WorkshopTable(props) {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
+                  console.log('PFEJOADSHJFOASF', row, rows)
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -394,7 +456,7 @@ export default function WorkshopTable(props) {
                       </TableCell>
                       <TableCell align="right">{timeHelper.normalizeDate(row.date)}</TableCell>
                       <TableCell align="right">{timeHelper.normalizeTime(row.time)}</TableCell>
-                      <TableCell align="right">{row.choreographerId}</TableCell>
+                      <TableCell align="right">{row.choreographer.name}</TableCell>
                       <TableCell align="right">{styles[row.style]}</TableCell>
                       <TableCell align="right">{categories[row.category]}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>
@@ -422,7 +484,7 @@ export default function WorkshopTable(props) {
         />
       </Paper>
 
-    {isError ? <ErrorBox isError={isError} message={errorMessage}/> : <></>}
+    {isError ? <ErrorBox isOpen={isError} message={errorMessage}/> : <></>}
     {isOpenAdditionalInfo ? <UsersAdditionalInfo workshopId={workshopIdToPreview}/> : <></>}
       
 

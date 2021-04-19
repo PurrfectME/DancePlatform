@@ -16,7 +16,6 @@ namespace DancePlatform.BL.Requests
         public int ChoreographerId { get; set; }
         public int MinAge { get; set; }
         public int MaxUsers { get; set; }
-
-
+        public bool IsClosed { get; set; }
     }
 }

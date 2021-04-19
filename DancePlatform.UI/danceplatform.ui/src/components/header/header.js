@@ -80,6 +80,11 @@ export default function Header(props) {
                         Календарь событий
                       </Button>
                   </MenuItem>
+                  <MenuItem onClick={handleClose}>
+                      <Button href='/workshops-history' color="inherit">
+                        История мастер-классов
+                      </Button>
+                  </MenuItem>
                 </Menu>
 
               </>

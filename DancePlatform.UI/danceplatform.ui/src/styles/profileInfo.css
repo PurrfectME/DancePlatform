@@ -6,6 +6,10 @@
     justify-content: space-between;
 }
 
+.upload__image-wrapper img {
+    margin: auto;
+}
+
 .image-item {
     height: inherit;
     width: inherit;
@@ -35,4 +39,9 @@
     font-weight: 400;
     line-height: 1.66;
     letter-spacing: 0.03333em;
+}
+
+.MuiButton-text {
+    padding: 6px 8px;
+    display: block !important;
 }

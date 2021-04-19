@@ -18,7 +18,6 @@ function normalizeTime(sharpDate) {
     return date.format('HH:mm');
 };
 
-
 const timeHelper = {
     normalizeDate,
     normalizeTime,

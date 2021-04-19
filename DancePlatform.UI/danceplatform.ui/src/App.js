@@ -11,6 +11,7 @@ import ProfileInfo from "./pages/profileInfo";
 import UsersAccounting from "./pages/usersAccounting";
 import WorkshopInfo from "./pages/workshopInfo";
 import Workshops from "./pages/workshops";
+import WorkshopsHistory from "./pages/workshopsHistory";
 
 function App() {
 
@@ -39,35 +40,82 @@ function App() {
             <Header isAuthenticated={storageHelper.isAuthenticated()} />
             <Workshops />
           </>} />
-          <Route exact path="/users-accounting" render={() => 
+          <Route exact path="/users-accounting/:workshopId?" render={params => 
           <>
-            <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
-            <UsersAccounting />
+            {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+            <>
+              <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+              <UsersAccounting {...params} />
+            </>
+            :
+              <Redirect to='/' />
+            }
           </>} />
           <Route exact path="/workshop-info/:id" render={() => 
           <>
-            <Header isAuthenticated={storageHelper.isAuthenticated()} />
-            <WorkshopInfo />
+            {storageHelper.isAuthenticated() ?
+            <>
+              <Header isAuthenticated={storageHelper.isAuthenticated()} />
+              <WorkshopInfo />
+            </>
+            :
+              <Redirect to='/login' />
+            }
           </>} />
           <Route exact path="/places" render={() => 
           <>
-            <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
-            <Places />
+            {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+            <>
+              <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+              <Places />
+            </>
+            :
+              <Redirect to='/' />
+            }
           </>} />
           <Route exact path="/profile-info" render={() => 
           <>
-            <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
-            <ProfileInfo />
+            {storageHelper.isAuthenticated() ?
+            <>
+              <Header isAuthenticated={storageHelper.isAuthenticated()} />
+              <ProfileInfo />
+            </>
+            :
+              <Redirect to='/login' />
+            }
           </>} />
           <Route exact path="/events" render={() => 
           <>
-            <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
-            <Events />
+            {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+            <>
+              <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+              <Events />
+            </>
+            :
+              <Redirect to='/' />
+            }
           </>} />
           <Route exact path="/choreographers" render={() => 
           <>
-            <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
-            <Choregraphers />
+            {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+            <>
+              <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+              <Choregraphers />
+            </>
+            :
+              <Redirect to='/' />
+            }
+          </>} />
+          <Route exact path="/workshops-history" render={() => 
+          <>
+            {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+            <>
+              <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+              <WorkshopsHistory />
+            </>
+            :
+              <Redirect to='/' />
+            }
           </>} />
         </Switch>
       </BrowserRouter>

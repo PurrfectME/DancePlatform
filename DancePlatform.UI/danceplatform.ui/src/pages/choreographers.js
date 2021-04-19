@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ChoreographerService from '../services/choreographerService';
 import ChoreographerForm from '../components/forms/choreographerForm';
 import {styles} from '../constants/commonData';
+import timeHelper from '../helpers/dateHelper';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -100,7 +101,7 @@ export default function Choregraphers(){
         if(!editing && choreographer)
             setChoreographers([...choreographers, {
                 name: choreographer.name,
-                dateOfBirth: choreographer.dateOfBirth,
+                dateOfBirth: timeHelper.normalizeDate(choreographer.dateOfBirth),
                 description: choreographer.description,
                 link: choreographer.link,
                 id: choreographer.id,
@@ -111,7 +112,7 @@ export default function Choregraphers(){
             const newArr = choreographers.slice(0, index);
             newArr.push({
                 name: choreographer.name,
-                dateOfBirth: choreographer.dateOfBirth,
+                dateOfBirth: timeHelper.normalizeDate(choreographer.dateOfBirth),
                 description: choreographer.description,
                 link: choreographer.link,
                 id: choreographer.id,
@@ -130,6 +131,7 @@ export default function Choregraphers(){
         ChoreographerService.getAll().then(response => {
             setChoreographers(response.map(x => {
                 x.style = styles[x.style];
+                x.dateOfBirth = timeHelper.normalizeDate(x.dateOfBirth);
                 return x;
             }));
     });
