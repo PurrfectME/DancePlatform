@@ -1,7 +1,12 @@
 import {React, useEffect, useState, Component} from 'react';
-import { YMaps, Map } from 'react-yandex-maps';
+import LoadingCircle from '../progress/loadingCircle';
 
 export default class YMap extends Component{
+
+    state = {
+        loading: false,
+    };
+
     init = () => {
     // Создание карты.
     window.ymaps.geocode(this.props.address).then(res => {
@@ -30,16 +35,28 @@ export default class YMap extends Component{
         myMap.geoObjects.add(myGeoObject);
     })
 }
+
     componentDidMount(){
         if(!window.ymaps){
-            return;
+            this.setState({loading: true})
         }
-        window.ymaps.ready(this.init);
+        else{
+            window.ymaps.ready(this.init);
+            this.setState({loading: false})
+        }
+
     }
+    
 render(){
     return(
         <>
-            <div id="map" style={{width: 1198, height: 400}}></div>
+            {!this.state.loading ? 
+                <div id="map" style={{width: 1198, height: 400}}></div>
+            :
+            <LoadingCircle />
+            // <div style={{width: 1198, height: 400}}>КАРТЫ В ДАННЫЙ МОМЕНТ НЕДОСТУПНЫ. ПРОБЛЕМА С YANDEX API</div>
+            }
+            
         </>
     );
 }

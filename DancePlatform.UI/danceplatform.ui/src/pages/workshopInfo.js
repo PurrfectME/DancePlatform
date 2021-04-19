@@ -2,18 +2,13 @@ import {React, useEffect, useState} from 'react';
 import WorkshopService from '../services/workshopService';
 import { makeStyles } from '@material-ui/core/styles';
 import {Paper, Grid, Typography, Button} from '@material-ui/core';
-import sex from '../images/sex.PNG';
-import SearchBox from "react-google-maps/lib/components/places/SearchBox";
-import {withScriptjs,
-    withGoogleMap,
-    GoogleMap,
-    Marker} from 'react-google-maps';
-import { compose, withProps, lifecycle, withState, withHandlers, } from 'recompose';
 import _ from 'lodash';
 import YMap from '../components/maps/YMap';
 import RegistrationService from '../services/registrationService';
 import storageHelper from '../helpers/storageHelper';
 import {categories, styles} from '../constants/commonData';
+import ImageUploading from 'react-images-uploading';
+import '../styles/profileInfo.css'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,24 +36,12 @@ const useStyles = makeStyles((theme) => ({
     },
     img: {
       margin: 'auto',
-      display: 'block',
-      minWidth: 550,
-      minHeight: 550,
-      backgroundImage: `url(${sex})`,
-      backgroundPosition: 'center', 
-      backgroundSize: 'cover', 
-      backgroundRepeat: 'no-repeat',
-      borderTopRightRadius: 4,
-      borderTopLeftRadius: 4,
     },
     registerButton: {
         marginBottom: 5,
         marginTop: 5,
     },
 }));
-
-
-
 
 export default function WorkshopInfo(props){
     const classes = useStyles();
@@ -78,7 +61,8 @@ export default function WorkshopInfo(props){
         var pathname = window.location.pathname.split("/");
         var id = pathname[pathname.length-1];
         WorkshopService.getById(id).then(response => {
-            setWorkshop(response);   
+            response.photo = `data:image/jpg;base64,${response.photo}`;
+            setWorkshop(response);
         });
     }, []);
 
@@ -94,7 +78,24 @@ export default function WorkshopInfo(props){
             <Paper className={classes.paper}>
                 <Grid className={classes.grid} container>
                     
-                    <Grid className={classes.img} item />
+                    <Grid className={classes.img} item>
+                        <ImageUploading
+                            value={workshop.photo}
+                            dataURLKey="photo"
+                        >
+                            {({
+                            }) => (
+                            // write your building UI
+                            <Grid container>
+                            <div className="upload__image-wrapper">
+                                <div key={1} className="image-item">
+                                    <img src={workshop['photo']} alt="" width="200" height="200" />
+                                </div>
+                            </div>
+                            </Grid>
+                            )}
+                        </ImageUploading>
+                    </Grid>
                     <Grid className={classes.gridInfo} item xs={12} sm container>
                     
                     <Grid item>

@@ -1,6 +1,5 @@
 import {React, useEffect, useState} from 'react';
 import WorkshopBox from '../workshops/workshopBox';
-import sex from '../../images/sex.PNG';
 import { makeStyles } from '@material-ui/core/styles';
 import WorkshopService from '../../services/workshopService';
 import storageHelper from '../../helpers/storageHelper';
@@ -16,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
       margin: 'auto',
     },
     paper: {
-        margin: '58px 10px 0px 10px',
+      margin: '58px 10px 0px 10px',
       minWidth: 300,
     },
     grid: {
@@ -34,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
       display: 'block',
       minWidth: 300,
       minHeight: 300,
-      backgroundImage: `url(${sex})`,
       backgroundPosition: 'center', 
       backgroundSize: 'cover', 
       backgroundRepeat: 'no-repeat',
@@ -53,10 +51,12 @@ export default function WorkshopContainer() {
 
     useEffect(() => {
         WorkshopService.getAvailableWorkshopsForUser(storageHelper.getCurrentUserId()).then(response => {
-            console.log('1', response)
 
-            setWorkshops(response);
-            console.log('2', workshops)
+            setWorkshops([...response.map(item => {
+                item.photo = `data:image/jpg;base64,${item.photo}`;
+
+                return item;
+            })]);
         })
     }, []);
 

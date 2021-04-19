@@ -1,14 +1,15 @@
-import React from 'react';
+import {React} from 'react';
 import WorkshopTable from '../components/dataTable/workshopTable';
 import storageHelper from '../helpers/storageHelper';
 
 
-export default function UsersAccounting({match}){
-    const {workshopId} = match.params;
+
+export default function WorkshopsHistory(){
+
     const isAdmin = storageHelper.isAdmin();
     return(
         <>
-            <WorkshopTable fromWorkshops={false} isAdmin={isAdmin} workshopId={workshopId} />
+            <WorkshopTable fromWorkshops={false} isAdmin={isAdmin} isHistory={true} />
         </>
     )
 }

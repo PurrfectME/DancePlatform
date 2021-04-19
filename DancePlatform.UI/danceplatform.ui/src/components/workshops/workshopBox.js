@@ -4,6 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import {styles, categories} from '../../constants/commonData';
+import ImageUploading from 'react-images-uploading';
+import '../../styles/profileInfo.css'
 
 export default function WorkshopBox(props) {
 const {workshop} = props;
@@ -11,7 +13,25 @@ const {workshop} = props;
 return (
         <Paper className={props.classes.paper}>
             <Grid className={props.classes.grid} container >
-                <Grid className={props.classes.img} item />
+                <Grid className={props.classes.img} item>
+                <ImageUploading
+                        value={workshop.photo}
+                        dataURLKey="photo"
+                    >
+                        {({
+                        imageList,
+                        }) => (
+                        // write your building UI
+                        <Grid container>
+                        <div className="upload__image-wrapper">
+                            <div key={1} className="image-item">
+                                <img src={workshop['photo']} alt="" width="200" height="200" />
+                            </div>
+                        </div>
+                        </Grid>
+                        )}
+                    </ImageUploading>
+                </Grid>
                 <Grid className={props.classes.gridInfo} item xs={12} sm container>
                     <Grid item>
                         <Typography variant="subtitle1">

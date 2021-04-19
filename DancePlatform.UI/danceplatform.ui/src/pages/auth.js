@@ -12,9 +12,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import AuthService from '../services/authService';
 import ErrorBox from '../components/dialog/errorBox';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Tooltip from '@material-ui/core/Tooltip';
 import NotificationBox from '../components/dialog/notificationBox';
 
 function Copyright() {
@@ -85,7 +82,7 @@ export default function Auth(props) {
       }).catch(err => {
         console.log('aFSafaFSDAF')
         if(err.status == 400){
-          setErrorMessage('Вы ввели неверные данные для регистрации');
+          setErrorMessage(err.data.message);
           setIsError(true);
         }
         if(err.status == 403){
@@ -188,7 +185,7 @@ export default function Auth(props) {
             {props.actionName}
           </Button>
         </form>
-        {isError ? <ErrorBox isError={isError} message={errorMessage}/> : <></>}
+        {isError ? <ErrorBox isOpen={isError} message={errorMessage}/> : <></>}
         {showNotification ? <NotificationBox closeCallback={notificationBoxCallback} isNotify={showNotification} message={'Подтвердите Вашу почту'}/> : <></>}
       </div>
       <Box mt={8}>

@@ -16,6 +16,7 @@ namespace DancePlatform.BL.Models
         public int MaxUsers { get; set; }
         public bool IsApprovedByAdmin { get; set; }
         public string CreatedBy { get; set; }
+        public bool IsClosed { get; set; }
 
         public int PlaceId { get; set; }
         public Place Place { get; set; }

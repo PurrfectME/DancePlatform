@@ -23,10 +23,10 @@ const getImage = () => {
     });
 }
 
-const UserService = {
+const ProfileService = {
     uploadImage,
     getImage,
     deleteImage
 }
 
-export default UserService;
+export default ProfileService;

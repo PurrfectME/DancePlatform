@@ -9,11 +9,10 @@ import {
     makeStyles,
     Typography
   } from '@material-ui/core';
-import sex from '../images/sex.PNG';
 import ImageUploading from 'react-images-uploading';
 import '../styles/profileInfo.css'
 import defaultUpload from '../images/defaultUpload.png';
-import UserService from '../services/userService';
+import ProfileService from '../services/profileService';
 import storageHelper from '../helpers/storageHelper';
 import timeHelper from '../helpers/dateHelper';
 
@@ -74,11 +73,7 @@ export default function ProfileInfo(){
     const [editing, setEditing] = useState(false);
 
     useEffect(() => {
-        UserService.getImage().then(response => {
-            if(response){
-                setImages([{base64Img: `data:image/jpg;base64,${response}`}]);
-                return;
-            }
+        ProfileService.getImage().then(response => {
             const xhr = new XMLHttpRequest();       
             xhr.open("GET", defaultUpload); 
             xhr.responseType = "blob";
@@ -93,19 +88,23 @@ export default function ProfileInfo(){
                 reader.readAsDataURL(file)
             };
             xhr.send();
+            if(response){
+                setImages([{base64Img: `data:image/jpg;base64,${response}`}]);
+                return;
+            }
         })
     }, [])
 
     const onChange = (imageList, addUpdateIndex) => {
         // data for submit
         if(imageList.length){
-            UserService.uploadImage(imageList[0]).then(x => {
+            ProfileService.uploadImage(imageList[0]).then(x => {
                 setImages(imageList);
             });
             return;
         }
 
-        UserService.deleteImage().then(x => {
+        ProfileService.deleteImage().then(x => {
             setImages([]);
         });
     };

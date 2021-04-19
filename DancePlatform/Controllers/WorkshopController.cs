@@ -26,6 +26,9 @@ namespace DancePlatform.API.Controllers
         {
             var isAdmin = HttpContext.User.IsInRole("Admin");
 
+            request.Photo = request.Photo.Remove(0, 23);
+            var converted = Convert.FromBase64String(request.Photo);
+
             return Ok(await _service.Create(
                 new Workshop
                 {
@@ -39,7 +42,8 @@ namespace DancePlatform.API.Controllers
                     MaxUsers = request.MaxUsers,
                     MinAge = request.MinAge,
                     CreatedBy = isAdmin ? "Admin" : "Organizer",
-                    IsApprovedByAdmin = isAdmin
+                    IsApprovedByAdmin = isAdmin,
+                    Photo = converted
                 }));
         }
 
@@ -99,6 +103,7 @@ namespace DancePlatform.API.Controllers
             workshopToUpdate.PlaceId = request.PlaceId;
             workshopToUpdate.MinAge = request.MinAge;
             workshopToUpdate.MaxUsers = request.MaxUsers;
+            workshopToUpdate.IsClosed = request.IsClosed;
 
             return Ok(await _service.Update(workshopToUpdate));
         }
@@ -116,6 +121,20 @@ namespace DancePlatform.API.Controllers
         public async Task<IActionResult> GetAvailableWorkshopsForUser(int userId)
         {
             var result = await _service.GetAvailableWorkshopsForUser(userId);
+
+            return Ok(result);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("workshops-history")]
+        public async Task<IActionResult> GetClosedWorkshops()
+        {
+            var result = await _service.GetClosed();
+
+            //if (result.Count == 0)
+            //{
+            //    return NotFound();
+            //}
 
             return Ok(result);
         }
