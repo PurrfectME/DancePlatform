@@ -126,7 +126,7 @@ export default function WorkshopInfo(props){
                     </Grid>
 
                     <Grid item>
-                        <Button href='/' onClick={register} className={classes.registerButton} type="button" variant="contained" color="primary">
+                        <Button href='/workshops' onClick={register} className={classes.registerButton} type="button" variant="contained" color="primary">
                             Зарегистрироваться
                         </Button>
                     </Grid>
