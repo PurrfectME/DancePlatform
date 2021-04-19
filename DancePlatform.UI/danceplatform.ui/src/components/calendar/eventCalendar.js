@@ -7,10 +7,6 @@ import {
   } from '@zach.codes/react-calendar';
   import {
     startOfMonth,
-    subHours,
-    subYears,
-    getHours,
-    getMinutes,
     parseISO
   } from 'date-fns';
   import '@zach.codes/react-calendar/dist/calendar-tailwind.css';
@@ -57,7 +53,7 @@ export default function EventCalendar() {
           })]}
           renderDay={data =>
             data.map((item, index) => (
-              <Button className={classes.btn} href={`/users-accounting/${item.id}`}>
+              <Button color="primary" className={classes.btn} href={`/users-accounting/${item.id}`}>
                 <DefaultMonthlyEventItem
                   style={{width: 50}}
                   key={item.id}

@@ -23,10 +23,19 @@ const getImage = () => {
     });
 }
 
+const updateUser = data => {
+    return request({
+        method: 'POST',
+        url: `/user/update-user`,
+        data: data
+    });
+}
+
 const ProfileService = {
     uploadImage,
     getImage,
-    deleteImage
+    deleteImage,
+    updateUser
 }
 
 export default ProfileService;

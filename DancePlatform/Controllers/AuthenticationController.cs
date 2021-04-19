@@ -77,7 +77,8 @@ namespace DancePlatform.API.Controllers
                 UserName = user.UserName,
                 Roles = userRoles,
                 DateOfBirth = user.DateOfBirth,
-                FullName = $"{user.Name} {user.Surname}",
+                Name = user.Name,
+                Surname = user.Surname,
                 PhoneNumber = user.PhoneNumber,
                 Photo = user.Photo == null ? null : Convert.ToBase64String(user.Photo),
             };
