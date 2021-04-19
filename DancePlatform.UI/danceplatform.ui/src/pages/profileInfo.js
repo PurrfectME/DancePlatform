@@ -15,6 +15,7 @@ import defaultUpload from '../images/defaultUpload.png';
 import ProfileService from '../services/profileService';
 import storageHelper from '../helpers/storageHelper';
 import timeHelper from '../helpers/dateHelper';
+import ProfileForm from '../components/forms/profileForm';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -69,8 +70,9 @@ export default function ProfileInfo(){
     const classes = useStyles();
     const [images, setImages] = useState([]);
     const [defaultImg, setDefaultImg] = useState([]);
-    const [user] = useState(storageHelper.getCurrentUser());
+    const [user, setUser] = useState(storageHelper.getCurrentUser());
     const [editing, setEditing] = useState(false);
+    const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
         ProfileService.getImage().then(response => {
@@ -115,6 +117,13 @@ export default function ProfileInfo(){
 
     const updateHandle = () => {
         setEditing(false);
+    }
+
+    const showFormCallback = (show, user, editing) => {
+        setEditing(false);
+        setShowForm(false);
+
+        setUser(user);
     }
 
     return(
@@ -163,30 +172,32 @@ export default function ProfileInfo(){
                     </ImageUploading>
                 </Grid>
                 <Grid item>
-                    {!editing ?
+                    {editing ? 
+                    <ProfileForm
+                        showForm={true}
+                        editing={editing}
+                        initialData={editing ? user : {}}
+                        showFormCallback={showFormCallback}
+                    />
+                    :
                     <>
                         <Typography className={classes.userName}>
-                            {user.userName}
+                            Логин: {user.userName}
                         </Typography>
                         <Typography className={classes.fullName}>
-                            {user.fullName}
+                            Имя: {user.name}
+                        </Typography>
+                        <Typography className={classes.fullName}>
+                            Фамилия: {user.surname}
                         </Typography>
                         <Typography className={classes.dob}>
-                            {timeHelper.normalizeDate(user.dateOfBirth)}
+                            Дата рождения: {timeHelper.normalizeDate(user.dateOfBirth)}
                         </Typography>
                         <Typography className={classes.dob}>
-                            {user.phoneNumber}
+                            Телефон: {user.phoneNumber}
                         </Typography>
                         <Button onClick={editHandle}>Редактировать</Button>
 
-                    </>
-                    :
-                    <>
-                        <TextField style={{display: 'block'}} value={user.userName} className={classes.userName} />
-                        <TextField style={{display: 'block'}} value={user.fullName} className={classes.fullName} />
-                        <TextField style={{display: 'block'}} value={timeHelper.normalizeDate(user.dateOfBirth)} className={classes.dob} />
-                        <TextField style={{display: 'block'}} value={user.phoneNumber} className={classes.dob} />
-                        <Button onClick={updateHandle}>Сохранить</Button>
                     </>
                     }
                 </Grid>

@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 using DancePlatform.BL.Interfaces;
 using DancePlatform.BL.Requests;
 using System;
+using DancePlatform.BL.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using DancePlatform.BL.Responses;
 
 namespace DancePlatform.API.Controllers
 {
@@ -12,11 +16,13 @@ namespace DancePlatform.API.Controllers
     {
         private readonly IRegistrationService _registrationService;
         private readonly IProfileService _userService;
+        private readonly UserManager<User> _userManager;
 
-        public ProfileController(IRegistrationService registrationService, IProfileService userService)
+        public ProfileController(IRegistrationService registrationService, IProfileService userService, UserManager<User> userManager)
         {
             _registrationService = registrationService;
             _userService = userService;
+            _userManager = userManager;
         }
 
         [HttpGet("registrations/{userId}")]
@@ -63,6 +69,28 @@ namespace DancePlatform.API.Controllers
             await _userService.DeleteUserPhoto(id);
 
             return Ok();
+        }
+
+        [HttpPost("update-user")]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
+        {
+            var userToUpdate = await _userManager.FindByIdAsync(request.Id.ToString());
+
+            userToUpdate.Surname = request.Surname;
+            userToUpdate.PhoneNumber = request.PhoneNumber;
+            userToUpdate.Name = request.Name;
+            userToUpdate.DateOfBirth = request.DateOfBirth;
+
+            var result = await _userManager.UpdateAsync(userToUpdate);
+
+            if (!result.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    new BaseResponse
+                    { Status = "Error", Message = "Ошибка обновления данных" });
+            }
+
+            return Ok(await _userManager.FindByIdAsync(request.Id.ToString()));
         }
 
     }
