@@ -143,7 +143,9 @@ export default function WorkshopForm(props) {
 
   const onSubmit = values => {
     var today = moment();
-    values.photo = images[0].base64Img
+    if(images.length !== 0){
+      values.photo = images[0].base64Img
+    }
 
     values.placeId = props.places.find(x => x.studioName === values.studioName).id;
     values.choreographerId = props.choreographers.find(x => x.name === values.choreographerName).id;

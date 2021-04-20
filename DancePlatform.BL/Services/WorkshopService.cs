@@ -83,13 +83,12 @@ namespace DancePlatform.BL.Services
                 }
                 else
                 {
-                    foreach (var reg in item.Registrations)
+                    if (!item.Registrations.Exists(x => x.UserId == userId))
                     {
-                        if (reg.UserId != userId)
-                        {
-                            result.Add(item);
-                        }
+                        result.Add(item);
+
                     }
+                    
                 }
             }
 

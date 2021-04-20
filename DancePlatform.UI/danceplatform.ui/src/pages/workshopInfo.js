@@ -9,6 +9,7 @@ import storageHelper from '../helpers/storageHelper';
 import {categories, styles} from '../constants/commonData';
 import ImageUploading from 'react-images-uploading';
 import '../styles/profileInfo.css'
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function WorkshopInfo(props){
+    let history = useHistory();
     const classes = useStyles();
     const [workshop, setWorkshop] = useState({
         minAge: 0,
@@ -125,11 +127,12 @@ export default function WorkshopInfo(props){
                         <YMap address={workshop.place.address}/>
                     </Grid>
 
-                    <Grid item>
-                        <Button href='/workshops' onClick={register} className={classes.registerButton} type="button" variant="contained" color="primary">
+                        <button onClick={() => {
+                            register();
+                            history.push('/')
+                            }} className={classes.registerButton} type="button" variant="contained" color="primary">
                             Зарегистрироваться
-                        </Button>
-                    </Grid>
+                        </button>
 
                     </Grid>
                 </Grid>
