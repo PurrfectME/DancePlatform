@@ -44,7 +44,7 @@ export default function ProfileForm(props) {
   }
 
   const onCloseClick = () => {
-    props.showFormCallback(props.showForm, null, props.editing)
+    props.showFormCallback(props.showForm, props.initialData, props.editing)
   }
 
 

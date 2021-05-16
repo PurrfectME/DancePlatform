@@ -12,113 +12,118 @@ import UsersAccounting from "./pages/usersAccounting";
 import WorkshopInfo from "./pages/workshopInfo";
 import Workshops from "./pages/workshops";
 import WorkshopsHistory from "./pages/workshopsHistory";
+import basicTheme from './themes/basicTheme';
+import { ThemeProvider } from '@material-ui/core/styles';
+import "typeface-pacifico";
 
 function App() {
 
   return (
     <div className="App">
-      <BrowserRouter basename='/'>
-        
-        <Switch>
-          <Route exact path="/" render={() => 
-          <>
-            <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
-            <Main />
-          </>} />
-          <Route exact path='/login' render={() => 
-          <>
-            <Header isAuthenticated={storageHelper.isAuthenticated()} />
-            <Auth actionName="Войти" />
-          </>}/>
-          <Route exact path='/register' render={() => 
-          <>
-            <Header isAuthenticated={storageHelper.isAuthenticated()} />
-            <Auth actionName="Регистрация" />
-          </>}/>
-          <Route exact path="/workshops" render={() => 
-          <>
-            <Header isAuthenticated={storageHelper.isAuthenticated()} />
-            <Workshops />
-          </>} />
-          <Route exact path="/users-accounting/:workshopId?" render={params => 
-          <>
-            {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+      <ThemeProvider theme={basicTheme}>
+        <BrowserRouter basename='/'>
+          
+          <Switch>
+            <Route exact path="/" render={() => 
             <>
               <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
-              <UsersAccounting {...params} />
-            </>
-            :
-              <Redirect to='/' />
-            }
-          </>} />
-          <Route exact path="/workshop-info/:id" render={() => 
-          <>
-            {storageHelper.isAuthenticated() ?
+              <Main />
+            </>} />
+            <Route exact path='/login' render={() => 
             <>
               <Header isAuthenticated={storageHelper.isAuthenticated()} />
-              <WorkshopInfo />
-            </>
-            :
-              <Redirect to='/login' />
-            }
-          </>} />
-          <Route exact path="/places" render={() => 
-          <>
-            {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
-            <>
-              <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
-              <Places />
-            </>
-            :
-              <Redirect to='/' />
-            }
-          </>} />
-          <Route exact path="/profile-info" render={() => 
-          <>
-            {storageHelper.isAuthenticated() ?
+              <Auth actionName="Войти" />
+            </>}/>
+            <Route exact path='/register' render={() => 
             <>
               <Header isAuthenticated={storageHelper.isAuthenticated()} />
-              <ProfileInfo />
-            </>
-            :
-              <Redirect to='/login' />
-            }
-          </>} />
-          <Route exact path="/events" render={() => 
-          <>
-            {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+              <Auth actionName="Регистрация" />
+            </>}/>
+            <Route exact path="/workshops" render={() => 
             <>
-              <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
-              <Events />
-            </>
-            :
-              <Redirect to='/' />
-            }
-          </>} />
-          <Route exact path="/choreographers" render={() => 
-          <>
-            {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+              <Header isAuthenticated={storageHelper.isAuthenticated()} />
+              <Workshops />
+            </>} />
+            <Route exact path="/users-accounting/:workshopId?" render={params => 
             <>
-              <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
-              <Choregraphers />
-            </>
-            :
-              <Redirect to='/' />
-            }
-          </>} />
-          <Route exact path="/workshops-history" render={() => 
-          <>
-            {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+              {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+              <>
+                <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+                <UsersAccounting {...params} />
+              </>
+              :
+                <Redirect to='/' />
+              }
+            </>} />
+            <Route exact path="/workshop-info/:id" render={() => 
             <>
-              <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
-              <WorkshopsHistory />
-            </>
-            :
-              <Redirect to='/' />
-            }
-          </>} />
-        </Switch>
-      </BrowserRouter>
+              {storageHelper.isAuthenticated() ?
+              <>
+                <Header isAuthenticated={storageHelper.isAuthenticated()} />
+                <WorkshopInfo />
+              </>
+              :
+                <Redirect to='/login' />
+              }
+            </>} />
+            <Route exact path="/places" render={() => 
+            <>
+              {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+              <>
+                <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+                <Places />
+              </>
+              :
+                <Redirect to='/' />
+              }
+            </>} />
+            <Route exact path="/profile-info" render={() => 
+            <>
+              {storageHelper.isAuthenticated() ?
+              <>
+                <Header isAuthenticated={storageHelper.isAuthenticated()} />
+                <ProfileInfo />
+              </>
+              :
+                <Redirect to='/login' />
+              }
+            </>} />
+            <Route exact path="/events" render={() => 
+            <>
+              {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+              <>
+                <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+                <Events />
+              </>
+              :
+                <Redirect to='/' />
+              }
+            </>} />
+            <Route exact path="/choreographers" render={() => 
+            <>
+              {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+              <>
+                <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+                <Choregraphers />
+              </>
+              :
+                <Redirect to='/' />
+              }
+            </>} />
+            <Route exact path="/workshops-history" render={() => 
+            <>
+              {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+              <>
+                <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+                <WorkshopsHistory />
+              </>
+              :
+                <Redirect to='/' />
+              }
+            </>} />
+          </Switch>
+        </BrowserRouter>
+      </ThemeProvider>
     </div>
   );
 }

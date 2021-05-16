@@ -44,7 +44,12 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    backgroundColor: '#B2C8D6',
+    "&:hover": {
+      backgroundColor: '#F59B69',
+    }
   },
+  
 }));
 
 export default function Auth(props) {
@@ -178,7 +183,6 @@ export default function Auth(props) {
             type="button"
             fullWidth
             variant="contained"
-            color="primary"
             className={classes.submit}
             onClick={register}
           >

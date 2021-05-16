@@ -94,7 +94,7 @@ export default function ProfileInfo(){
                 setImages([{base64Img: `data:image/jpg;base64,${response}`}]);
                 return;
             }
-        })
+        });
     }, [])
 
     const onChange = (imageList, addUpdateIndex) => {
