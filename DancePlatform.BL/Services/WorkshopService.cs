@@ -112,5 +112,20 @@ namespace DancePlatform.BL.Services
                 .Where(x => x.IsClosed == true)
                 .ToListAsync();
         }
+
+        public Task<List<Workshop>> GetUserDesiredWorkshops(int userId)
+        {
+            var registrations = _context.Registrations
+                .AsNoTracking()
+                .Include(x => x.Workshop)
+                .ThenInclude(x => x.Place)
+                .Include(x => x.Workshop)
+                .ThenInclude(x => x.Choreographer)
+                .Include(x => x.User)
+                .Where(x => x.UserId == userId && x.IsPresent == false)
+                .Where(x => x.IsDesired);
+
+            return registrations.Count() == 0 ? null : registrations.Select(x => x.Workshop).Where(x => !x.IsClosed).ToListAsync();
+        }
     }
 }

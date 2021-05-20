@@ -54,6 +54,13 @@ const getClosed = () => {
     });
 }
 
+const getDesiredWorkshops = userId => {
+    return request({
+        method: 'GET',
+        url: `/workshop/desired/${userId}`
+    });
+}
+
 
 const WorkshopService = {
     getAllWorkshops,
@@ -64,6 +71,7 @@ const WorkshopService = {
     getRegisteredUsersOnWorkshop,
     getById,
     getClosed,
+    getDesiredWorkshops,
 }
 
 export default WorkshopService;

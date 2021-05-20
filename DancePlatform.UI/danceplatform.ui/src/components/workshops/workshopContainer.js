@@ -45,25 +45,37 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function WorkshopContainer() {
+export default function WorkshopContainer(props) {
     const classes = useStyles();
     const [workshops, setWorkshops] = useState([]);
 
     useEffect(() => {
-        WorkshopService.getAvailableWorkshopsForUser(storageHelper.getCurrentUserId()).then(response => {
-
-            setWorkshops([...response.map(item => {
-                item.photo = `data:image/jpg;base64,${item.photo}`;
-
-                return item;
-            })]);
-        })
+        const userId = storageHelper.getCurrentUserId();
+        if(!props.isDesired){
+            WorkshopService.getAvailableWorkshopsForUser(userId).then(response => {
+                setWorkshops([...response.map(item => {
+                    item.photo = `data:image/jpg;base64,${item.photo}`;
+    
+                    return item;
+                })]);
+            });
+        }
+        else{
+            WorkshopService.getDesiredWorkshops(userId).then(response => {
+                setWorkshops([...response.map(item => {
+                    item.photo = `data:image/jpg;base64,${item.photo}`;
+    
+                    return item;
+                })]);
+            });
+        }
+        
     }, []);
 
     return(
         <div className={classes.root}>
             {workshops.length === 0 ? <h1>НЕТ ДОСТУПНЫХ МАСТЕР-КЛАССОВ</h1> : workshops.map(workshop => 
-                <WorkshopBox workshop={workshop} classes={classes}/>)
+                <WorkshopBox workshop={workshop} classes={classes} isDesired={props.isDesired}/>)
             }
         </div>
     );

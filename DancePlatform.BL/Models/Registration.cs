@@ -7,6 +7,7 @@
 		public int WorkshopId { get; set; }
 		public bool IsPresent { get; set; }
         public bool IsPaid { get; set; }
+        public bool IsDesired { get; set; }
         public Workshop Workshop { get; set; }
         public User User { get; set; }
 	}

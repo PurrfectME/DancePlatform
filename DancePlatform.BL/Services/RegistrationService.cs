@@ -50,26 +50,28 @@ namespace DancePlatform.BL.Services
 
         public async Task<List<Registration>> GetUserRegistrations(int userId)
         {
-            var registrations = (await _context.Registrations
+            var registrations = await _context.Registrations
                 .AsNoTracking()
                 .Include(x => x.User)
-                .Where(x => x.UserId == userId).ToListAsync());
+                .Where(x => x.UserId == userId && x.IsPaid)
+                .ToListAsync();
 
             return registrations.Count == 0 ? null : registrations;
         }
 
-        public async Task<List<Workshop>> GetUserWorkshops(int userId)
+        public Task<List<Workshop>> GetUserWorkshops(int userId)
         {
-            var registrations = (await _context.Registrations
+            var registrations = _context.Registrations
                 .AsNoTracking()
                 .Include(x => x.Workshop)
                 .ThenInclude(x => x.Place)
                 .Include(x => x.Workshop)
                 .ThenInclude(x => x.Choreographer)
                 .Include(x => x.User)
-                .Where(x => x.UserId == userId && x.IsPresent == false).ToListAsync());
+                .Where(x => x.UserId == userId && x.IsPresent == false)
+                .Where(x => !x.IsDesired);
 
-            return registrations.Count == 0 ? null : registrations.Select(x => x.Workshop).ToList();
+            return registrations.Count() == 0 ? null : registrations.Select(x => x.Workshop).Where(x => !x.IsClosed).ToListAsync();
         }
 
         public async Task CheckoutUsers(int userId, int workshopId)

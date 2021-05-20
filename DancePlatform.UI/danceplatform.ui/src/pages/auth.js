@@ -70,8 +70,6 @@ export default function Auth(props) {
   };
 
   const notificationBoxCallback = open => {
-    console.log('HERE', open)
-
     setCloseNotification(open);
   }
 
@@ -134,7 +132,7 @@ export default function Auth(props) {
         <Typography component="h1" variant="h5">
           {props.actionName}
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form}>
         {props.actionName === 'Регистрация' ? <TextField
             variant="outlined"
             margin="normal"

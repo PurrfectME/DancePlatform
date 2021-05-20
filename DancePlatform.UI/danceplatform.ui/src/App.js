@@ -15,6 +15,7 @@ import WorkshopsHistory from "./pages/workshopsHistory";
 import basicTheme from './themes/basicTheme';
 import { ThemeProvider } from '@material-ui/core/styles';
 import "typeface-pacifico";
+import DesiredWorkshops from "./pages/desiredWorkshops";
 
 function App() {
 
@@ -116,6 +117,17 @@ function App() {
               <>
                 <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
                 <WorkshopsHistory />
+              </>
+              :
+                <Redirect to='/' />
+              }
+            </>} />
+            <Route exact path="/desired-workshops" render={() => 
+            <>
+              {storageHelper.isAuthenticated() ?
+              <>
+                <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+                <DesiredWorkshops />
               </>
               :
                 <Redirect to='/' />

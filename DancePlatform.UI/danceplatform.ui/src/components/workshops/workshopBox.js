@@ -47,7 +47,7 @@ return (
                         <Typography variant="subtitle1">{workshop.price} BYN</Typography>
                     </Grid>
                     <Grid item>
-                        <Button href={`/workshop-info/${workshop.id}`} className={props.classes.registerButton} type="button" variant="contained" color="primary">
+                        <Button href={`/workshop-info/${workshop.id}?desired=${props.isDesired}`} className={props.classes.registerButton} type="button" variant="contained" color="primary">
                             Подробнее
                         </Button>
                     </Grid>

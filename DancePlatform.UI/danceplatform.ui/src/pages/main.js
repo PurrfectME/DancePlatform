@@ -1,7 +1,6 @@
 import {React} from 'react';
 import { Redirect } from 'react-router-dom';
 import storageHelper from '../helpers/storageHelper';
-import EditableTable from '../components/dataTable/editableTable';
 import WorkshopContainer from '../components/workshops/workshopContainer';
 import AdminTable from '../components/dataTable/adminTable';
 
@@ -13,7 +12,7 @@ export default function Main(){
                 
                 isAdmin ? <AdminTable /> :
                 // <WorkshopTable fromWorkshops={false} isAdmin={isAdmin} />
-                <WorkshopContainer />
+                <WorkshopContainer isDesired={false} />
             :
                 <Redirect to='/login' />
             }

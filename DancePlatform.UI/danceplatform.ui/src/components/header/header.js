@@ -55,7 +55,9 @@ export default function Header(props) {
       <AppBar position="static">
         <Toolbar>
           <>
-            <Typography variant="h6" style={{fontFamily: 'Pacifico', color: 'white'}}>DanceEvents</Typography>
+            <Typography variant="h6" style={{fontFamily: 'Pacifico', color: 'white'}}>
+              <Link to="/">DanceEvents</Link>
+            </Typography>
             <Typography variant="h6" className={classes.title}>
                 
                 {props.isAdmin ? 
@@ -126,6 +128,11 @@ export default function Header(props) {
                     <MenuItem onClick={handleClose}>
                       <Button href='/workshops' color="inherit">
                           Мои мастер-классы
+                      </Button>
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
+                      <Button href='/desired-workshops' color="inherit">
+                        Желаемые мастер-классы
                       </Button>
                     </MenuItem>
                     <MenuItem onClick={handleClose}>

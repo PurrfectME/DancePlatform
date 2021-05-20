@@ -4,8 +4,7 @@
 	{
 		public int UserId { get; set; }
 		public int WorkshopId { get; set; }
-		public bool? IsPresent { get; set; } = false;
-		public bool? IsPaid { get; set; } = false;
-		public int Coast { get; set; }
-	}
+		public bool IsPaid { get; set; }
+        public bool IsDesired { get; set; }
+    }
 }

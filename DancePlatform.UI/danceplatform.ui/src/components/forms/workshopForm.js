@@ -214,7 +214,6 @@ export default function WorkshopForm(props) {
 
   const onChange = (imageList, addedIndex) => {
     setImageName(imageList[0].file.name);
-    console.log('LIST', imageList[0].base64Img)
     setImages(imageList);
     // data for submit
   //   if(imageList.length){
@@ -420,10 +419,7 @@ export default function WorkshopForm(props) {
               </Grid>
             </Paper>
           </form>
-          
         )}
-
-
       />
 
     </div>

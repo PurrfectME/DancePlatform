@@ -138,5 +138,13 @@ namespace DancePlatform.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("desired/{userId}")]
+        public async Task<IActionResult> GetDesiredWorkshops(int userId)
+        {
+            var result = await _service.GetUserDesiredWorkshops(userId);
+
+            return Ok(result);
+        }
     }
 }

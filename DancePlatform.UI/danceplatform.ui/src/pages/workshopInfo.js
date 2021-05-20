@@ -5,10 +5,11 @@ import {Paper, Grid, Typography, Button} from '@material-ui/core';
 import _ from 'lodash';
 import YMap from '../components/maps/YMap';
 import RegistrationService from '../services/registrationService';
-import storageHelper from '../helpers/storageHelper';
 import {categories, styles} from '../constants/commonData';
 import ImageUploading from 'react-images-uploading';
 import '../styles/profileInfo.css'
+import PayPalComponent from '../components/paypal/paypalComponent';
+import storageHelper from '../helpers/storageHelper';
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function WorkshopInfo(props){
+export default function WorkshopInfo(){
     let history = useHistory();
     const classes = useStyles();
     const [workshop, setWorkshop] = useState({
@@ -59,6 +60,8 @@ export default function WorkshopInfo(props){
         }
     });
 
+    const [isDesired] = useState(new URLSearchParams(window.location.search).get('desired'));
+
     useEffect(() => {
         var pathname = window.location.pathname.split("/");
         var id = pathname[pathname.length-1];
@@ -68,12 +71,19 @@ export default function WorkshopInfo(props){
         });
     }, []);
 
-    const register = () => {
-        
-        RegistrationService.registerOnWorkshop({workshopId: workshop.id, userId: storageHelper.getCurrentUserId()}).then(response => {
-            console.log('RTESPONSE', response);
+    const addToDesired = () => {
+        const registration = {
+            workshopId: workshop.id,
+            userId: storageHelper.getCurrentUserId(),
+            isDesired: true,
+            isPaid: false
+          };
+        RegistrationService.registerOnWorkshop(registration).then(response => {
+            history.push('/');
         })
     }
+
+    console.log(isDesired)
 
     return(
         <>
@@ -127,13 +137,16 @@ export default function WorkshopInfo(props){
                         <YMap address={workshop.place.address}/>
                     </Grid>
 
-                        <button onClick={() => {
-                            register();
-                            history.push('/')
-                            }} className={classes.registerButton} type="button" variant="contained" color="primary">
-                            Зарегистрироваться
+                    {isDesired == 'false' ?
+                        <button style={{width: 500, marginTop: 35}} onClick={addToDesired} className={classes.registerButton} type="button" variant="contained" color="primary">
+                            Добавить в желаемое 
                         </button>
-
+                    :
+                        <></>
+                    }
+                        <button style={{width: 500, marginTop: 35}} className={classes.registerButton} type="button" variant="contained" color="primary">
+                            <PayPalComponent workshop={workshop}/>
+                        </button>
                     </Grid>
                 </Grid>
             </Paper>
