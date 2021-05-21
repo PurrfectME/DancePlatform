@@ -124,7 +124,7 @@ export default function AdminTable(props) {
 
 const showFormCallback = (show, workshop, editing) => {
     setShowForm(!show);
-
+console.log('12312312312',workshop);
     if(workshop === null){
         return;
     }
@@ -144,7 +144,7 @@ const showFormCallback = (show, workshop, editing) => {
             minAge: workshop.minAge,
             maxUsers: workshop.maxUsers,
             id: workshop.id,
-            isApprovedByModerator: workshop.isApprovedByModerator
+            isApprovedByModerator: workshop.isApprovedByModerator ? 'Да' : 'Нет'
         }]);
     else if(workshop){
         var index = workshops.map(x => x.id).indexOf(workshop.id);
@@ -162,7 +162,7 @@ const showFormCallback = (show, workshop, editing) => {
             minAge: workshop.minAge,
             maxUsers: workshop.maxUsers,
             id: workshop.id,
-            isApprovedByModerator: workshop.isApprovedByModerator
+            isApprovedByModerator: workshop.isApprovedByModerator ? 'Да' : 'Нет'
         });
 
         const secArr = workshops.slice(index + 1, workshops.length);

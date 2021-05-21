@@ -48,6 +48,9 @@ export default function EventCalendar() {
             if(date.getTime() < new Date()){
               return false;
             }
+            if(!x.isApprovedByModerator || x.isClosed){
+              return false;
+            }
             return {
               title: x.place.studioName,
               date: date,

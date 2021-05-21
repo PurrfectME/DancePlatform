@@ -38,7 +38,8 @@ namespace DancePlatform.BL.Services
                 .Include(X => X.Place)
                 .Include(X => X.Choreographer)
                 .Include(X => X.Registrations)
-                .Where(x => x.IsClosed != true)
+                .Where(x => !x.IsClosed)
+                .Where(x => x.IsApprovedByModerator)
                 .ToListAsync();
 		}
 
@@ -70,7 +71,8 @@ namespace DancePlatform.BL.Services
                 .Include(x => x.Choreographer)
                 .Include(x => x.Registrations)
                 .Include(x => x.Place)
-                .Where(x => x.IsClosed != true)
+                .Where(x => !x.IsClosed)
+                .Where(x => x.IsApprovedByModerator)
                 .ToListAsync();
 
             var result = new List<Workshop>();
@@ -108,6 +110,7 @@ namespace DancePlatform.BL.Services
                 .Include(X => X.Choreographer)
                 .Include(X => X.Registrations)
                 .Where(x => x.IsClosed == true)
+                .Where(x => x.Comment == null)
                 .ToListAsync();
         }
 
