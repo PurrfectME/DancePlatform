@@ -5,10 +5,10 @@ import storageHelper from '../helpers/storageHelper';
 
 export default function UsersAccounting({match}){
     const {workshopId} = match.params;
-    const isAdmin = storageHelper.isAdmin();
+    const isOrganizer = storageHelper.isOrganizer();
     return(
         <>
-            <WorkshopTable fromWorkshops={false} isAdmin={isAdmin} workshopId={workshopId} />
+            <WorkshopTable fromWorkshops={false} isOrganizer={isOrganizer} workshopId={workshopId} />
         </>
     )
 }

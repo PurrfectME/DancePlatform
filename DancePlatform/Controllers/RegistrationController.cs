@@ -23,13 +23,33 @@ namespace DancePlatform.API.Controllers
 		[HttpPost("add")]
 		public async Task<IActionResult> PostRegistration(CreateRegistrationRequest request)
 		{
-            await _service.Create(new Registration
+			var existingRegistration = await _service.GetByUserAndWorkshopIds(request.UserId, request.WorkshopId);
+
+            if (existingRegistration == null)
             {
-                UserId = request.UserId,
-                WorkshopId = request.WorkshopId,
-				IsPaid = request.IsPaid,
-				IsDesired = request.IsDesired
-            });
+				await _service.Create(new Registration
+				{
+					UserId = request.UserId,
+					WorkshopId = request.WorkshopId,
+					IsPaid = request.IsPaid,
+					IsDesired = request.IsDesired
+				});
+			}
+            else
+            {
+                if (existingRegistration.IsDesired)
+                {
+					existingRegistration.IsPaid = true;
+					existingRegistration.IsDesired = false;
+					await _service.Update(existingRegistration);
+                }
+                else
+                {
+					existingRegistration.IsPaid = false;
+					existingRegistration.IsDesired = true;
+					await _service.Update(existingRegistration);
+				}
+            }
 
 			return Ok();
 		}
@@ -58,14 +78,9 @@ namespace DancePlatform.API.Controllers
 		[HttpGet("get/{id}")]
 		public async Task<IActionResult> GetById(int id)
 		{
-			var registrations = await _service.GetById(id);
+			var registration = await _service.GetById(id);
 
-			if (registrations.Count == 0)
-			{
-				return NotFound();
-			}
-
-			return Ok(registrations);
+			return Ok(registration);
 		}
 
 		[HttpPut("update")]
@@ -89,7 +104,7 @@ namespace DancePlatform.API.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Organizer")]
         [HttpPost("checkout-users")]
         public async Task<IActionResult> CheckoutUsers(List<CheckoutUsersRequest> requests)
         {

@@ -61,6 +61,20 @@ const getDesiredWorkshops = userId => {
     });
 }
 
+const approveWorkshop = workshopId => {
+    return request({
+        method: 'POST',
+        url: `/workshop/approve/${workshopId}`
+    });
+}
+
+const declineWorkshop = (workshopId, comment) => {
+    return request({
+        method: 'POST',
+        url: `/workshop/decline/${workshopId}/${comment}`
+    });
+}
+
 
 const WorkshopService = {
     getAllWorkshops,
@@ -72,6 +86,8 @@ const WorkshopService = {
     getById,
     getClosed,
     getDesiredWorkshops,
+    approveWorkshop,
+    declineWorkshop,
 }
 
 export default WorkshopService;

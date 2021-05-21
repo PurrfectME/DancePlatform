@@ -45,6 +45,9 @@ export default function EventCalendar() {
         <MonthlyBody
           events={[...workshops.map(x => {
             const date = parseISO(`${timeHelper.normalizeDate(x.date)}T${new Date(x.time).toISOString().substr(11, 5)}`);
+            if(date.getTime() < new Date()){
+              return false;
+            }
             return {
               title: x.place.studioName,
               date: date,
@@ -58,7 +61,7 @@ export default function EventCalendar() {
                   style={{width: 50}}
                   key={item.id}
                   title={item.title}
-                  date={`${item.date.getHours()}:${item.date.getMinutes()}`}
+                  date={`${item.date.toLocaleTimeString()}`}
               />
               </Button>
               

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DancePlatform.API.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Organizer")]
     [Route("choreographer")]
     [ApiController]
     public class ChoreographerController : ControllerBase

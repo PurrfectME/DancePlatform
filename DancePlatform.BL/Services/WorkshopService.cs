@@ -86,9 +86,7 @@ namespace DancePlatform.BL.Services
                     if (!item.Registrations.Exists(x => x.UserId == userId))
                     {
                         result.Add(item);
-
                     }
-                    
                 }
             }
 
@@ -113,9 +111,9 @@ namespace DancePlatform.BL.Services
                 .ToListAsync();
         }
 
-        public Task<List<Workshop>> GetUserDesiredWorkshops(int userId)
+        public async Task<List<Workshop>> GetUserDesiredWorkshops(int userId)
         {
-            var registrations = _context.Registrations
+            var registrations = await _context.Registrations
                 .AsNoTracking()
                 .Include(x => x.Workshop)
                 .ThenInclude(x => x.Place)
@@ -123,9 +121,29 @@ namespace DancePlatform.BL.Services
                 .ThenInclude(x => x.Choreographer)
                 .Include(x => x.User)
                 .Where(x => x.UserId == userId && x.IsPresent == false)
-                .Where(x => x.IsDesired);
+                .Where(x => x.IsDesired)
+                .ToListAsync();
 
-            return registrations.Count() == 0 ? null : registrations.Select(x => x.Workshop).Where(x => !x.IsClosed).ToListAsync();
+            return registrations.Count == 0 ? null : registrations.Select(x => x.Workshop).Where(x => !x.IsClosed).ToList();
+        }
+
+        public async Task ApproveWorkshop(int workshopId)
+        {
+            var workshopToApprove = await _context.Workshops.FirstAsync(x => x.Id == workshopId);
+
+            workshopToApprove.IsApprovedByModerator = true;
+
+            await Update(workshopToApprove);
+        }
+
+        public async Task DeclineWorkshop(int workshopId, string comment)
+        {
+            var workshopToDecline = await _context.Workshops.FirstAsync(x => x.Id == workshopId);
+
+            workshopToDecline.IsClosed = true;
+            workshopToDecline.Comment = comment;
+
+            await Update(workshopToDecline);
         }
     }
 }

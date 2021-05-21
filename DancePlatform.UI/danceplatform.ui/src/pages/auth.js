@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
+import Checkbox from '@material-ui/core/Checkbox';
+import Grid from '@material-ui/core/Grid';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
@@ -59,6 +63,8 @@ export default function Auth(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [checked, setChecked] = useState(false);
@@ -76,14 +82,11 @@ export default function Auth(props) {
   const register = () => {
     if(props.actionName === 'Регистрация'){
       setIsError(false);
-      AuthService.register({email, password, username}).then(x => {
+      const isOrganizer = checked;
+      AuthService.register({email, password, username, isOrganizer, name, surname}).then(x => {
         setShowNotification(true);
-        if(closeNotification){
-          
-          history.push('/login');
-        }
+          // history.push('/login');
       }).catch(err => {
-        console.log('aFSafaFSDAF')
         if(err.status == 400){
           setErrorMessage(err.data.message);
           setIsError(true);
@@ -107,7 +110,7 @@ export default function Auth(props) {
         history.push('/');
       }).catch(err => {
         if(err.status == 401){
-          setErrorMessage('Вы ввели неверные данные для аутентификации');
+          setErrorMessage(err.data.message);
           setIsError(true);
         }
         if(err.status == 403){
@@ -133,16 +136,46 @@ export default function Auth(props) {
           {props.actionName}
         </Typography>
         <form className={classes.form}>
-        {props.actionName === 'Регистрация' ? <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Логин"
-            name="username"
-            onChange={e => setUsername(e.target.value)}
-          /> : <></>}
+        {props.actionName === 'Регистрация' ?
+        <>
+          <Grid container alignItems="flex-start" justify="space-between">
+            <Grid item xs={5}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label="Имя"
+              name="name"
+              onChange={e => setName(e.target.value)}
+            />
+            </Grid>
+            <Grid item xs={5}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="surname"
+              label="Фамилия"
+              name="surname"
+              onChange={e => setSurname(e.target.value)}
+            />
+            </Grid>
+          </Grid>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="Логин"
+              name="username"
+              onChange={e => setUsername(e.target.value)}
+            />
+            </>
+          : <></>}
           <TextField
             variant="outlined"
             margin="normal"
@@ -164,19 +197,22 @@ export default function Auth(props) {
             id="password"
             onChange={e => setPassword(e.target.value)}
           />
-          {/* <Tooltip title="Если вы хотите предлагать свои мероприятия, то поставьте галочку" placement="right-start">
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={checked}
-                  onChange={handleChange}
-                  name="checkedB"
-                  color="primary"
-                />
-              }
-              label="Хотите стать организатором?"
-            />
-          </Tooltip> */}
+          {props.actionName === 'Регистрация' ?
+            <Tooltip title="Если вы хотите предлагать свои мероприятия, то поставьте галочку" placement="right-start">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={checked}
+                    onChange={handleChange}
+                    name="checkedB"
+                    color="primary"
+                  />
+                }
+                label="Хотите стать организатором?"
+              />
+            </Tooltip>
+          : <></>
+          }
           <Button
             type="button"
             fullWidth

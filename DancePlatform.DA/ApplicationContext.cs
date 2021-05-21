@@ -39,15 +39,15 @@ namespace DancePlatform.DA
             builder.Entity<Role>().HasData(
                 new Role
                 {
-                    Id = 3,
-                    Name = "Organizer",
-                    NormalizedName = "ORGANIZER"
+                    Id = 1,
+                    Name = "Moderator",
+                    NormalizedName = "MODERATOR"
                 },
                 new Role
                 {
-                    Id = 1,
-                    Name = "Admin",
-                    NormalizedName = "ADMIN"
+                    Id = 3,
+                    Name = "Organizer",
+                    NormalizedName = "ORGANIZER"
                 },
                 new Role
                 {

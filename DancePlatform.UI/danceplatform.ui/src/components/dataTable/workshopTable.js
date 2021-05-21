@@ -72,7 +72,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-      {storageHelper.isAdmin() ?
+      {storageHelper.isOrganizer() ?
         <TableCell padding="checkbox">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -291,7 +291,7 @@ export default function WorkshopTable(props) {
         </Typography>
       )}
 
-      {props.isAdmin ? (
+      {props.isOrganizer ? (
         props.isHistory ? <></> :
         <>
           <Button
@@ -450,7 +450,7 @@ export default function WorkshopTable(props) {
                       key={shortid.generate()}
                       selected={isItemSelected}
                     >
-                      {storageHelper.isAdmin() ?
+                      {storageHelper.isOrganizer() ?
                         <TableCell padding="checkbox">
                           <Checkbox
                             checked={isItemSelected}

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DancePlatform.DA.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20210410163751_asd")]
-    partial class asd
+    [Migration("20210520200835_change_props")]
+    partial class change_props
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -76,10 +76,13 @@ namespace DancePlatform.DA.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("IsDesired")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsPresent")
+                    b.Property<bool>("IsPresent")
                         .HasColumnType("bit");
 
                     b.Property<int>("UserId")
@@ -124,6 +127,29 @@ namespace DancePlatform.DA.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ConcurrencyStamp = "85618bd9-d37e-44a6-9b61-dfaa0e83e7b0",
+                            Name = "Moderator",
+                            NormalizedName = "MODERATOR"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ConcurrencyStamp = "0ce91cc6-982c-4fb4-adad-59c71085f871",
+                            Name = "Organizer",
+                            NormalizedName = "ORGANIZER"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ConcurrencyStamp = "66ba18b8-f067-4ac7-b170-1e480035911d",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("DancePlatform.BL.Models.User", b =>
@@ -144,6 +170,9 @@ namespace DancePlatform.DA.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -159,6 +188,9 @@ namespace DancePlatform.DA.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Photo")
@@ -200,13 +232,16 @@ namespace DancePlatform.DA.Migrations
                     b.Property<int>("ChoreographerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<bool>("IsApprovedByModerator")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsClosed")
                         .HasColumnType("bit");
 
                     b.Property<int>("MaxUsers")
@@ -215,8 +250,11 @@ namespace DancePlatform.DA.Migrations
                     b.Property<int>("MinAge")
                         .HasColumnType("int");
 
-                    b.Property<string>("Place")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("PlaceId")
+                        .HasColumnType("int");
 
                     b.Property<float>("Price")
                         .HasColumnType("real");
@@ -224,9 +262,14 @@ namespace DancePlatform.DA.Migrations
                     b.Property<int>("Style")
                         .HasColumnType("int");
 
+                    b.Property<DateTimeOffset>("Time")
+                        .HasColumnType("datetimeoffset");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChoreographerId");
+
+                    b.HasIndex("PlaceId");
 
                     b.ToTable("Workshops");
                 });
@@ -359,7 +402,15 @@ namespace DancePlatform.DA.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DancePlatform.BL.Models.Place", "Place")
+                        .WithMany("Workshops")
+                        .HasForeignKey("PlaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Choreographer");
+
+                    b.Navigation("Place");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -414,6 +465,11 @@ namespace DancePlatform.DA.Migrations
                 });
 
             modelBuilder.Entity("DancePlatform.BL.Models.Choreographer", b =>
+                {
+                    b.Navigation("Workshops");
+                });
+
+            modelBuilder.Entity("DancePlatform.BL.Models.Place", b =>
                 {
                     b.Navigation("Workshops");
                 });

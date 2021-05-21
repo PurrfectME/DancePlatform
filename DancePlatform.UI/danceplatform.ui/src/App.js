@@ -27,7 +27,7 @@ function App() {
           <Switch>
             <Route exact path="/" render={() => 
             <>
-              <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+              <Header isOrganizer={storageHelper.isOrganizer()} isAuthenticated={storageHelper.isAuthenticated()} />
               <Main />
             </>} />
             <Route exact path='/login' render={() => 
@@ -47,9 +47,9 @@ function App() {
             </>} />
             <Route exact path="/users-accounting/:workshopId?" render={params => 
             <>
-              {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+              {storageHelper.isAuthenticated() && storageHelper.isOrganizer() ?
               <>
-                <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+                <Header isOrganizer={storageHelper.isOrganizer()} isAuthenticated={storageHelper.isAuthenticated()} />
                 <UsersAccounting {...params} />
               </>
               :
@@ -69,9 +69,9 @@ function App() {
             </>} />
             <Route exact path="/places" render={() => 
             <>
-              {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+              {storageHelper.isAuthenticated() && storageHelper.isOrganizer() ?
               <>
-                <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+                <Header isOrganizer={storageHelper.isOrganizer()} isAuthenticated={storageHelper.isAuthenticated()} />
                 <Places />
               </>
               :
@@ -91,9 +91,9 @@ function App() {
             </>} />
             <Route exact path="/events" render={() => 
             <>
-              {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+              {storageHelper.isAuthenticated() && storageHelper.isOrganizer() ?
               <>
-                <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+                <Header isOrganizer={storageHelper.isOrganizer()} isAuthenticated={storageHelper.isAuthenticated()} />
                 <Events />
               </>
               :
@@ -102,9 +102,9 @@ function App() {
             </>} />
             <Route exact path="/choreographers" render={() => 
             <>
-              {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+              {storageHelper.isAuthenticated() && storageHelper.isOrganizer() ?
               <>
-                <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+                <Header isOrganizer={storageHelper.isOrganizer()} isAuthenticated={storageHelper.isAuthenticated()} />
                 <Choregraphers />
               </>
               :
@@ -113,9 +113,9 @@ function App() {
             </>} />
             <Route exact path="/workshops-history" render={() => 
             <>
-              {storageHelper.isAuthenticated() && storageHelper.isAdmin() ?
+              {storageHelper.isAuthenticated() && storageHelper.isOrganizer() ?
               <>
-                <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+                <Header isOrganizer={storageHelper.isOrganizer()} isAuthenticated={storageHelper.isAuthenticated()} />
                 <WorkshopsHistory />
               </>
               :
@@ -126,7 +126,7 @@ function App() {
             <>
               {storageHelper.isAuthenticated() ?
               <>
-                <Header isAdmin={storageHelper.isAdmin()} isAuthenticated={storageHelper.isAuthenticated()} />
+                <Header isOrganizer={storageHelper.isOrganizer()} isAuthenticated={storageHelper.isAuthenticated()} />
                 <DesiredWorkshops />
               </>
               :

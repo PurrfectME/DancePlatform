@@ -5,13 +5,13 @@ import WorkshopContainer from '../components/workshops/workshopContainer';
 import AdminTable from '../components/dataTable/adminTable';
 
 export default function Main(){
-    const isAdmin = storageHelper.isAdmin();
+    const isOrganizer = storageHelper.isOrganizer();
     return(
         <>
             {storageHelper.isAuthenticated() ? 
                 
-                isAdmin ? <AdminTable /> :
-                // <WorkshopTable fromWorkshops={false} isAdmin={isAdmin} />
+                isOrganizer ? <AdminTable /> :
+                // <WorkshopTable fromWorkshops={false} isOrganizer={isOrganizer} />
                 <WorkshopContainer isDesired={false} />
             :
                 <Redirect to='/login' />

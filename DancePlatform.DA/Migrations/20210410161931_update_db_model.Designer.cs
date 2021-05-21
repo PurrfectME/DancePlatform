@@ -204,7 +204,7 @@ namespace DancePlatform.DA.Migrations
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<bool>("IsApprovedByAdmin")
+                    b.Property<bool>("IsApprovedByModerator")
                         .HasColumnType("bit");
 
                     b.Property<int>("MaxUsers")

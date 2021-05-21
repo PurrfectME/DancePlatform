@@ -76,6 +76,7 @@ export default function AdminTable(props) {
         { name: 'price', label: 'Цена, BYN' },
         { name: 'minAge', label: 'Мин. возраст' },
         { name: 'maxUsers', label: 'Макс. людей' },
+        { name: 'isApprovedByModerator', label: 'Одобрено модератором' },
     ];
 
     const handleRowClick = (rowData, rowMeta) => {
@@ -142,7 +143,8 @@ const showFormCallback = (show, workshop, editing) => {
             price: workshop.price,
             minAge: workshop.minAge,
             maxUsers: workshop.maxUsers,
-            id: workshop.id
+            id: workshop.id,
+            isApprovedByModerator: workshop.isApprovedByModerator
         }]);
     else if(workshop){
         var index = workshops.map(x => x.id).indexOf(workshop.id);
@@ -159,7 +161,8 @@ const showFormCallback = (show, workshop, editing) => {
             price: workshop.price,
             minAge: workshop.minAge,
             maxUsers: workshop.maxUsers,
-            id: workshop.id
+            id: workshop.id,
+            isApprovedByModerator: workshop.isApprovedByModerator
         });
 
         const secArr = workshops.slice(index + 1, workshops.length);
@@ -172,15 +175,16 @@ const showFormCallback = (show, workshop, editing) => {
 
     useEffect(() => {
         WorkshopService.getAllWorkshops().then(response => {
-        setWorkshops(response.map(x => {
-            x.style = styles[x.style];
-            x.category = categories[x.category];
-            x.date = timeHelper.normalizeDate(x.date);
-            x.time = timeHelper.normalizeTime(x.time);
-            x.studioName = x.place.studioName;
-            x.choreographerName = x.choreographer.name;
-            return x;
-        }));
+            setWorkshops(response.map(x => {
+                x.style = styles[x.style];
+                x.category = categories[x.category];
+                x.date = timeHelper.normalizeDate(x.date);
+                x.time = timeHelper.normalizeTime(x.time);
+                x.studioName = x.place.studioName;
+                x.choreographerName = x.choreographer.name;
+                x.isApprovedByModerator = x.isApprovedByModerator ? 'Да' : 'Нет'
+                return x;
+            }));
 
         PlaceService.getAllPlaces().then(places => {
             setPlaces(places);

@@ -80,11 +80,11 @@ namespace DancePlatform.API
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("ADMIN",
-                    policy => policy.RequireRole("ADMIN"));
-
                 options.AddPolicy("ORGANIZER",
                     policy => policy.RequireRole("ORGANIZER"));
+
+                options.AddPolicy("MODERATOR",
+                    policy => policy.RequireRole("MODERATOR"));
             });
 
 
@@ -139,17 +139,18 @@ namespace DancePlatform.API
 
         private static void SeedUsers(UserManager<User> manager)
         {
-            if (manager.FindByNameAsync("Admin").Result != null) return;
-            var admin = new User
+            if (manager.FindByNameAsync("Moderator").Result != null) return;
+            var moderator = new User
             {
-                UserName = "Admin",
-                Email = "admin@gmail.com",
+                UserName = "Moderator",
+                Email = "moderator@gmail.com",
+                EmailConfirmed = true
             };
 
-            if ((manager.CreateAsync(admin, "admin").Result).Succeeded)
+            if ((manager.CreateAsync(moderator, "moderator").Result).Succeeded)
             {
-                manager.AddToRoleAsync(admin,
-                    "Admin").Wait();
+                manager.AddToRoleAsync(moderator,
+                    "Moderator").Wait();
             }
         }
     }

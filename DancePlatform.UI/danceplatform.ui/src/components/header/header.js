@@ -60,7 +60,7 @@ export default function Header(props) {
             </Typography>
             <Typography variant="h6" className={classes.title}>
                 
-                {props.isAdmin ? 
+                {props.isOrganizer ? 
                 <>
                   {/* <Button style={{textDecoration: 'none', color: 'white'}} aria-controls="simple-menu" aria-haspopup="true" onClick={handleMenu}>
                     Дополнительные действия
@@ -112,7 +112,30 @@ export default function Header(props) {
                   </Menu>
                 </>
                 :
-                <>
+                  
+                  storageHelper.isModerator() ?
+                  
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleClose}>
+                      <Button href='/' color="inherit">
+                        Ожидают подтверждения
+                      </Button>
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
+                      <Button href='/login' onClick={() => {
+                        localStorage.clear();
+                      }} color="inherit">
+                          Выйти
+                      </Button>
+                    </MenuItem>
+                  </Menu>
+                :
                   <Menu
                     id="simple-menu"
                     anchorEl={anchorEl}
@@ -148,11 +171,9 @@ export default function Header(props) {
                       </Button>
                     </MenuItem>
                 </Menu>
-                </>
                 }
             </Typography>
           </>
-            
             {props.isAuthenticated ? 
               <>
               <Button className={classes.menu} aria-controls="simple-menu" aria-haspopup="true" onClick={handleMenu}>

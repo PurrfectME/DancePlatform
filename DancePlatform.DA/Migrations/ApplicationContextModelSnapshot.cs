@@ -129,22 +129,22 @@ namespace DancePlatform.DA.Migrations
                     b.HasData(
                         new
                         {
+                            Id = 1,
+                            ConcurrencyStamp = "ee06ae43-08d6-4729-800a-cbfee57faff5",
+                            Name = "Moderator",
+                            NormalizedName = "MODERATOR"
+                        },
+                        new
+                        {
                             Id = 3,
-                            ConcurrencyStamp = "4d0e2b80-2b53-4df0-b699-f19ca889a085",
+                            ConcurrencyStamp = "6c754715-d6c1-4ee2-978c-9540235546bb",
                             Name = "Organizer",
                             NormalizedName = "ORGANIZER"
                         },
                         new
                         {
-                            Id = 1,
-                            ConcurrencyStamp = "518acb68-f05f-4036-8cc5-c538626c1621",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
                             Id = 2,
-                            ConcurrencyStamp = "5c895b57-7615-45fd-b498-8386a4bde349",
+                            ConcurrencyStamp = "99b60a1c-1c88-4794-8025-c817c01290cd",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -230,13 +230,16 @@ namespace DancePlatform.DA.Migrations
                     b.Property<int>("ChoreographerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<bool>("IsApprovedByAdmin")
+                    b.Property<bool>("IsApprovedByModerator")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsClosed")

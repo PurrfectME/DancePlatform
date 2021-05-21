@@ -11,6 +11,7 @@ import '../styles/profileInfo.css'
 import PayPalComponent from '../components/paypal/paypalComponent';
 import storageHelper from '../helpers/storageHelper';
 import { useHistory } from "react-router-dom";
+import NotificationBox from '../components/dialog/notificationBox';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,6 +44,12 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 5,
         marginTop: 5,
     },
+    moderatorButtons: {
+        marginTop: 45,
+        display: 'flex',
+        justifyContent: 'space-evenly',
+        width: 500
+    }
 }));
 
 export default function WorkshopInfo(){
@@ -59,6 +66,9 @@ export default function WorkshopInfo(){
             address: '',
         }
     });
+    
+    const [isDeclined, setIsDeclined] = useState(false);
+    const [isNotify, setIsNotify] = useState(false);
 
     const [isDesired] = useState(new URLSearchParams(window.location.search).get('desired'));
 
@@ -82,8 +92,13 @@ export default function WorkshopInfo(){
             history.push('/');
         })
     }
-
-    console.log(isDesired)
+    
+    const notificationBoxCallback = (open, comment) => {
+        setIsDeclined(open);
+        WorkshopService.declineWorkshop(workshop.id, comment).then(x => {
+            history.push('/');
+        });
+    }
 
     return(
         <>
@@ -137,7 +152,41 @@ export default function WorkshopInfo(){
                         <YMap address={workshop.place.address}/>
                     </Grid>
 
-                    {isDesired == 'false' ?
+                    {storageHelper.isModerator() ?
+                        <div className={classes.moderatorButtons}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="button"
+                                color="primary"
+                                onClick={() => {
+                                    WorkshopService.approveWorkshop(workshop.id).then(x => {
+                                        history.push('/');
+                                    });
+                                }}
+                            >
+                                Подтвердить мастер-класс
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="button"
+                                color="primary"
+                                onClick={() => {
+                                    setIsDeclined(true);
+                                    setIsNotify(true);
+                                    // WorkshopService.declineWorkshop(workshop.id).then(x => {
+                                    //     history.push('/');
+                                    // });
+                                }}
+                            >
+                                Отклонить мастер-класс
+                            </Button>
+                            {!isDeclined ? <></> : <NotificationBox isDeclined={isDeclined} closeCallback={notificationBoxCallback} isNotify={isNotify} />}
+                        </div>
+                    :
+                    <>
+                        {isDesired == 'false' ?
                         <button style={{width: 500, marginTop: 35}} onClick={addToDesired} className={classes.registerButton} type="button" variant="contained" color="primary">
                             Добавить в желаемое 
                         </button>
@@ -147,6 +196,8 @@ export default function WorkshopInfo(){
                         <button style={{width: 500, marginTop: 35}} className={classes.registerButton} type="button" variant="contained" color="primary">
                             <PayPalComponent workshop={workshop}/>
                         </button>
+                    </>
+                    }
                     </Grid>
                 </Grid>
             </Paper>

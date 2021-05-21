@@ -6,10 +6,10 @@ import storageHelper from '../helpers/storageHelper';
 
 export default function WorkshopsHistory(){
 
-    const isAdmin = storageHelper.isAdmin();
+    const isOrganizer = storageHelper.isOrganizer();
     return(
         <>
-            <WorkshopTable fromWorkshops={false} isAdmin={isAdmin} isHistory={true} />
+            <WorkshopTable fromWorkshops={false} isOrganizer={isOrganizer} isHistory={true} />
         </>
     )
 }

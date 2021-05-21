@@ -8,7 +8,7 @@ export default function Workshops(){
         <>
             {storageHelper.isAuthenticated() ? 
                     
-                <WorkshopTable fromWorkshops={true} isAdmin={storageHelper.isAdmin()}
+                <WorkshopTable fromWorkshops={true} isOrganizer={storageHelper.isOrganizer()}
                     data={[]}/>
             
             :
