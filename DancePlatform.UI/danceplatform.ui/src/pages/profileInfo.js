@@ -54,9 +54,11 @@ const useStyles = makeStyles((theme) => ({
     userName: {
         fontSize: 30,
         fontWeight: 'bold',
+        marginBottom: 25,
     },
     fullName: {
         fontSize: 15,
+        marginBottom: 10,
     },
     personalInfoTab: {
         display: 'inline-block'
@@ -73,6 +75,9 @@ const useStyles = makeStyles((theme) => ({
           backgroundColor: '#F59B69',
         }
     },
+    dob: {
+        marginBottom: 10,
+    }
 }));
 
 export default function ProfileInfo(){

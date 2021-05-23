@@ -148,6 +148,13 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  btn: {
+    color: 'black',
+    backgroundColor: '#B2C8D6',
+    "&:hover": {
+      backgroundColor: '#F59B69',
+    },
+},
 }));
 
 export default function UsersAdditionalInfo(props) {
@@ -246,7 +253,7 @@ export default function UsersAdditionalInfo(props) {
             type="button"
             variant="contained"
             color="primary"
-            className={toolBarStyles.submit}
+            className={`${toolBarStyles.submit} ${classes.btn}`}
             onClick={() => {
                 const {workshopId} = props;
 

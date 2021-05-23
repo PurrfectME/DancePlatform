@@ -17,6 +17,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import "typeface-pacifico";
 import DesiredWorkshops from "./pages/desiredWorkshops";
 import UserWorkshopsHistory from "./pages/userWorkshopsHistory";
+import './styles/profileInfo.css'
 
 function App() {
 

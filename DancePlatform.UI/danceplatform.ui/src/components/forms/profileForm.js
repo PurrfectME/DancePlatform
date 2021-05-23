@@ -7,10 +7,23 @@ import {
   Button,
   CssBaseline,
   MenuItem,
+  makeStyles
 } from '@material-ui/core';
 import ErrorBox from '../dialog/errorBox';
 import ProfileService from '../../services/profileService';
 import storageHelper from '../../helpers/storageHelper';
+import timeHelper from '../../helpers/dateHelper';
+
+
+const useStyles = makeStyles((theme) => ({
+  submit: {
+    color: 'black',
+    backgroundColor: '#B2C8D6',
+    "&:hover": {
+      backgroundColor: '#F59B69',
+    }
+},
+}));
 
 const validate = values => {
   const errors = {};
@@ -31,6 +44,7 @@ const validate = values => {
 };
 
 export default function ProfileForm(props) {
+  const classes = useStyles();
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -44,7 +58,7 @@ export default function ProfileForm(props) {
       user.dateOfBirth = values.dateOfBirth;
       user.photo = values.photo;
       localStorage.setItem('user', JSON.stringify(user));
-      
+
       props.showFormCallback(props.showForm, response, props.editing);
     })
   };
@@ -57,6 +71,7 @@ export default function ProfileForm(props) {
     props.showFormCallback(props.showForm, props.initialData, props.editing)
   }
 
+  props.initialData.dateOfBirth = timeHelper.normalizeDate(props.initialData.dateOfBirth);
 
   return(
     props.showForm ?
@@ -125,6 +140,8 @@ export default function ProfileForm(props) {
                     color="primary"
                     type="submit"
                     disabled={submitting}
+                    className={classes.submit}
+                    style={{marginRight: 15}}
                   >
                     Обновить
                   </Button>
@@ -134,6 +151,7 @@ export default function ProfileForm(props) {
                     type="button"
                     onClick={onCloseClick}
                     disabled={submitting}
+                    className={classes.submit}
                   >
                     Закрыть
                   </Button>

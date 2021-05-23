@@ -45,5 +45,13 @@
     padding: 6px 8px;
     display: block !important;
     font-family: "Pacifico";
+}
 
+button {
+    color: 'black !important';
+    background-color: '#B2C8D6 !important';
+}
+
+button:hover {
+    background-color: '#F59B69 !important';
 }
