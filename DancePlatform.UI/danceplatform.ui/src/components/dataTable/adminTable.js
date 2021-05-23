@@ -13,6 +13,13 @@ const useStyles = makeStyles((theme) => ({
     root: {
       margin: 22,
     },
+    btn: {
+        color: 'black',
+        backgroundColor: '#B2C8D6',
+        "&:hover": {
+          backgroundColor: '#F59B69',
+        }
+    },
 }));
 
 export default function AdminTable(props) {
@@ -35,7 +42,7 @@ export default function AdminTable(props) {
                 sort: false,
                 customBodyRender: (value, tableMeta, updateValue) => {
                     return (
-                        <Button disabled={showForm} onClick={() => 
+                        <Button className={classes.btn} disabled={showForm} onClick={() => 
                         {
                             setShowForm(!showForm);
                             setEditing(true);
@@ -53,7 +60,7 @@ export default function AdminTable(props) {
               sort: false,
               customBodyRender: (value, tableMeta, updateValue) => {
                 return (
-                    <Button disabled={showForm} onClick={() => {
+                    <Button className={classes.btn} disabled={showForm} onClick={() => {
                         const idToDelete = workshops[tableMeta.rowIndex].id;
 
                         WorkshopService.deleteWorkshop(idToDelete).then(response => {
@@ -91,6 +98,7 @@ export default function AdminTable(props) {
         filterType: 'dropdown',
         responsive: 'standard',
         viewColumns: false,
+        print: false,
         onRowClick: handleRowClick,
         onDownload: (buildHead, buildBody, columns, data) => {
             return "\uFEFF" + buildHead(columns) + buildBody(data); 
@@ -105,7 +113,6 @@ export default function AdminTable(props) {
             toolbar: {
                 search: "Поиск",
                 downloadCsv: "Скачать CSV",
-                print: "Распечатать",
                 viewColumns: "Показать колонки",
                 filterTable: "Фильтр таблицы",
             },
@@ -125,7 +132,6 @@ export default function AdminTable(props) {
 
 const showFormCallback = (show, workshop, editing) => {
     setShowForm(!show);
-console.log('12312312312',workshop);
     if(workshop === null){
         return;
     }
@@ -208,7 +214,7 @@ console.log('12312312312',workshop);
     return(
         <>
         <div className={classes.root}>
-            <Button disabled={showForm} onClick={() => {
+            <Button className={classes.btn} disabled={showForm} onClick={() => {
                 setShowForm(true);
                 setEditing(false);
             }} type="button" variant="contained" color="primary">

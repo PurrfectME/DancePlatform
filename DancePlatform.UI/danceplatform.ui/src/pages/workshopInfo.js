@@ -49,7 +49,14 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'space-evenly',
         width: 500
-    }
+    },
+    btn: {
+        color: 'black',
+        backgroundColor: '#B2C8D6',
+        "&:hover": {
+          backgroundColor: '#F59B69',
+        },
+    },
 }));
 
 export default function WorkshopInfo(){
@@ -174,17 +181,19 @@ export default function WorkshopInfo(){
                     :
                     <>
                         {isDesired == 'false' ?
-                        <button style={{width: 500, marginTop: 35}} onClick={addToDesired} className={classes.registerButton} type="button" variant="contained" color="primary">
-                            Добавить в желаемое 
-                        </button>
+                        <>
+                            <Button style={{width: 500, marginTop: 35}} onClick={addToDesired} className={`${classes.registerButton} ${classes.btn}`} type="button" variant="contained" color="primary">
+                                Добавить в желаемое 
+                            </Button>
+                            <h1 style={{fontSize: 15, marginTop: 20}}>Или</h1>
+                        </>
                     :
                         <></>
                     }
                         {workshop.maxUsers === workshop.currentUsersCount ? <></> :
-                        
-                        <button style={{width: 500, marginTop: 35}} className={classes.registerButton} type="button" variant="contained" color="primary">
-                            <PayPalComponent workshop={workshop}/>
-                        </button>
+                            <button style={{width: 500, marginTop: 20}} className={classes.registerButton} type="button" variant="contained" color="primary">
+                                <PayPalComponent workshop={workshop}/>
+                            </button>
                     }
                     </>
                     }

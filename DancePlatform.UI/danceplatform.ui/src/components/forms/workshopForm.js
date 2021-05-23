@@ -130,7 +130,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     color: 'red'
-  }
+  },
+  btn: {
+    color: 'black',
+    backgroundColor: '#B2C8D6',
+    "&:hover": {
+      backgroundColor: '#F59B69',
+    }
+},
 }));
 
 
@@ -311,6 +318,7 @@ export default function WorkshopForm(props) {
                     // write your building UI
                       <div className={classes.imageButtons}>
                         <Button
+                              className={classes.btn}
                               type="button" variant="contained" color="primary"
                               style={isDragging ? { color: 'red' } : undefined}
                               onClick={onImageUpload}
@@ -382,15 +390,19 @@ export default function WorkshopForm(props) {
                     color="primary"
                     type="submit"
                     disabled={submitting}
+                    className={classes.btn}
+                    style={{marginRight: 25}}
                   >
                     Сохранить
                   </Button>
                   <Button
+                    className={classes.btn}
                     variant="contained"
                     color="primary"
                     type="button"
                     onClick={onCloseClick}
                     disabled={submitting}
+                    className={classes.btn}
                   >
                     Закрыть
                   </Button>
@@ -398,19 +410,22 @@ export default function WorkshopForm(props) {
                   :
                   <>
                     <Button
+                      className={classes.btn}
                       variant="contained"
                       color="primary"
                       type="submit"
                       disabled={submitting}
+                      style={{marginRight: 25}}
                     >
                       Добавить
                     </Button>
                     <Button
-                    variant="contained"
-                    color="primary"
-                    type="button"
-                    onClick={onCloseClick}
-                    disabled={submitting}
+                      className={classes.btn}
+                      variant="contained"
+                      color="primary"
+                      type="button"
+                      onClick={onCloseClick}
+                      disabled={submitting}
                   >
                     Закрыть
                   </Button>

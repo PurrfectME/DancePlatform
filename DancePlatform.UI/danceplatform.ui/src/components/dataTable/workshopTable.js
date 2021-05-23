@@ -162,6 +162,15 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  btn: {
+    color: 'black',
+    backgroundColor: '#B2C8D6',
+    "&:hover": {
+      backgroundColor: '#F59B69',
+    },
+    width: 720,
+    marginLeft: 30
+},
 }));
 
 export default function WorkshopTable(props) {
@@ -309,7 +318,7 @@ export default function WorkshopTable(props) {
             type="button"
             variant="contained"
             color="primary"
-            className={toolBarStyles.submit}
+            className={`${toolBarStyles.submit} ${classes.btn}`}
             onClick={() => {
                 if(selected.length === 1){
                     setWorkshopIdToPreview(selected[0]);
@@ -328,7 +337,7 @@ export default function WorkshopTable(props) {
               type="button"
               variant="contained"
               color="primary"
-              className={toolBarStyles.submit}
+              className={`${toolBarStyles.submit} ${classes.btn}`}
               onClick={() => {
                   if(selected.length !== 0){
                     setSelected([]);
@@ -337,14 +346,14 @@ export default function WorkshopTable(props) {
                   }
               }}
               >
-              Сбросить выбранное
+              Закрыть выбранное
             </Button>
             <Button
               disabled={isCloseButtonDisabled}
               type="button"
               variant="contained"
               color="primary"
-              className={toolBarStyles.submit}
+              className={`${toolBarStyles.submit} ${classes.btn}`}
               onClick={() => {
                   if(selected.length !== 0){
                     setIsOpenAdditionalInfo(false);
@@ -360,38 +369,12 @@ export default function WorkshopTable(props) {
                   }
               }}
               >
-              Закрыть мастер-класс
+              Завершить мастер-класс
             </Button>
         </>
       ) : props.fromWorkshops ? (
         <></>
-    //     <Tooltip title="Отменить бронь">
-          
-    //     <Button
-    //         type="button"
-    //         variant="contained"
-    //         color="primary"
-    //         className={toolBarStyles.submit}
-    //         onClick={() => {
-    //             const ids = rows.filter(x => selected.includes(x.id)).map(x => {
-    //                 return (x.registrations.find(y => y.userId === storageHelper.getCurrentUserId()).id)
-    //             });
 
-    //             for(let i = 0; i < ids.length; i++){
-    //                 RegistrationService.deleteRegistrations(ids[i]).then(x => {
-    //                     setSelected([...selected.filter(x => x === ids[i])]);
-    //                     setRows([...rows.filter(x => x.id === ids[i])])
-    //                 }).then(() => {
-    //                     RegistrationService.getUserWorkshops(storageHelper.getCurrentUserId()).then(w => {
-    //                         setRows([...w]);
-    //                     })
-    //                 })
-    //             }
-    //         }}
-    //         >
-    //         Отменить бронь
-    //     </Button>
-    // </Tooltip>
       ) : props.isUserOwnHistory ? <></> :(
           
         <Tooltip title="Регистрация">

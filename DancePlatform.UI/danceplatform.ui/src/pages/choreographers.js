@@ -11,9 +11,15 @@ const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
       display: 'flex',
-      justifyContent: 'space-evenly',
       maxWidth: 1198,
-      margin: 'auto',
+      margin: 22,
+    },
+    btn: {
+        color: 'black',
+        backgroundColor: '#B2C8D6',
+        "&:hover": {
+        backgroundColor: '#F59B69',
+        },
     }
 }));
 
@@ -35,11 +41,11 @@ export default function Choregraphers(){
                 sort: false,
                 customBodyRender: (value, tableMeta, updateValue) => {
                     return (
-                        <Button disabled={showForm} onClick={() => 
+                        <Button style={{width: 220}} className={classes.btn} disabled={showForm} onClick={() => 
                         {
                             setShowForm(!showForm);
                             setEditing(true);
-                        }} type="button" variant="contained" color="primary" fullWidth={true}>
+                        }} type="button" variant="contained" color="primary">
                             Редактировать
                         </Button>
                     );
@@ -143,7 +149,7 @@ export default function Choregraphers(){
     return(
         <>
             <div className={classes.root}>
-                <Button disabled={showForm} onClick={() => {
+                <Button className={classes.btn} disabled={showForm} onClick={() => {
                     setShowForm(true);
                     setEditing(false);
                 }} type="button" variant="contained" color="primary">

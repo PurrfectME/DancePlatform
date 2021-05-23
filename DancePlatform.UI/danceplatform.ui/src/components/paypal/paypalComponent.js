@@ -37,7 +37,7 @@ export default function PayPalComponent(props) {
 
   return (
     <>
-      Или оплатить сейчас
+      <h1 style={{fontSize: 25}}>Оплатить сейчас</h1>
       <PayPalButton
         createOrder={(data, actions) => createOrder(data, actions)}
         onApprove={(data, actions) => onApprove(data, actions)}

@@ -9,10 +9,17 @@ const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
       display: 'flex',
-      justifyContent: 'space-evenly',
       maxWidth: 1198,
-      margin: 'auto',
-    }
+      margin: 22,
+    },
+    btn: {
+        color: 'black',
+        backgroundColor: '#B2C8D6',
+        "&:hover": {
+          backgroundColor: '#F59B69',
+        },
+
+    },
 }));
 
 export default function Places(props) {
@@ -31,37 +38,17 @@ export default function Places(props) {
                 sort: false,
                 customBodyRender: (value, tableMeta, updateValue) => {
                     return (
-                        <Button disabled={showForm} onClick={() => 
+                        <Button style={{width: 220}} className={classes.btn} disabled={showForm} onClick={() => 
                         {
                             setShowForm(!showForm);
                             setEditing(true);
-                        }} type="button" variant="contained" color="primary" fullWidth={true}>
+                        }} type="button" variant="contained" color="primary" >
                             Редактировать
                         </Button>
                     );
                 }
                 }
         },
-        // {
-        //     name: " ",
-        //     options: {
-        //       filter: false,
-        //       sort: false,
-        //       customBodyRender: (value, tableMeta, updateValue) => {
-        //         return (
-        //             <Button disabled={showForm} onClick={() => {
-        //                 const idToDelete = places[tableMeta.rowIndex].id;
-
-        //                 PlaceService.deletePlace(idToDelete).then(response => {
-        //                     setPlaces([...places.filter(x => x.id !== idToDelete)])
-        //                 });
-        //                 }} type="button" variant="contained" color="primary">
-        //                 Удалить
-        //             </Button>
-        //         );
-        //       }
-        //     }
-        // },
         { name: 'id', label: 'Номер' },
         { name: 'studioName', label: 'Студия' },
         { name: 'address', label: 'Адрес' },
@@ -140,13 +127,15 @@ const showFormCallback = (show, addedPlace, editing) => {
     }, []);
 
     const currentPlace = {...places[selectedRowToEdit]};
-    // currentWorkshop.style = Object.keys(styles).find(key => styles[key] === selectedStyle);
-    // currentWorkshop.category = Object.keys(categories).find(key => categories[key] === selectedCategory);
 
     return(
         <>
         <div className={classes.root}>
-            <Button disabled={showForm} onClick={() => {
+            <Button
+                style={{}}
+                className={classes.btn}
+                disabled={showForm}
+                onClick={() => {
                 setShowForm(true);
                 setEditing(false);
             }} type="button" variant="contained" color="primary">

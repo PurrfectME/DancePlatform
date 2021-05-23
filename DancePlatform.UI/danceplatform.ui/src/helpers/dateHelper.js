@@ -2,10 +2,7 @@ import moment from 'moment';
 
 function normalizeDate(sharpDate) {
     const date = moment(sharpDate);
-    
-    const y = date.year();
-    const m = date.month();
-    const d = date.date();
+
     return date.format('YYYY-MM-DD');
 };
 
