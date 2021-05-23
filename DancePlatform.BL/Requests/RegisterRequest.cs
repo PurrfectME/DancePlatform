@@ -1,4 +1,6 @@
-﻿namespace DancePlatform.BL.Requests
+﻿using System;
+
+namespace DancePlatform.BL.Requests
 {
     public class RegisterRequest
     {
@@ -8,5 +10,6 @@
         public bool IsOrganizer { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public DateTimeOffset DateOfBirth { get; set; }
     }
 }

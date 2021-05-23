@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
       flexWrap: 'wrap',
       maxWidth: 1198,
       margin: 'auto',
+      height: 200,
+      alignItems: 'center',
+      fontSize: 35
     },
     paper: {
       margin: '58px 10px 0px 10px',
@@ -51,6 +54,20 @@ export default function WorkshopContainer(props) {
 
     useEffect(() => {
         const userId = storageHelper.getCurrentUserId();
+        const isModerator = storageHelper.isModerator();
+
+        if(isModerator){
+            WorkshopService.getWorkshopsForApproval().then(response => {
+                setWorkshops([...response.map(item => {
+                    item.photo = `data:image/jpg;base64,${item.photo}`;
+    
+                    return item;
+                })]);
+            });
+            return;
+        }
+
+
         if(!props.isDesired){
             WorkshopService.getAvailableWorkshopsForUser(userId).then(response => {
                 setWorkshops([...response.map(item => {

@@ -5,21 +5,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { Input } from '@material-ui/core';
 
 export default function NotificationBox(props) {
     const [open, setOpen] = React.useState(props.isNotify);
-    const [comment, setComment] = useState('');
 
     const handleClose = () => {
       setOpen(false);
-      props.closeCallback(true, comment);
+      props.closeCallback(true);
     };
   
-    const commentOnChange = e => {
-      setComment(e.target.value);
-    }
-
     return (
       <div>
         <Dialog
@@ -29,34 +23,17 @@ export default function NotificationBox(props) {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">
-          {!props.isDeclined ?
-            "Уведомление!"
-          :
-            "Комментарий"
-          }
+          {"Уведомление!"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              {!props.isDeclined ?
-                props.message
-              :
-                <Input
-                  type="text"
-                  onChange={commentOnChange}
-                />
-              }
+              {props.message}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            {!props.isDeclined ?
               <Button onClick={handleClose} color="primary" autoFocus>
                 Закрыть
               </Button>
-            :
-              <Button onClick={handleClose} color="primary" autoFocus>
-                Отправить
-              </Button>
-            }
           </DialogActions>
         </Dialog>
       </div>

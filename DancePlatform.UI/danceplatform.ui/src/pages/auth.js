@@ -65,6 +65,7 @@ export default function Auth(props) {
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState();
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [checked, setChecked] = useState(false);
@@ -83,7 +84,7 @@ export default function Auth(props) {
     if(props.actionName === 'Регистрация'){
       setIsError(false);
       const isOrganizer = checked;
-      AuthService.register({email, password, username, isOrganizer, name, surname}).then(x => {
+      AuthService.register({email, password, username, isOrganizer, name, surname, dateOfBirth}).then(x => {
         setShowNotification(true);
           // history.push('/login');
       }).catch(err => {
@@ -139,8 +140,9 @@ export default function Auth(props) {
         {props.actionName === 'Регистрация' ?
         <>
           <Grid container alignItems="flex-start" justify="space-between">
-            <Grid item xs={5}>
+            <Grid item xs={6}>
             <TextField
+            style={{paddingRight: 5}}
               variant="outlined"
               margin="normal"
               required
@@ -151,7 +153,7 @@ export default function Auth(props) {
               onChange={e => setName(e.target.value)}
             />
             </Grid>
-            <Grid item xs={5}>
+            <Grid item xs={6}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -162,6 +164,20 @@ export default function Auth(props) {
               name="surname"
               onChange={e => setSurname(e.target.value)}
             />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                type="date"
+                fullWidth
+                id="dateOfBirth"
+                InputLabelProps={{ shrink: true, required: true }}
+                label="Дата рождения"
+                name="dateOfBirth"
+                onChange={e => setDateOfBirth(e.target.value)}
+              />
             </Grid>
           </Grid>
             <TextField

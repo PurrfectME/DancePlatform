@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DancePlatform.BL.Interfaces;
@@ -125,17 +126,26 @@ namespace DancePlatform.API.Controllers
         [HttpGet("available/{userId}")]
         public async Task<IActionResult> GetAvailableWorkshopsForUser(int userId)
         {
-            var name = _userManager.GetUserId(User);
-            var user = await _userManager.FindByEmailAsync(name);
-            var isModerator = await _userManager.IsInRoleAsync(user, "Moderator");
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            List<Workshop> result;
 
-            var result = await _service.GetAvailableWorkshopsForUser(userId);
-
-            if (isModerator)
+            if(await _userManager.IsInRoleAsync(user, "User"))
             {
-                result = result.Where(x => !x.IsApprovedByModerator).ToList();
-                return Ok(result);
+                result = await _service.GetAvailableWorkshopsForUser(userId, user.DateOfBirth);
             }
+            else
+            {
+                result = await _service.GetAvailableWorkshopsForUser(userId, null);
+            }
+
+            return Ok(result);
+        }
+
+        [Authorize(Roles = "Moderator")]
+        [HttpGet("awaiting-approval")]
+        public async Task<IActionResult> GetWorkshopsForApproval()
+        {
+            var result = await _service.GetWorkshopsForApproval();
 
             return Ok(result);
         }
@@ -145,11 +155,6 @@ namespace DancePlatform.API.Controllers
         public async Task<IActionResult> GetClosedWorkshops()
         {
             var result = await _service.GetClosed();
-
-            //if (result.Count == 0)
-            //{
-            //    return NotFound();
-            //}
 
             return Ok(result);
         }
@@ -177,10 +182,10 @@ namespace DancePlatform.API.Controllers
         }
 
         [Authorize(Roles = "Moderator")]
-        [HttpPost("decline/{workshopId}/{comment}")]
-        public async Task<IActionResult> DeclineWorkshop(int workshopId, string comment)
+        [HttpPost("decline/{workshopId}")]
+        public async Task<IActionResult> DeclineWorkshop(int workshopId)
         {
-            await _service.DeclineWorkshop(workshopId, comment);
+            await _service.DeclineWorkshop(workshopId);
 
             return Ok();
         }

@@ -103,7 +103,8 @@ namespace DancePlatform.API.Controllers
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
                 Name = model.Name,
-                Surname = model.Surname
+                Surname = model.Surname,
+                DateOfBirth = model.DateOfBirth
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);

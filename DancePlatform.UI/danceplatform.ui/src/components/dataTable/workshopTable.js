@@ -274,6 +274,10 @@ export default function WorkshopTable(props) {
 
   const toolBarStyles = useToolbarStyles();
 
+  console.log('SECLETED', selected)
+
+  const currentWorkshop = rows.find(x => x.id === selected[0]);
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -502,7 +506,7 @@ export default function WorkshopTable(props) {
       </Paper>
 
     {isError ? <ErrorBox isOpen={isError} message={errorMessage}/> : <></>}
-    {isOpenAdditionalInfo ? <UsersAdditionalInfo workshopId={workshopIdToPreview}/> : <></>}
+    {isOpenAdditionalInfo ? <UsersAdditionalInfo selectedWorkshop={currentWorkshop} workshopId={workshopIdToPreview}/> : <></>}
     </div>
   );
 }

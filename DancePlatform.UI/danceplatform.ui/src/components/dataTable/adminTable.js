@@ -76,6 +76,7 @@ export default function AdminTable(props) {
         { name: 'price', label: 'Цена, BYN' },
         { name: 'minAge', label: 'Мин. возраст' },
         { name: 'maxUsers', label: 'Макс. людей' },
+        { name: 'currentUsersCount', label: 'Зарег. людей' },
         { name: 'isApprovedByModerator', label: 'Одобрено модератором' },
     ];
 
@@ -143,6 +144,7 @@ console.log('12312312312',workshop);
             price: workshop.price,
             minAge: workshop.minAge,
             maxUsers: workshop.maxUsers,
+            currentUsersCount: workshop.currentUsersCount,
             id: workshop.id,
             isApprovedByModerator: workshop.isApprovedByModerator ? 'Да' : 'Нет'
         }]);
@@ -161,6 +163,7 @@ console.log('12312312312',workshop);
             price: workshop.price,
             minAge: workshop.minAge,
             maxUsers: workshop.maxUsers,
+            currentUsersCount: workshop.currentUsersCount,
             id: workshop.id,
             isApprovedByModerator: workshop.isApprovedByModerator ? 'Да' : 'Нет'
         });

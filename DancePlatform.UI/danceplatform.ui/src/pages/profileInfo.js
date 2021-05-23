@@ -16,6 +16,8 @@ import ProfileService from '../services/profileService';
 import storageHelper from '../helpers/storageHelper';
 import timeHelper from '../helpers/dateHelper';
 import ProfileForm from '../components/forms/profileForm';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFileImage } from '@fortawesome/free-solid-svg-icons'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     grid: {
         flexDirection: 'row',
         padding: 55,
+        height: 510,
     },
     generalInfo: {
         display: 'flex',
@@ -55,15 +58,21 @@ const useStyles = makeStyles((theme) => ({
     fullName: {
         fontSize: 15,
     },
-    dob: {
-    },
     personalInfoTab: {
         display: 'inline-block'
     },
     imageButtons: {
         display: 'flex',
         justifyContent: 'space-evenly'
-    }
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+        color: 'black',
+        backgroundColor: '#B2C8D6',
+        "&:hover": {
+          backgroundColor: '#F59B69',
+        }
+    },
 }));
 
 export default function ProfileInfo(){
@@ -128,7 +137,7 @@ export default function ProfileInfo(){
 
     return(
         <>
-            <Paper className={classes.paper}>
+            <Paper>
                 <Grid className={classes.grid} container>
                 <Grid className={classes.img} item>
                     <ImageUploading
@@ -157,6 +166,7 @@ export default function ProfileInfo(){
                             ))}
                             <div className={classes.imageButtons}>
                                 <Button
+                                className={classes.submit}
                                 type="button" variant="contained" color="primary"
                                 style={isDragging ? { color: 'red' } : undefined}
                                 onClick={onImageUpload}
@@ -164,7 +174,7 @@ export default function ProfileInfo(){
                                 >
                                     Загрузить
                                 </Button>
-                                <Button type="button" variant="contained" color="primary" onClick={onImageRemove}>Удалить</Button>
+                                <Button className={classes.submit} type="button" variant="contained" color="primary" onClick={onImageRemove}>Удалить</Button>
                             </div>
                         </div>
                         </Grid>
@@ -196,8 +206,15 @@ export default function ProfileInfo(){
                         <Typography className={classes.dob}>
                             Телефон: {user.phoneNumber}
                         </Typography>
-                        <Button onClick={editHandle}>Редактировать</Button>
-
+                        <Button
+                            type="button"
+                            fullWidth
+                            variant="contained"
+                            className={classes.submit}
+                            onClick={editHandle}
+                        >
+                            Редактировать
+                        </Button>
                     </>
                     }
                 </Grid>

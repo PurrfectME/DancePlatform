@@ -19,6 +19,7 @@ import Button from '@material-ui/core/Button';
 import shortid from 'shortid';
 import RegistrationService from '../../services/registrationService';
 import WorkshopService from '../../services/workshopService';
+import timeHelper from '../../helpers/dateHelper';
 
 const headCells = [
     { id: 'id', numeric: true,  label: 'ID' },
@@ -158,6 +159,8 @@ export default function UsersAdditionalInfo(props) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [rows, setRows] = useState([]);
 
+  const date = timeHelper.normalizeDate(new Date());
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -237,7 +240,7 @@ export default function UsersAdditionalInfo(props) {
         </Typography>
       )}
 
-     
+        {props.selectedWorkshop.date > date && timeHelper.isBeforeWithAddDays(props.selectedWorkshop.date, date, 1) ?
         <Tooltip title="Отметить">
           <Button
             type="button"
@@ -258,6 +261,9 @@ export default function UsersAdditionalInfo(props) {
                 Отметить
             </Button>
         </Tooltip>
+        :
+        <></>
+        }
     </Toolbar>
 
         <TableContainer>

@@ -67,9 +67,6 @@ export default function WorkshopInfo(){
         }
     });
     
-    const [isDeclined, setIsDeclined] = useState(false);
-    const [isNotify, setIsNotify] = useState(false);
-
     const [isDesired] = useState(new URLSearchParams(window.location.search).get('desired'));
 
     useEffect(() => {
@@ -91,13 +88,6 @@ export default function WorkshopInfo(){
         RegistrationService.registerOnWorkshop(registration).then(response => {
             history.push('/');
         })
-    }
-    
-    const notificationBoxCallback = (open, comment) => {
-        setIsDeclined(open);
-        WorkshopService.declineWorkshop(workshop.id, comment).then(x => {
-            history.push('/');
-        });
     }
 
     return(
@@ -173,16 +163,13 @@ export default function WorkshopInfo(){
                                 type="button"
                                 color="primary"
                                 onClick={() => {
-                                    setIsDeclined(true);
-                                    setIsNotify(true);
-                                    // WorkshopService.declineWorkshop(workshop.id).then(x => {
-                                    //     history.push('/');
-                                    // });
+                                    WorkshopService.declineWorkshop(workshop.id).then(x => {
+                                        history.push('/');
+                                    });
                                 }}
                             >
                                 Отклонить мастер-класс
                             </Button>
-                            {!isDeclined ? <></> : <NotificationBox isDeclined={isDeclined} closeCallback={notificationBoxCallback} isNotify={isNotify} />}
                         </div>
                     :
                     <>
@@ -193,9 +180,12 @@ export default function WorkshopInfo(){
                     :
                         <></>
                     }
+                        {workshop.maxUsers === workshop.currentUsersCount ? <></> :
+                        
                         <button style={{width: 500, marginTop: 35}} className={classes.registerButton} type="button" variant="contained" color="primary">
                             <PayPalComponent workshop={workshop}/>
                         </button>
+                    }
                     </>
                     }
                     </Grid>

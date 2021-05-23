@@ -1,6 +1,7 @@
 ﻿using DancePlatform.BL.Interfaces;
 using DancePlatform.BL.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -64,8 +65,11 @@ namespace DancePlatform.BL.Services
             return t;
         }
 
-        public async Task<List<Workshop>> GetAvailableWorkshopsForUser(int userId)
+        public async Task<List<Workshop>> GetAvailableWorkshopsForUser(int userId, DateTimeOffset? dateOfBirth = null)
         {
+            var currentYear = DateTimeOffset.Now.Year;
+            var userAge = dateOfBirth.HasValue ? currentYear - dateOfBirth.Value.Year : -1;
+
             var works = await _context.Workshops
                 .AsNoTracking()
                 .Include(x => x.Choreographer)
@@ -73,6 +77,8 @@ namespace DancePlatform.BL.Services
                 .Include(x => x.Place)
                 .Where(x => !x.IsClosed)
                 .Where(x => x.IsApprovedByModerator)
+                .Where(x => x.CurrentUsersCount < x.MaxUsers)
+                .Where(x => x.MinAge <= userAge)
                 .ToListAsync();
 
             var result = new List<Workshop>();
@@ -139,14 +145,25 @@ namespace DancePlatform.BL.Services
             await Update(workshopToApprove);
         }
 
-        public async Task DeclineWorkshop(int workshopId, string comment)
+        public async Task DeclineWorkshop(int workshopId)
         {
             var workshopToDecline = await _context.Workshops.FirstAsync(x => x.Id == workshopId);
 
             workshopToDecline.IsClosed = true;
-            workshopToDecline.Comment = comment;
 
             await Update(workshopToDecline);
+        }
+
+        public Task<List<Workshop>> GetWorkshopsForApproval()
+        {
+            return _context.Workshops
+               .AsNoTracking()
+               .Include(x => x.Choreographer)
+               .Include(x => x.Registrations)
+               .Include(x => x.Place)
+               .Where(x => !x.IsClosed)
+               .Where(x => !x.IsApprovedByModerator)
+               .ToListAsync();
         }
     }
 }

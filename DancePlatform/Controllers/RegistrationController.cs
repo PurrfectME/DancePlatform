@@ -13,42 +13,53 @@ namespace DancePlatform.API.Controllers
 	[ApiController]
 	public class RegistrationController : ControllerBase
 	{
-		private readonly IRegistrationService _service;
+		private readonly IRegistrationService _registrationService;
+		private readonly IWorkshopService _workshopService;
 
-		public RegistrationController(IRegistrationService service)
+		public RegistrationController(IRegistrationService service, IWorkshopService workshopService)
 		{
-			_service = service;
+			_registrationService = service;
+			_workshopService = workshopService;
 		}
 
 		[HttpPost("add")]
 		public async Task<IActionResult> PostRegistration(CreateRegistrationRequest request)
 		{
-			var existingRegistration = await _service.GetByUserAndWorkshopIds(request.UserId, request.WorkshopId);
+			var existingRegistration = await _registrationService.GetByUserAndWorkshopIds(request.UserId, request.WorkshopId);
+			var workshopToUpdate = await _workshopService.GetById(request.WorkshopId);
 
-            if (existingRegistration == null)
+            if (existingRegistration == null && request.IsPaid)
             {
-				await _service.Create(new Registration
+				await _registrationService.Create(new Registration
 				{
 					UserId = request.UserId,
 					WorkshopId = request.WorkshopId,
 					IsPaid = request.IsPaid,
-					IsDesired = request.IsDesired
+					IsDesired = false,
 				});
+
+				workshopToUpdate.CurrentUsersCount++;
+				await _workshopService.Update(workshopToUpdate);
+
 			}
-            else
+            else if(request.IsDesired)
             {
-                if (existingRegistration.IsDesired)
-                {
-					existingRegistration.IsPaid = true;
-					existingRegistration.IsDesired = false;
-					await _service.Update(existingRegistration);
-                }
-                else
-                {
-					existingRegistration.IsPaid = false;
-					existingRegistration.IsDesired = true;
-					await _service.Update(existingRegistration);
-				}
+				await _registrationService.Create(new Registration
+				{
+					UserId = request.UserId,
+					WorkshopId = request.WorkshopId,
+					IsPaid = false,
+					IsDesired = request.IsDesired,
+				});
+            }
+			else
+			{
+				existingRegistration.IsPaid = true;
+				existingRegistration.IsDesired = false;
+				await _registrationService.Update(existingRegistration);
+
+                workshopToUpdate.CurrentUsersCount++;
+                await _workshopService.Update(workshopToUpdate);
             }
 
 			return Ok();
@@ -57,20 +68,20 @@ namespace DancePlatform.API.Controllers
         [HttpGet("getAll")]
 		public async Task<IActionResult> GetAll()
 		{
-			return Ok(await _service.GetAll());
+			return Ok(await _registrationService.GetAll());
 		}
 
 		[HttpPost("delete/{id}")]
 		public async Task<IActionResult> Delete(int id)
 		{
-			var registrationsToDelete = await _service.GetById(id);
+			var registrationsToDelete = await _registrationService.GetById(id);
 
             if (registrationsToDelete == null)
             {
                 return NotFound();
             }
 
-            await _service.Delete(registrationsToDelete);
+            await _registrationService.Delete(registrationsToDelete);
 
             return Ok();
 		}
@@ -78,7 +89,7 @@ namespace DancePlatform.API.Controllers
 		[HttpGet("get/{id}")]
 		public async Task<IActionResult> GetById(int id)
 		{
-			var registration = await _service.GetById(id);
+			var registration = await _registrationService.GetById(id);
 
 			return Ok(registration);
 		}
@@ -86,7 +97,7 @@ namespace DancePlatform.API.Controllers
 		[HttpPut("update")]
 		public async Task<IActionResult> Update(Registration model)
 		{
-			await _service.Update(model);
+			await _registrationService.Update(model);
 
 			return Ok();
 		}
@@ -94,7 +105,7 @@ namespace DancePlatform.API.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUsersWorkshops(int userId)
         {
-            var result = await _service.GetUserWorkshops(userId);
+            var result = await _registrationService.GetUserWorkshops(userId);
 
             if (result == null)
             {
@@ -110,7 +121,7 @@ namespace DancePlatform.API.Controllers
         {
             foreach (var request in requests)
             {
-                await _service.CheckoutUsers(request.UserId, request.WorkshopId);
+                await _registrationService.CheckoutUsers(request.UserId, request.WorkshopId);
             }
 
             return Ok();
@@ -119,7 +130,7 @@ namespace DancePlatform.API.Controllers
 		[HttpGet("visited/{userId}")]
 		public async Task<IActionResult> GetUsersVisitedWorkshops(int userId)
         {
-			return Ok(await _service.GetUserVisitedWorkshops(userId));
+			return Ok(await _registrationService.GetUserVisitedWorkshops(userId));
         }
 	}
 }

@@ -36,7 +36,17 @@ export default function ProfileForm(props) {
 
   const onSubmit = values => {
     values.id = storageHelper.getCurrentUserId();
-    ProfileService.updateUser(values).then(response => props.showFormCallback(props.showForm, response, props.editing))
+    ProfileService.updateUser(values).then(response => {
+      const user = storageHelper.getCurrentUser();
+      user.phoneNumber = values.phoneNumber;
+      user.name = values.name;
+      user.surname = values.surname;
+      user.dateOfBirth = values.dateOfBirth;
+      user.photo = values.photo;
+      localStorage.setItem('user', JSON.stringify(user));
+      
+      props.showFormCallback(props.showForm, response, props.editing);
+    })
   };
 
   const errorCallback = error => {

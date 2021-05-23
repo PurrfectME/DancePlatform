@@ -44,8 +44,9 @@ export default function EventCalendar() {
         <MonthlyNav />
         <MonthlyBody
           events={[...workshops.map(x => {
-            const date = parseISO(`${timeHelper.normalizeDate(x.date)}T${new Date(x.time).toISOString().substr(11, 5)}`);
-            if(date.getTime() < new Date()){
+            const date = parseISO(`${timeHelper.normalizeDate(x.date)}T${timeHelper.toUtc(x.time).substr(11, 5)}`);
+            // console.log('DATE', timeHelper.toUtc(x.time))
+            if(date < new Date()){
               return false;
             }
             if(!x.isApprovedByModerator || x.isClosed){
