@@ -37,12 +37,21 @@ const checkoutUsers = data => {
 });}
 
 
+const getUserVisitedWorkshops = userId => {
+    return request({
+        method: 'GET',
+        url: `/registration/visited/${userId}`
+    });
+}
+
+
 const RegistrationService = {
     registerOnWorkshop,
     getAllRegistrations,
     getUserWorkshops,
     deleteRegistrations,
-    checkoutUsers
+    checkoutUsers,
+    getUserVisitedWorkshops
 }
 
 export default RegistrationService;

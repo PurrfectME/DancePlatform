@@ -1,4 +1,3 @@
-
 const isAuthenticated = () => {
     const token = localStorage.getItem('token');
     let isAuthenticated = false;
@@ -10,13 +9,13 @@ const isAuthenticated = () => {
 
 const getToken = () => localStorage.getItem('token');
 
-const isAdmin = () => {
+const isOrganizer = () => {
     const user = JSON.parse(localStorage.getItem('user'));
-    let isAdmin = false;
-    if(user && user.roles[0] === 'Admin')
-    isAdmin = true;
+    let isOrganizer = false;
+    if(user && user.roles[0] === 'Organizer')
+    isOrganizer = true;
 
-    return isAdmin;
+    return isOrganizer;
 }
 
 const getCurrentUserId = () => {
@@ -37,13 +36,23 @@ const getCurrentUser = () => {
         return user;
 }
 
+const isModerator = () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    let isModerator = false;
+    if(user && user.roles[0] === 'Moderator')
+    isModerator = true;
+
+    return isModerator;
+} 
+
 const storageHelper = {
     isAuthenticated,
-    isAdmin,
+    isOrganizer,
     getCurrentUserId,
     getToken,
     getCurrentUserName,
     getCurrentUser,
+    isModerator,
 }
 
 export default storageHelper;

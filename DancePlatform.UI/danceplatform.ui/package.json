@@ -9,6 +9,9 @@
     "@devexpress/dx-react-core": "^2.7.3",
     "@devexpress/dx-react-grid": "^2.7.3",
     "@devexpress/dx-react-grid-material-ui": "^2.7.3",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/pickers": "^3.3.10",
@@ -25,6 +28,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "mui-datatables": "^3.7.7",
+    "mui-rff": "^3.0.6",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-final-form": "^6.5.3",
@@ -36,6 +40,7 @@
     "react-yandex-maps": "^4.6.0",
     "recompose": "^0.30.0",
     "shortid": "^2.2.16",
+    "typeface-pacifico": "0.0.40",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

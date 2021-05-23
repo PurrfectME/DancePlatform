@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
       flexWrap: 'wrap',
       maxWidth: 1198,
       margin: 'auto',
+      height: 200,
+      alignItems: 'center',
+      fontSize: 35
     },
     paper: {
       margin: '58px 10px 0px 10px',
@@ -45,25 +48,51 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function WorkshopContainer() {
+export default function WorkshopContainer(props) {
     const classes = useStyles();
     const [workshops, setWorkshops] = useState([]);
 
     useEffect(() => {
-        WorkshopService.getAvailableWorkshopsForUser(storageHelper.getCurrentUserId()).then(response => {
+        const userId = storageHelper.getCurrentUserId();
+        const isModerator = storageHelper.isModerator();
 
-            setWorkshops([...response.map(item => {
-                item.photo = `data:image/jpg;base64,${item.photo}`;
+        if(isModerator){
+            WorkshopService.getWorkshopsForApproval().then(response => {
+                setWorkshops([...response.map(item => {
+                    item.photo = `data:image/jpg;base64,${item.photo}`;
+    
+                    return item;
+                })]);
+            });
+            return;
+        }
 
-                return item;
-            })]);
-        })
+
+        if(!props.isDesired){
+            WorkshopService.getAvailableWorkshopsForUser(userId).then(response => {
+                setWorkshops([...response.map(item => {
+                    item.photo = `data:image/jpg;base64,${item.photo}`;
+    
+                    return item;
+                })]);
+            });
+        }
+        else{
+            WorkshopService.getDesiredWorkshops(userId).then(response => {
+                setWorkshops([...response.map(item => {
+                    item.photo = `data:image/jpg;base64,${item.photo}`;
+    
+                    return item;
+                })]);
+            });
+        }
+        
     }, []);
 
     return(
         <div className={classes.root}>
             {workshops.length === 0 ? <h1>НЕТ ДОСТУПНЫХ МАСТЕР-КЛАССОВ</h1> : workshops.map(workshop => 
-                <WorkshopBox workshop={workshop} classes={classes}/>)
+                <WorkshopBox workshop={workshop} classes={classes} isDesired={props.isDesired}/>)
             }
         </div>
     );

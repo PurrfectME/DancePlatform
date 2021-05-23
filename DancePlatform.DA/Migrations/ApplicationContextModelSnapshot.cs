@@ -74,6 +74,9 @@ namespace DancePlatform.DA.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("IsDesired")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
 
@@ -126,22 +129,22 @@ namespace DancePlatform.DA.Migrations
                     b.HasData(
                         new
                         {
+                            Id = 1,
+                            ConcurrencyStamp = "85af2f88-edc9-470d-8f09-6fb13d743b5b",
+                            Name = "Moderator",
+                            NormalizedName = "MODERATOR"
+                        },
+                        new
+                        {
                             Id = 3,
-                            ConcurrencyStamp = "527fc567-436e-493e-b9bd-41e83026299b",
+                            ConcurrencyStamp = "9db7743c-dfe6-4a69-b7f2-8ec7e97f0b25",
                             Name = "Organizer",
                             NormalizedName = "ORGANIZER"
                         },
                         new
                         {
-                            Id = 1,
-                            ConcurrencyStamp = "28b2a4d2-32e9-4bfd-a7dd-96c13ee07bd5",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
                             Id = 2,
-                            ConcurrencyStamp = "af3b7e8b-b238-488a-8ad7-ce3543048f0b",
+                            ConcurrencyStamp = "223fc139-e239-44a3-9a35-711a3e8019e0",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -227,13 +230,19 @@ namespace DancePlatform.DA.Migrations
                     b.Property<int>("ChoreographerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CurrentUsersCount")
+                        .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<bool>("IsApprovedByAdmin")
+                    b.Property<bool>("IsApprovedByModerator")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsClosed")

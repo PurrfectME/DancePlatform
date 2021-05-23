@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function NotificationBox(props) {
     const [open, setOpen] = React.useState(props.isNotify);
-  
+
     const handleClose = () => {
       setOpen(false);
       props.closeCallback(true);
@@ -22,16 +22,18 @@ export default function NotificationBox(props) {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{"Уведомление!"}</DialogTitle>
+          <DialogTitle id="alert-dialog-title">
+          {"Уведомление!"}
+          </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               {props.message}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary" autoFocus>
-              Закрыть
-            </Button>
+              <Button onClick={handleClose} color="primary" autoFocus>
+                Закрыть
+              </Button>
           </DialogActions>
         </Dialog>
       </div>

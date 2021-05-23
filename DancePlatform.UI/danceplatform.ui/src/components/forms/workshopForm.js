@@ -143,8 +143,9 @@ export default function WorkshopForm(props) {
 
   const onSubmit = values => {
     var today = moment();
-    values.photo = images[0].base64Img
-    console.log('VALUES', values)
+    if(images.length !== 0){
+      values.photo = images[0].base64Img
+    }
 
     values.placeId = props.places.find(x => x.studioName === values.studioName).id;
     values.choreographerId = props.choreographers.find(x => x.name === values.choreographerName).id;
@@ -213,7 +214,6 @@ export default function WorkshopForm(props) {
 
   const onChange = (imageList, addedIndex) => {
     setImageName(imageList[0].file.name);
-    console.log('LIST', imageList[0].base64Img)
     setImages(imageList);
     // data for submit
   //   if(imageList.length){
@@ -419,10 +419,7 @@ export default function WorkshopForm(props) {
               </Grid>
             </Paper>
           </form>
-          
         )}
-
-
       />
 
     </div>

@@ -23,7 +23,7 @@ namespace DancePlatform.BL.Services
             using var client = new SmtpClient();
             //587
             await client.ConnectAsync("smtp.gmail.com", 465, true);
-            await client.AuthenticateAsync("dance.evetns@gmail.com", "admin12345!");
+            await client.AuthenticateAsync("dance.evetns", "admin12345!");
             await client.SendAsync(emailMessage);
 
             await client.DisconnectAsync(true);

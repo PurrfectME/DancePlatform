@@ -101,7 +101,10 @@ namespace DancePlatform.API.Controllers
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                UserName = model.Username,
+                Name = model.Name,
+                Surname = model.Surname,
+                DateOfBirth = model.DateOfBirth
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -113,14 +116,14 @@ namespace DancePlatform.API.Controllers
                     { Status = "Error", Message = "Ошибка создания пользователя, проверьте введённые данные" });
             }
 
-            await _userManager.AddToRoleAsync(user, "User");
+            await _userManager.AddToRoleAsync(user, model.IsOrganizer ? "Organizer" : "User");
 
             // генерация токена для пользователя
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
             var token = HttpUtility.UrlEncode(code);
 
-            var link = $"http://localhost:51928/auth/confirm-email?userId={user.Id}&code={token}";
+            var link = $"https://localhost:44305/auth/confirm-email?userId={user.Id}&code={token}";
 
             await _emailService.SendEmail(model.Email, "Confirm your account",
                 $"Подтвердите регистрацию, перейдя по ссылке: <a href='{link}'>link</a>");
@@ -128,7 +131,6 @@ namespace DancePlatform.API.Controllers
             return Ok(new BaseResponse
             { Status = "Success", Message = "Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме!" });
         }
-
 
         [AllowAnonymous]
         [HttpGet("confirm-email")]
@@ -158,8 +160,7 @@ namespace DancePlatform.API.Controllers
                    new BaseResponse
                    { Status = "Error", Message = "Ошибка подтверждения почты" });
 
-            return Ok();
+            return Redirect("http://localhost:3000/login");
         }
-
     }
 }

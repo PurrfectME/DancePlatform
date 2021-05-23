@@ -14,9 +14,11 @@ namespace DancePlatform.BL.Models
         public float Price { get; set; }
         public int MinAge { get; set; }
         public int MaxUsers { get; set; }
-        public bool IsApprovedByAdmin { get; set; }
-        public string CreatedBy { get; set; }
+        public int CurrentUsersCount { get; set; }
+        public bool IsApprovedByModerator { get; set; }
+        public int CreatedBy { get; set; }
         public bool IsClosed { get; set; }
+        public string Comment { get; set; }
 
         public int PlaceId { get; set; }
         public Place Place { get; set; }

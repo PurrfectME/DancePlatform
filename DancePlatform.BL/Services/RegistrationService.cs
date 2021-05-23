@@ -42,34 +42,36 @@ namespace DancePlatform.BL.Services
             return _context.Registrations.ToListAsync();
         }
 
-        public Task<List<Registration>> GetById(int id)
+        public Task<Registration> GetById(int id)
         {
-            return _context.Registrations
-                .Where(x => x.Id == id).ToListAsync();
+            return _context.Registrations.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<List<Registration>> GetUserRegistrations(int userId)
         {
-            var registrations = (await _context.Registrations
+            var registrations = await _context.Registrations
                 .AsNoTracking()
                 .Include(x => x.User)
-                .Where(x => x.UserId == userId).ToListAsync());
+                .Where(x => x.UserId == userId && x.IsPaid)
+                .ToListAsync();
 
             return registrations.Count == 0 ? null : registrations;
         }
 
         public async Task<List<Workshop>> GetUserWorkshops(int userId)
         {
-            var registrations = (await _context.Registrations
+            var registrations = await _context.Registrations
                 .AsNoTracking()
                 .Include(x => x.Workshop)
                 .ThenInclude(x => x.Place)
                 .Include(x => x.Workshop)
                 .ThenInclude(x => x.Choreographer)
                 .Include(x => x.User)
-                .Where(x => x.UserId == userId && x.IsPresent == false).ToListAsync());
+                .Where(x => x.UserId == userId && x.IsPresent == false)
+                .Where(x => !x.IsDesired)
+                .ToListAsync();
 
-            return registrations.Count == 0 ? null : registrations.Select(x => x.Workshop).ToList();
+            return registrations.Count == 0 ? null : registrations.Select(x => x.Workshop).Where(x => !x.IsClosed).ToList();
         }
 
         public async Task CheckoutUsers(int userId, int workshopId)
@@ -87,6 +89,26 @@ namespace DancePlatform.BL.Services
             _context.Registrations.Update(entity);
 
             await _context.SaveChangesAsync();
+        }
+
+        public Task<Registration> GetByUserAndWorkshopIds(int userId, int workshopId)
+        {
+            return _context.Registrations.FirstOrDefaultAsync(x => x.UserId == userId && x.WorkshopId == workshopId);
+        }
+
+        public Task<List<Workshop>> GetUserVisitedWorkshops(int userId)
+        {
+            return _context.Registrations
+                .Include(x => x.Workshop)
+                .ThenInclude(x => x.Place)
+                .Include(x => x.Workshop)
+                .ThenInclude(x => x.Choreographer)
+                .Where(x => x.UserId == userId)
+                .Where(x => x.IsPaid)
+                .Where(x => x.IsPresent)
+                .Select(x => x.Workshop)
+                .Where(x => x.IsClosed)
+                .ToListAsync();
         }
     }
 }

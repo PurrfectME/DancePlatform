@@ -54,6 +54,33 @@ const getClosed = () => {
     });
 }
 
+const getDesiredWorkshops = userId => {
+    return request({
+        method: 'GET',
+        url: `/workshop/desired/${userId}`
+    });
+}
+
+const approveWorkshop = workshopId => {
+    return request({
+        method: 'POST',
+        url: `/workshop/approve/${workshopId}`
+    });
+}
+
+const declineWorkshop = (workshopId) => {
+    return request({
+        method: 'POST',
+        url: `/workshop/decline/${workshopId}`
+    });
+}
+
+const getWorkshopsForApproval = () => {
+    return request({
+        method: 'GET',
+        url: `/workshop/awaiting-approval`
+    });
+}
 
 const WorkshopService = {
     getAllWorkshops,
@@ -64,6 +91,10 @@ const WorkshopService = {
     getRegisteredUsersOnWorkshop,
     getById,
     getClosed,
+    getDesiredWorkshops,
+    approveWorkshop,
+    declineWorkshop,
+    getWorkshopsForApproval,
 }
 
 export default WorkshopService;

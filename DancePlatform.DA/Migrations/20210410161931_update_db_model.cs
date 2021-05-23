@@ -20,7 +20,7 @@ namespace DancePlatform.DA.Migrations
                 defaultValue: 0);
 
             migrationBuilder.AddColumn<bool>(
-                name: "IsApprovedByAdmin",
+                name: "IsApprovedByModerator",
                 table: "Workshops",
                 type: "bit",
                 nullable: false,
@@ -136,7 +136,7 @@ namespace DancePlatform.DA.Migrations
                 table: "Workshops");
 
             migrationBuilder.DropColumn(
-                name: "IsApprovedByAdmin",
+                name: "IsApprovedByModerator",
                 table: "Workshops");
 
             migrationBuilder.DropColumn(

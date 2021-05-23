@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DancePlatform.BL.Interfaces;
 using DancePlatform.BL.Models;
 using DancePlatform.BL.Requests;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DancePlatform.API.Controllers
@@ -14,20 +17,23 @@ namespace DancePlatform.API.Controllers
     public class WorkshopController : ControllerBase
     {
         private readonly IWorkshopService _service;
+        private readonly UserManager<User> _userManager;
 
-        public WorkshopController(IWorkshopService service)
+        public WorkshopController(IWorkshopService service, UserManager<User> userManager)
         {
             _service = service;
+            _userManager = userManager;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Organizer")]
         [HttpPost("add")]
         public async Task<IActionResult> PostWorkshop([FromBody] CreateWorkshopRequest request)
         {
-            var isAdmin = HttpContext.User.IsInRole("Admin");
-
             request.Photo = request.Photo.Remove(0, 23);
             var converted = Convert.FromBase64String(request.Photo);
+
+            var name = _userManager.GetUserId(User);
+            var user = await _userManager.FindByEmailAsync(name);
 
             return Ok(await _service.Create(
                 new Workshop
@@ -41,20 +47,20 @@ namespace DancePlatform.API.Controllers
                     Time = request.Time,
                     MaxUsers = request.MaxUsers,
                     MinAge = request.MinAge,
-                    CreatedBy = isAdmin ? "Admin" : "Organizer",
-                    IsApprovedByAdmin = isAdmin,
+                    CreatedBy = user.Id,
+                    IsApprovedByModerator = false,
                     Photo = converted
                 }));
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Organizer")]
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _service.GetAll());
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Organizer")]
         [HttpPost("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -83,7 +89,7 @@ namespace DancePlatform.API.Controllers
             return Ok(workshop);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Organizer")]
         [HttpPost("update")]
         public async Task<IActionResult> Update([FromBody] UpdateWorkshopRequest request)
         {
@@ -108,7 +114,7 @@ namespace DancePlatform.API.Controllers
             return Ok(await _service.Update(workshopToUpdate));
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Organizer")]
         [HttpGet("registered-users/{workshopId}")]
         public async Task<IActionResult> GetRegisteredUsersOnWorkshop(int workshopId)
         {
@@ -120,23 +126,68 @@ namespace DancePlatform.API.Controllers
         [HttpGet("available/{userId}")]
         public async Task<IActionResult> GetAvailableWorkshopsForUser(int userId)
         {
-            var result = await _service.GetAvailableWorkshopsForUser(userId);
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            List<Workshop> result;
+
+            if(await _userManager.IsInRoleAsync(user, "User"))
+            {
+                result = await _service.GetAvailableWorkshopsForUser(userId, user.DateOfBirth);
+            }
+            else
+            {
+                result = await _service.GetAvailableWorkshopsForUser(userId, null);
+            }
 
             return Ok(result);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Moderator")]
+        [HttpGet("awaiting-approval")]
+        public async Task<IActionResult> GetWorkshopsForApproval()
+        {
+            var result = await _service.GetWorkshopsForApproval();
+
+            return Ok(result);
+        }
+
+        [Authorize(Roles = "Organizer")]
         [HttpGet("workshops-history")]
         public async Task<IActionResult> GetClosedWorkshops()
         {
             var result = await _service.GetClosed();
 
-            //if (result.Count == 0)
-            //{
-            //    return NotFound();
-            //}
+            return Ok(result);
+        }
+
+        [HttpGet("desired/{userId}")]
+        public async Task<IActionResult> GetDesiredWorkshops(int userId)
+        {
+            var result = await _service.GetUserDesiredWorkshops(userId);
+
+            if(result == null)
+            {
+                return NotFound();
+            }
 
             return Ok(result);
+        }
+
+        [Authorize(Roles = "Moderator")]
+        [HttpPost("approve/{workshopId}")]
+        public async Task<IActionResult> ApproveWorkshop(int workshopId)
+        {
+            await _service.ApproveWorkshop(workshopId);
+
+            return Ok();
+        }
+
+        [Authorize(Roles = "Moderator")]
+        [HttpPost("decline/{workshopId}")]
+        public async Task<IActionResult> DeclineWorkshop(int workshopId)
+        {
+            await _service.DeclineWorkshop(workshopId);
+
+            return Ok();
         }
     }
 }

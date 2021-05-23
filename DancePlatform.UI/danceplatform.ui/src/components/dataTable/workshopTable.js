@@ -72,6 +72,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
+      {storageHelper.isOrganizer() ?
         <TableCell padding="checkbox">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -80,6 +81,9 @@ function EnhancedTableHead(props) {
             inputProps={{ 'aria-label': 'select all desserts' }}
           />
         </TableCell>
+      :
+        <></>
+      }
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -200,7 +204,14 @@ export default function WorkshopTable(props) {
       if(props.isHistory){
         WorkshopService.getClosed().then(response => {
           setRows([...response]);
-        })
+        });
+        return;
+      }
+
+      if(props.isUserOwnHistory){
+        RegistrationService.getUserVisitedWorkshops(storageHelper.getCurrentUserId()).then(response => {
+          setRows([...response]);
+        });
         return;
       }
 
@@ -263,6 +274,10 @@ export default function WorkshopTable(props) {
 
   const toolBarStyles = useToolbarStyles();
 
+  console.log('SECLETED', selected)
+
+  const currentWorkshop = rows.find(x => x.id === selected[0]);
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -277,7 +292,7 @@ export default function WorkshopTable(props) {
           {numSelected} выбрано
         </Typography>
       ) : (
-        !props.isHistory ?
+        !props.isHistory && !props.isUserOwnHistory ?
         <Typography className={toolBarStyles.title} variant="h6" id="tableTitle" component="div">
           Мастер-классы
         </Typography>
@@ -287,7 +302,7 @@ export default function WorkshopTable(props) {
         </Typography>
       )}
 
-      {props.isAdmin ? (
+      {props.isOrganizer ? (
         props.isHistory ? <></> :
         <>
           <Button
@@ -349,33 +364,35 @@ export default function WorkshopTable(props) {
             </Button>
         </>
       ) : props.fromWorkshops ? (
-        <Tooltip title="Отменить бронь">
-        <Button
-            type="button"
-            variant="contained"
-            color="primary"
-            className={toolBarStyles.submit}
-            onClick={() => {
-                const ids = rows.filter(x => selected.includes(x.id)).map(x => {
-                    return (x.registrations.find(y => y.userId === storageHelper.getCurrentUserId()).id)
-                });
+        <></>
+    //     <Tooltip title="Отменить бронь">
+          
+    //     <Button
+    //         type="button"
+    //         variant="contained"
+    //         color="primary"
+    //         className={toolBarStyles.submit}
+    //         onClick={() => {
+    //             const ids = rows.filter(x => selected.includes(x.id)).map(x => {
+    //                 return (x.registrations.find(y => y.userId === storageHelper.getCurrentUserId()).id)
+    //             });
 
-                for(let i = 0; i < ids.length; i++){
-                    RegistrationService.deleteRegistrations(ids[i]).then(x => {
-                        setSelected([...selected.filter(x => x === ids[i])]);
-                        setRows([...rows.filter(x => x.id === ids[i])])
-                    }).then(() => {
-                        RegistrationService.getUserWorkshops(storageHelper.getCurrentUserId()).then(w => {
-                            setRows([...w]);
-                        })
-                    })
-                }
-            }}
-            >
-            Отменить бронь
-        </Button>
-    </Tooltip>
-      ) : (
+    //             for(let i = 0; i < ids.length; i++){
+    //                 RegistrationService.deleteRegistrations(ids[i]).then(x => {
+    //                     setSelected([...selected.filter(x => x === ids[i])]);
+    //                     setRows([...rows.filter(x => x.id === ids[i])])
+    //                 }).then(() => {
+    //                     RegistrationService.getUserWorkshops(storageHelper.getCurrentUserId()).then(w => {
+    //                         setRows([...w]);
+    //                     })
+    //                 })
+    //             }
+    //         }}
+    //         >
+    //         Отменить бронь
+    //     </Button>
+    // </Tooltip>
+      ) : props.isUserOwnHistory ? <></> :(
           
         <Tooltip title="Регистрация">
             <Button
@@ -431,7 +448,6 @@ export default function WorkshopTable(props) {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  console.log('PFEJOADSHJFOASF', row, rows)
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -445,12 +461,17 @@ export default function WorkshopTable(props) {
                       key={shortid.generate()}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ 'aria-labelledby': labelId }}
-                        />
-                      </TableCell>
+                      {storageHelper.isOrganizer() ?
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isItemSelected}
+                            inputProps={{ 'aria-labelledby': labelId }}
+                          />
+                        </TableCell>
+                      :
+                        <></>
+                      }
+                      
                       <TableCell id={labelId} align="right" scope="row">
                         {row.place.studioName}
                       </TableCell>
@@ -485,11 +506,7 @@ export default function WorkshopTable(props) {
       </Paper>
 
     {isError ? <ErrorBox isOpen={isError} message={errorMessage}/> : <></>}
-    {isOpenAdditionalInfo ? <UsersAdditionalInfo workshopId={workshopIdToPreview}/> : <></>}
-      
-
-
-
+    {isOpenAdditionalInfo ? <UsersAdditionalInfo selectedWorkshop={currentWorkshop} workshopId={workshopIdToPreview}/> : <></>}
     </div>
   );
 }
