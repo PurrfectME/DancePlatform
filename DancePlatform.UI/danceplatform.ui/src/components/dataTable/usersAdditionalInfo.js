@@ -18,10 +18,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 import shortid from 'shortid';
 import RegistrationService from '../../services/registrationService';
-import storageHelper from '../../helpers/storageHelper';
 import WorkshopService from '../../services/workshopService';
-import normalizeDate from '../../helpers/dateHelper';
-import {styles, categories} from '../../constants/commonData';
 
 const headCells = [
     { id: 'id', numeric: true,  label: 'ID' },

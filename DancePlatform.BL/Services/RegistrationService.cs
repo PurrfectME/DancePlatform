@@ -95,5 +95,20 @@ namespace DancePlatform.BL.Services
         {
             return _context.Registrations.FirstOrDefaultAsync(x => x.UserId == userId && x.WorkshopId == workshopId);
         }
+
+        public Task<List<Workshop>> GetUserVisitedWorkshops(int userId)
+        {
+            return _context.Registrations
+                .Include(x => x.Workshop)
+                .ThenInclude(x => x.Place)
+                .Include(x => x.Workshop)
+                .ThenInclude(x => x.Choreographer)
+                .Where(x => x.UserId == userId)
+                .Where(x => x.IsPaid)
+                .Where(x => x.IsPresent)
+                .Select(x => x.Workshop)
+                .Where(x => x.IsClosed)
+                .ToListAsync();
+        }
     }
 }

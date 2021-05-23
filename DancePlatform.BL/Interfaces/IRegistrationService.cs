@@ -15,8 +15,8 @@ namespace DancePlatform.BL.Interfaces
         Task<Registration> GetById(int id);
         Task<List<Registration>> GetUserRegistrations(int userId);
         Task<List<Workshop>> GetUserWorkshops(int userId);
-
         Task<Registration> GetByUserAndWorkshopIds(int userId, int workshopId);
+        Task<List<Workshop>> GetUserVisitedWorkshops(int userId);
 
         Task CheckoutUsers(int userId, int workshopId);
     }

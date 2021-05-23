@@ -204,7 +204,14 @@ export default function WorkshopTable(props) {
       if(props.isHistory){
         WorkshopService.getClosed().then(response => {
           setRows([...response]);
-        })
+        });
+        return;
+      }
+
+      if(props.isUserOwnHistory){
+        RegistrationService.getUserVisitedWorkshops(storageHelper.getCurrentUserId()).then(response => {
+          setRows([...response]);
+        });
         return;
       }
 
@@ -281,7 +288,7 @@ export default function WorkshopTable(props) {
           {numSelected} выбрано
         </Typography>
       ) : (
-        !props.isHistory ?
+        !props.isHistory && !props.isUserOwnHistory ?
         <Typography className={toolBarStyles.title} variant="h6" id="tableTitle" component="div">
           Мастер-классы
         </Typography>
@@ -381,7 +388,7 @@ export default function WorkshopTable(props) {
     //         Отменить бронь
     //     </Button>
     // </Tooltip>
-      ) : (
+      ) : props.isUserOwnHistory ? <></> :(
           
         <Tooltip title="Регистрация">
             <Button
@@ -496,10 +503,6 @@ export default function WorkshopTable(props) {
 
     {isError ? <ErrorBox isOpen={isError} message={errorMessage}/> : <></>}
     {isOpenAdditionalInfo ? <UsersAdditionalInfo workshopId={workshopIdToPreview}/> : <></>}
-      
-
-
-
     </div>
   );
 }

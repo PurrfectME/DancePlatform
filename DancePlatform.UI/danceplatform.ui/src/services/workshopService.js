@@ -75,7 +75,6 @@ const declineWorkshop = (workshopId, comment) => {
     });
 }
 
-
 const WorkshopService = {
     getAllWorkshops,
     getAvailableWorkshopsForUser,

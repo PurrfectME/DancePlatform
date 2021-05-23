@@ -159,6 +159,11 @@ export default function Header(props) {
                       </Button>
                     </MenuItem>
                     <MenuItem onClick={handleClose}>
+                      <Button href='/user-workshops-history' color="inherit">
+                          История
+                      </Button>
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
                       <Button href='/profile-info' color="inherit">
                         Личный кабинет
                       </Button>
