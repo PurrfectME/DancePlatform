@@ -45,6 +45,15 @@ const isModerator = () => {
     return isModerator;
 } 
 
+const isUser = () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    let isModerator = false;
+    if(user && user.roles[0] === 'User')
+    isModerator = true;
+
+    return isModerator;  
+}
+
 const storageHelper = {
     isAuthenticated,
     isOrganizer,
@@ -53,6 +62,7 @@ const storageHelper = {
     getCurrentUserName,
     getCurrentUser,
     isModerator,
+    isUser,
 }
 
 export default storageHelper;

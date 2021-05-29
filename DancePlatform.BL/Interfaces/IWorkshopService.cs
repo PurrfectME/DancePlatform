@@ -17,7 +17,6 @@ namespace DancePlatform.BL.Interfaces
 		Task<List<Workshop>> GetUserDesiredWorkshops(int userId);
 		Task<List<Workshop>> GetClosed();
 		Task<List<Workshop>> GetAvailableWorkshopsForUser(int userId, DateTimeOffset? dateOfBirth);
-
 		Task<List<Workshop>> GetWorkshopsForApproval();
 
 		Task ApproveWorkshop(int workshopId);

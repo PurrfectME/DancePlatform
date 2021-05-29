@@ -40,7 +40,6 @@ namespace DancePlatform.BL.Services
                 .Include(X => X.Choreographer)
                 .Include(X => X.Registrations)
                 .Where(x => !x.IsClosed)
-                .Where(x => x.IsApprovedByModerator)
                 .ToListAsync();
 		}
 

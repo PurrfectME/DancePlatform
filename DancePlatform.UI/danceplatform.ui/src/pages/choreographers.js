@@ -6,6 +6,7 @@ import ChoreographerService from '../services/choreographerService';
 import ChoreographerForm from '../components/forms/choreographerForm';
 import {styles} from '../constants/commonData';
 import timeHelper from '../helpers/dateHelper';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -158,7 +159,11 @@ export default function Choregraphers(){
             </div>
             
                 <MUIDataTable
-                    title={"Хореографы"}
+                    title={
+                        <Typography variant="h4" id="tableTitle" component="div">
+                           Хореографы
+                        </Typography>
+                    }
                     data={choreographers}
                     columns={columns}
                     options={options}

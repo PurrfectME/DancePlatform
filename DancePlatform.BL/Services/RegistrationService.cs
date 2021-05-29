@@ -110,5 +110,12 @@ namespace DancePlatform.BL.Services
                 .Where(x => x.IsClosed)
                 .ToListAsync();
         }
+
+        public async Task RemoveFromDesired(int userId, int workshopId)
+        {
+            var registration = await GetByUserAndWorkshopIds(userId, workshopId);
+
+            await Delete(registration);
+        }
     }
 }

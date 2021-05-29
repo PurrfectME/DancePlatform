@@ -3,6 +3,11 @@ import WorkshopBox from '../workshops/workshopBox';
 import { makeStyles } from '@material-ui/core/styles';
 import WorkshopService from '../../services/workshopService';
 import storageHelper from '../../helpers/storageHelper';
+import { categories, styles } from '../../constants/commonData';
+import SearchInput, {createFilter} from 'react-search-input';
+import '../../styles/profileInfo.css'
+
+const KEYS_TO_FILTERS = ['choreographer.name', 'price', 'style', 'category'];
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,6 +56,22 @@ const useStyles = makeStyles((theme) => ({
 export default function WorkshopContainer(props) {
     const classes = useStyles();
     const [workshops, setWorkshops] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const removeFromDesiredCallback = (userId) => {
+        WorkshopService.getDesiredWorkshops(userId).then(response => {
+            setWorkshops([...response.map(item => {
+                item.photo = `data:image/jpg;base64,${item.photo}`;
+
+                return item;
+            })]);
+        })
+        .catch(err => {
+            if(err.status === 404) {
+                setWorkshops([]);
+            }
+        });
+    }
 
     useEffect(() => {
         const userId = storageHelper.getCurrentUserId();
@@ -59,6 +80,8 @@ export default function WorkshopContainer(props) {
         if(isModerator){
             WorkshopService.getWorkshopsForApproval().then(response => {
                 setWorkshops([...response.map(item => {
+                    item.style = styles[item.style];
+                    item.category = categories[item.category];
                     item.photo = `data:image/jpg;base64,${item.photo}`;
     
                     return item;
@@ -67,10 +90,11 @@ export default function WorkshopContainer(props) {
             return;
         }
 
-
         if(!props.isDesired){
             WorkshopService.getAvailableWorkshopsForUser(userId).then(response => {
                 setWorkshops([...response.map(item => {
+                    item.style = styles[item.style];
+                    item.category = categories[item.category];
                     item.photo = `data:image/jpg;base64,${item.photo}`;
     
                     return item;
@@ -80,20 +104,56 @@ export default function WorkshopContainer(props) {
         else{
             WorkshopService.getDesiredWorkshops(userId).then(response => {
                 setWorkshops([...response.map(item => {
+                    item.style = styles[item.style];
+                    item.category = categories[item.category];
                     item.photo = `data:image/jpg;base64,${item.photo}`;
     
                     return item;
                 })]);
             });
         }
-        
     }, []);
 
+    const searchUpdated = (term) => {
+        setSearchTerm(term);
+    }
+
+    const filteredWorkshops = workshops.filter(createFilter(searchTerm, KEYS_TO_FILTERS));
+
+    
+
     return(
-        <div className={classes.root}>
-            {workshops.length === 0 ? <h1>НЕТ ДОСТУПНЫХ МАСТЕР-КЛАССОВ</h1> : workshops.map(workshop => 
-                <WorkshopBox workshop={workshop} classes={classes} isDesired={props.isDesired}/>)
+        <>
+            
+            {workshops.length === 0 ? <h1>НЕТ ДОСТУПНЫХ МАСТЕР-КЛАССОВ</h1> : 
+            <>
+            <SearchInput className="search-input" onChange={searchUpdated} />
+            {/* {(() => {
+                const inputs = document.getElementsByTagName('input');
+
+                for(var i = 0; i < inputs.length; i++) {
+                    if(inputs[i].type.toLowerCase() == 'search') {
+                        inputs[i].placeholder = 'Поиск';
+                    }
+                }
+            })} */}
+            <div className={classes.root}>
+
+                    <>
+                        
+                        {filteredWorkshops.map(workshop => {
+                            return (
+                                <WorkshopBox removeFromDesiredCallback={removeFromDesiredCallback} workshop={workshop} classes={classes} isDesired={props.isDesired}/>
+                            )
+                        })}
+                    </>
+                
+            </div>
+            </>
             }
-        </div>
+
+            
+
+        </>
     );
 }

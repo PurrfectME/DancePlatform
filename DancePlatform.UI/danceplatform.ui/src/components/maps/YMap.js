@@ -51,7 +51,7 @@ render(){
     return(
         <>
             {!this.state.loading ? 
-                <div id="map" style={{width: 1198, height: 400}}></div>
+                <div id="map" style={{width: 500, height: 400}}></div>
             :
             <LoadingCircle />
             // <div style={{width: 1198, height: 400}}>КАРТЫ В ДАННЫЙ МОМЕНТ НЕДОСТУПНЫ. ПРОБЛЕМА С YANDEX API</div>

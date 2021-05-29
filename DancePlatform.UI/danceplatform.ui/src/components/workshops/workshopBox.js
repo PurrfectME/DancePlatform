@@ -7,6 +7,8 @@ import {styles, categories} from '../../constants/commonData';
 import ImageUploading from 'react-images-uploading';
 import { makeStyles } from '@material-ui/core/styles';
 import '../../styles/profileInfo.css'
+import storageHelper from '../../helpers/storageHelper';
+import RegistrationService from '../../services/registrationService';
 
 const useStyles = makeStyles((theme) => ({
     btn: {
@@ -22,11 +24,18 @@ export default function WorkshopBox(props) {
     const classes = useStyles();
     const {workshop} = props;
 
+    const removeFromDesired = () => {
+        const userId = storageHelper.getCurrentUserId();
+        RegistrationService.removeFromDesired(userId, workshop.id).then(resp => {
+            props.removeFromDesiredCallback(userId, workshop.id);
+        });
+    }
+
     return (
             <Paper className={props.classes.paper}>
                 <Grid className={props.classes.grid} container >
                     <Grid className={props.classes.img} item>
-                    <ImageUploading
+                        <ImageUploading
                             value={workshop.photo}
                             dataURLKey="photo"
                         >
@@ -47,7 +56,7 @@ export default function WorkshopBox(props) {
                     <Grid className={props.classes.gridInfo} item xs={12} sm container>
                         <Grid item>
                             <Typography variant="subtitle1">
-                                {styles[workshop.style]} <Typography display='inline' variant="subtitle1">({categories[workshop.category]})</Typography>
+                                {workshop.style} <Typography display='inline' variant="subtitle1">({workshop.category})</Typography>
                             </Typography>
                         </Grid>
                         <Grid item>
@@ -56,16 +65,28 @@ export default function WorkshopBox(props) {
                             </Typography>
                         </Grid>
                         <Grid item>
-                            <Typography variant="subtitle1">{workshop.price} BYN</Typography>
+                            <Typography variant="subtitle1">{workshop.price} USD</Typography>
                         </Grid>
-                        <Grid item>
-                            <Typography variant="subtitle1">Свободных мест: {workshop.maxUsers - workshop.currentUsersCount}</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Button href={`/workshop-info/${workshop.id}?desired=${props.isDesired}`} className={`${props.classes.registerButton} ${classes.btn}`} type="button" variant="contained" color="primary">
-                                Подробнее
-                            </Button>
-                        </Grid>
+                        {storageHelper.isUser() && props.isDesired ?
+                            <>
+                                <Grid item>
+                                    <Button href={`/workshop-info/${workshop.id}?desired=${props.isDesired}`} className={`${props.classes.registerButton} ${classes.btn}`} type="button" variant="contained" color="primary">
+                                        Подробнее
+                                    </Button>
+                                </Grid>
+                                <Grid item>
+                                <Button onClick={removeFromDesired} className={`${props.classes.registerButton} ${classes.btn}`} type="button" variant="contained" color="primary">
+                                        Удалить
+                                </Button>
+                                </Grid>
+                            </>
+                            :
+                            <Grid item>
+                                <Button href={`/workshop-info/${workshop.id}?desired=${props.isDesired}`} className={`${props.classes.registerButton} ${classes.btn}`} type="button" variant="contained" color="primary">
+                                    Подробнее
+                                </Button>
+                            </Grid>
+                        }
                     </Grid>
                 </Grid>
             </Paper>

@@ -44,6 +44,12 @@ const getUserVisitedWorkshops = userId => {
     });
 }
 
+const removeFromDesired = (userId, workshopId) => {
+    return request({
+        method: 'POST',
+        url: `/registration/remove-desired/${userId}/${workshopId}`
+    });
+}
 
 const RegistrationService = {
     registerOnWorkshop,
@@ -51,7 +57,8 @@ const RegistrationService = {
     getUserWorkshops,
     deleteRegistrations,
     checkoutUsers,
-    getUserVisitedWorkshops
+    getUserVisitedWorkshops,
+    removeFromDesired,
 }
 
 export default RegistrationService;

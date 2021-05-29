@@ -205,8 +205,11 @@ export default function ProfileInfo(){
                         <Typography className={classes.fullName}>
                             Фамилия: {user.surname}
                         </Typography>
+                        <Typography className={classes.fullName}>
+                            E-mail: {user.email}
+                        </Typography>
                         <Typography className={classes.dob}>
-                            Дата рождения: {timeHelper.normalizeDate(user.dateOfBirth)}
+                            Дата рождения: {new Date().getFullYear() - new Date(timeHelper.normalizeDate(user.dateOfBirth)).getFullYear()}
                         </Typography>
                         <Typography className={classes.dob}>
                             Телефон: {user.phoneNumber}

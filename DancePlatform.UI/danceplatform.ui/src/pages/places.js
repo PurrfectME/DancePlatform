@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import PlaceForm from '../components/forms/placeForm';
 import PlaceService from '../services/placeService';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -144,7 +145,11 @@ const showFormCallback = (show, addedPlace, editing) => {
         </div>
         
             <MUIDataTable
-                title={"Студии"}
+                title={
+                    <Typography variant="h4" id="tableTitle" component="div">
+                       Студии
+                    </Typography>
+                }
                 data={places}
                 columns={columns}
                 options={options}
