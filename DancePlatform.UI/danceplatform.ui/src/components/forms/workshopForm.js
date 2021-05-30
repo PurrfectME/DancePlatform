@@ -114,9 +114,9 @@ const validate = values => {
   if (values.maxUsers <= 0) {
     errors.maxUsers = 'Некорректное значение';
   }
-  // if (!values.photo) {
-  //   errors.photo = 'Обязательно';
-  // }
+  if (!values.photo) {
+    errors.photo = 'Обязательно';
+  }
   return errors;
 };
 
@@ -127,16 +127,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
-  photoButton: {
-    lineHeight: 1.3,
-  },
-  photoField: {
-    marginTop: 16,
-  },
+
   photoFieldContainer: {
     display: 'flex',
     flexDirection: 'column',
-    color: 'red'
   },
   btn: {
     color: 'black',
@@ -225,7 +219,6 @@ export default function WorkshopForm(props) {
     props.showFormCallback(props.showForm, null, props.editing)
   }
 
-
   const onChange = (imageList, addedIndex) => {
     setImageName(imageList[0].file.name);
     setImages(imageList);
@@ -243,7 +236,7 @@ export default function WorkshopForm(props) {
           onSubmit={onSubmit}
           initialValues={props.initialData}
           validate={validate}
-          render={({ handleSubmit, reset, submitting, pristine, values }) => (
+          render={({ handleSubmit, reset, submitting, pristine, values, form }) => (
             <form onSubmit={handleSubmit}>
               <Paper style={{ padding: 16, width: 676 }}>
                 <Grid container alignItems="flex-start" spacing={2}>
@@ -293,33 +286,32 @@ export default function WorkshopForm(props) {
                       {stylesData}
                     </Field>
                   </Grid>
-                  <Grid item xs={3} className={classes.photoFieldContainer}>
-                      {/* <div>{imageName}</div> */}
+                  <Grid item xs={3} >
                       <Field
                         name="photo"
                         component={TextField}
                         type="text"
-                        disabled={true}
-                        label={imageName}
-                        className={classes.photoField}
-                        defaultValue={imageName}
-                        validate={false}
+                        label={'Фото'}
                       ></Field>
                       
                   </Grid>
-                  <Grid item xs={3} className={classes.photoContainer}>
+                  <Grid style={{display: 'flex', alignItems: 'flex-end', height: 61}} item xs={3} >
                     <ImageUploading
                       value={images}
-                      onChange={onChange}
+                      onChange={(imageList, a) => {
+                        onChange(imageList, a);
+                        form.change('photo', imageList[0].file.name);
+                      }
+                      }
                       dataURLKey="base64Img"
                     >
                       {({
                       onImageUpload,
+                      
                       isDragging,
                       dragProps,
                       }) => (
                       // write your building UI
-                        <div className={classes.imageButtons}>
                           <Button
                                 className={classes.btn}
                                 type="button" variant="contained" color="primary"
@@ -329,7 +321,6 @@ export default function WorkshopForm(props) {
                                 >
                             Добавить фото
                           </Button>
-                        </div>
                       )}
                     </ImageUploading>
                   </Grid>
