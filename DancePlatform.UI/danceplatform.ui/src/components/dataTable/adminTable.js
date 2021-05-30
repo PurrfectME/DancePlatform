@@ -43,7 +43,7 @@ export default function AdminTable(props) {
                 sort: false,
                 customBodyRender: (value, tableMeta, updateValue) => {
                     return (
-                        <Button className={classes.btn} disabled={showForm} onClick={() => 
+                        <Button className={classes.btn} disabled={showForm || tableMeta.rowData[13] === 'Да'} onClick={() => 
                         {
                             setShowForm(!showForm);
                             setEditing(true);
@@ -242,7 +242,6 @@ const showFormCallback = (show, workshop, editing) => {
                 places={places}
                 choreographers={choreographers}
             />
-            
         </>
     );
 }

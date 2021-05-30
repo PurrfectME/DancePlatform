@@ -55,7 +55,7 @@ button:hover {
 }
 
 .search-input {
-    margin-top: 58px;
+    margin-top: 11px;
     margin-left: 46px;
     box-shadow: 0 0 10px rgb(47 66 146 / 50%);
     border-radius: 30px;
@@ -69,4 +69,13 @@ button:hover {
 
 .search-input input {
     margin-left: 8px;
+}
+
+.search-input ::-webkit-input-placeholder {
+    color: transparent;
+}
+
+.search-label {
+    margin-top: 58px;
+    margin-left: 46px;
 }

@@ -8,9 +8,9 @@ import {
   CssBaseline,
   MenuItem,
 } from '@material-ui/core';
-import WorkshopService from '../../services/workshopService';
 import ErrorBox from '../dialog/errorBox';
 import PlaceService from '../../services/placeService';
+import Popup from '../dialog/popup';
 
 const validate = values => {
   const errors = {};
@@ -49,7 +49,9 @@ export default function PlaceForm(props) {
 
   return(
     props.showForm ?
-    <div style={{ padding: 16, margin: 'auto', maxWidth: 700 }}>
+    <Popup content={
+      <>
+    <div style={{margin: 'auto', maxWidth: 700 }}>
         {error ? <ErrorBox callback={errorCallback} isError={error} message={errorMessage}/> : <></>}
       <CssBaseline />
       <Form
@@ -130,6 +132,9 @@ export default function PlaceForm(props) {
       />
 
     </div>
+      </>
+    }
+    />
     :
     <></>
     );

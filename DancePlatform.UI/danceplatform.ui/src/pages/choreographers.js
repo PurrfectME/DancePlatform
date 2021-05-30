@@ -57,8 +57,8 @@ export default function Choregraphers(){
         { name: 'name', label: 'Имя' },
         { name: 'dateOfBirth', label: 'Дата рождения' },
         { name: 'description', label: 'Описание' },
-        // { name: 'link', label: 'Соцсети' },
-        { name: 'style', label: 'Стиль' },
+        { name: 'style', label: 'Основной стиль' },
+        { name: 'link', label: 'Соцсеть' },
     ];
 
     const handleRowClick = (rowData, rowMeta) => {

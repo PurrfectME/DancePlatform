@@ -24,6 +24,7 @@ import timeHelper from '../../helpers/dateHelper';
 import {styles, categories} from '../../constants/commonData';
 import UsersAdditionalInfo from './usersAdditionalInfo';
 import ErrorBox from '../dialog/errorBox.js';
+import '../../styles/workshopTable.css'
 
 const headCells = storageHelper.isOrganizer() ? [
     { id: 'place', numeric: false,  label: 'Место' },
@@ -137,11 +138,11 @@ const useToolbarStyles = makeStyles((theme) => ({
     theme.palette.type === 'light'
       ? {
           color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+          backgroundColor: '#f7b692',
         }
       : {
           color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
+          backgroundColor: '#f7b692',
         },
   title: {
     flex: '1 1 100%',
@@ -301,8 +302,6 @@ export default function WorkshopTable(props) {
   const numSelected= selected.length;
 
   const toolBarStyles = useToolbarStyles();
-
-  console.log('SECLETED', selected)
 
   const currentWorkshop = rows.find(x => x.id === selected[0]);
 

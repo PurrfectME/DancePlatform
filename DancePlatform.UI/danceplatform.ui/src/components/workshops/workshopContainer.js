@@ -112,6 +112,7 @@ export default function WorkshopContainer(props) {
                 })]);
             });
         }
+
     }, []);
 
     const searchUpdated = (term) => {
@@ -120,40 +121,23 @@ export default function WorkshopContainer(props) {
 
     const filteredWorkshops = workshops.filter(createFilter(searchTerm, KEYS_TO_FILTERS));
 
-    
-
     return(
         <>
             
-            {workshops.length === 0 ? <h1>НЕТ ДОСТУПНЫХ МАСТЕР-КЛАССОВ</h1> : 
-            <>
-            <SearchInput className="search-input" onChange={searchUpdated} />
-            {/* {(() => {
-                const inputs = document.getElementsByTagName('input');
-
-                for(var i = 0; i < inputs.length; i++) {
-                    if(inputs[i].type.toLowerCase() == 'search') {
-                        inputs[i].placeholder = 'Поиск';
-                    }
-                }
-            })} */}
-            <div className={classes.root}>
-
-                    <>
-                        
+            {workshops.length === 0 ? <h1 className={classes.root}>НЕТ ДОСТУПНЫХ МАСТЕР-КЛАССОВ</h1> : 
+                <>
+                    <h1 className="search-label">Поиск</h1>
+                    <SearchInput className="search-input" onChange={searchUpdated} />
+                    
+                    <div className={classes.root}>
                         {filteredWorkshops.map(workshop => {
                             return (
                                 <WorkshopBox removeFromDesiredCallback={removeFromDesiredCallback} workshop={workshop} classes={classes} isDesired={props.isDesired}/>
                             )
                         })}
-                    </>
-                
-            </div>
-            </>
+                    </div>
+                </>
             }
-
-            
-
         </>
     );
 }

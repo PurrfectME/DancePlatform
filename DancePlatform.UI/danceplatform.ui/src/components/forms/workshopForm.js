@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { Form, Field } from 'react-final-form';
-import { TextField, Select, Input } from 'final-form-material-ui';
+import { TextField, Select } from 'final-form-material-ui';
 import {
   Paper,
   Grid,
@@ -22,8 +22,7 @@ import moment from 'moment';
 import timeHelper from '../../helpers/dateHelper';
 import ImageUploading from 'react-images-uploading';
 import '../../styles/profileInfo.css';
-import ProfileService from '../../services/profileService'
-
+import Popup from '../dialog/popup';
 
 function DatePickerWrapper(props) {
   const {
@@ -100,18 +99,26 @@ const validate = values => {
   if (!values.price) {
     errors.price = 'Обязательно';
   }
+  if (values.price <= 0) {
+    errors.price = 'Некорректное значение';
+  }
   if (!values.minAge) {
     errors.minAge = 'Обязательно';
   }
+  if (values.minAge <= 0) {
+    errors.minAge = 'Некорректное значение';
+  }
   if (!values.maxUsers) {
     errors.maxUsers = 'Обязательно';
+  }
+  if (values.maxUsers <= 0) {
+    errors.maxUsers = 'Некорректное значение';
   }
   // if (!values.photo) {
   //   errors.photo = 'Обязательно';
   // }
   return errors;
 };
-
 
 const useStyles = makeStyles((theme) => ({
   photoContainer: {
@@ -222,202 +229,174 @@ export default function WorkshopForm(props) {
   const onChange = (imageList, addedIndex) => {
     setImageName(imageList[0].file.name);
     setImages(imageList);
-    // data for submit
-  //   if(imageList.length){
-  //     ProfileService.uploadImage(imageList[0]).then(x => {
-  //         setImages(imageList);
-  //     });
-  //     return;
-  // }
   }
 
   return(
     props.showForm ?
-    <div style={{ padding: 16, margin: 'auto', maxWidth: 700 }}>
-        {error ? <ErrorBox callback={errorCallback} isOpen={error} message={errorMessage}/> : <></>}
-      <CssBaseline />
-      <Form
-        onSubmit={onSubmit}
-        initialValues={props.initialData}
-        validate={validate}
-        render={({ handleSubmit, reset, submitting, pristine, values }) => (
-          <form onSubmit={handleSubmit}>
-            <Paper style={{ padding: 16 }}>
-              <Grid container alignItems="flex-start" spacing={2}>
-                <Grid item xs={4}>
-                  <Field
-                    name="studioName"
-                    component={Select}
-                    label="Место *"
-                    type="text"
-                    formControlProps={{ fullWidth: true}}
-                  >
-                    {placesData}
-                  </Field>
-                </Grid>
-                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
+
+      <Popup content={
+        <>
+          <div style={{margin: 'auto', maxWidth: 700 }}>
+          {error ? <ErrorBox callback={errorCallback} isOpen={error} message={errorMessage}/> : <></>}
+        <CssBaseline />
+        <Form
+          onSubmit={onSubmit}
+          initialValues={props.initialData}
+          validate={validate}
+          render={({ handleSubmit, reset, submitting, pristine, values }) => (
+            <form onSubmit={handleSubmit}>
+              <Paper style={{ padding: 16, width: 676 }}>
+                <Grid container alignItems="flex-start" spacing={2}>
                   <Grid item xs={4}>
                     <Field
-                    fullWidth
-                    required
-                    name="date"
-                    component={DatePickerWrapper}
-                    type="text"
-                    label="Дата"
-                  />
+                      name="studioName"
+                      component={Select}
+                      label="Место *"
+                      type="text"
+                      formControlProps={{ fullWidth: true}}
+                    >
+                      {placesData}
+                    </Field>
                   </Grid>
-                </MuiPickersUtilsProvider>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <Grid item xs={4}>
-                    <Field
+                  <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
+                    <Grid item xs={4}>
+                      <Field
                       fullWidth
                       required
-                      name="time"
-                      component={TimePickerWrapper}
+                      name="date"
+                      component={DatePickerWrapper}
                       type="text"
-                      label="Время"
+                      label="Дата"
+                    />
+                    </Grid>
+                  </MuiPickersUtilsProvider>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Grid item xs={4}>
+                      <Field
+                        fullWidth
+                        required
+                        name="time"
+                        component={TimePickerWrapper}
+                        type="text"
+                        label="Время"
+                      />
+                    </Grid>
+                  </MuiPickersUtilsProvider>
+                  <Grid item xs={6}>
+                    <Field
+                      fullWidth
+                      name="style"
+                      component={Select}
+                      label="Выберите стиль *"
+                      formControlProps={{ fullWidth: true}}
+                    >
+                      {stylesData}
+                    </Field>
+                  </Grid>
+                  <Grid item xs={3} className={classes.photoFieldContainer}>
+                      {/* <div>{imageName}</div> */}
+                      <Field
+                        name="photo"
+                        component={TextField}
+                        type="text"
+                        disabled={true}
+                        label={imageName}
+                        className={classes.photoField}
+                        defaultValue={imageName}
+                        validate={false}
+                      ></Field>
+                      
+                  </Grid>
+                  <Grid item xs={3} className={classes.photoContainer}>
+                    <ImageUploading
+                      value={images}
+                      onChange={onChange}
+                      dataURLKey="base64Img"
+                    >
+                      {({
+                      onImageUpload,
+                      isDragging,
+                      dragProps,
+                      }) => (
+                      // write your building UI
+                        <div className={classes.imageButtons}>
+                          <Button
+                                className={classes.btn}
+                                type="button" variant="contained" color="primary"
+                                style={isDragging ? { color: 'red' } : undefined}
+                                onClick={onImageUpload}
+                                {...dragProps}
+                                >
+                            Добавить фото
+                          </Button>
+                        </div>
+                      )}
+                    </ImageUploading>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      fullWidth
+                      name="category"
+                      component={Select}
+                      label="Выберите категорию *"
+                      formControlProps={{ fullWidth: true }}
+                    >
+                      {categoriesData}
+                    </Field>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      fullWidth
+                      name="choreographerName"
+                      component={Select}
+                      label="Выберите хореографа"
+                      formControlProps={{ fullWidth: true }}
+                    >
+                      {choreographersData}
+                    </Field>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Field
+                      fullWidth
+                      name="price"
+                      component={TextField}
+                      type="number"
+                      label="Цена"
+                      formControlProps={{ fullWidth: true, required: true }}
                     />
                   </Grid>
-                </MuiPickersUtilsProvider>
-                <Grid item xs={6}>
-                  <Field
-                    fullWidth
-                    name="style"
-                    component={Select}
-                    label="Выберите стиль *"
-                    formControlProps={{ fullWidth: true}}
-                  >
-                    {stylesData}
-                  </Field>
-                </Grid>
-                <Grid item xs={3} className={classes.photoFieldContainer}>
-                    {/* <div>{imageName}</div> */}
+                  <Grid item xs={6}>
                     <Field
-                      name="photo"
+                      fullWidth
+                      name="maxUsers"
                       component={TextField}
-                      type="text"
-                      disabled={true}
-                      label={imageName}
-                      className={classes.photoField}
-                      defaultValue={imageName}
-                      validate={false}
-                    ></Field>
-                    
-                </Grid>
-                <Grid item xs={3} className={classes.photoContainer}>
-                  <ImageUploading
-                    value={images}
-                    onChange={onChange}
-                    dataURLKey="base64Img"
-                  >
-                    {({
-                    onImageUpload,
-                    isDragging,
-                    dragProps,
-                    }) => (
-                    // write your building UI
-                      <div className={classes.imageButtons}>
-                        <Button
-                              className={classes.btn}
-                              type="button" variant="contained" color="primary"
-                              style={isDragging ? { color: 'red' } : undefined}
-                              onClick={onImageUpload}
-                              {...dragProps}
-                              >
-                          Добавить фото
-                        </Button>
-                      </div>
-                    )}
-                  </ImageUploading>
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    name="category"
-                    component={Select}
-                    label="Выберите категорию *"
-                    formControlProps={{ fullWidth: true }}
-                  >
-                    {categoriesData}
-                  </Field>
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    name="choreographerName"
-                    component={Select}
-                    label="Выберите хореографа"
-                    formControlProps={{ fullWidth: true }}
-                  >
-                    {choreographersData}
-                  </Field>
-                </Grid>
-                <Grid item xs={6}>
-                  <Field
-                    fullWidth
-                    name="price"
-                    component={TextField}
-                    type="number"
-                    label="Цена"
-                    formControlProps={{ fullWidth: true, required: true }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <Field
-                    fullWidth
-                    name="maxUsers"
-                    component={TextField}
-                    type="number"
-                    label="Максимальное количество участников"
-                    formControlProps={{ fullWidth: true, required: true }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <Field
-                    fullWidth
-                    name="minAge"
-                    component={TextField}
-                    type="number"
-                    label="Минимальный возраст"
-                    formControlProps={{ fullWidth: true, required: true }}
-                  />
-                </Grid>
-                <Grid item style={{ marginTop: 16 }}>
-                  {props.editing ? 
-                  <>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    disabled={submitting}
-                    className={classes.btn}
-                    style={{marginRight: 25}}
-                  >
-                    Сохранить
-                  </Button>
-                  <Button
-                    className={classes.btn}
-                    variant="contained"
-                    color="primary"
-                    type="button"
-                    onClick={onCloseClick}
-                    disabled={submitting}
-                    className={classes.btn}
-                  >
-                    Закрыть
-                  </Button>
-                  </>
-                  :
-                  <>
+                      type="number"
+                      label="Максимальное количество участников"
+                      formControlProps={{ fullWidth: true, required: true }}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Field
+                      fullWidth
+                      name="minAge"
+                      component={TextField}
+                      type="number"
+                      label="Минимальный возраст"
+                      formControlProps={{ fullWidth: true, required: true }}
+                    />
+                  </Grid>
+                  <Grid item style={{ marginTop: 16 }}>
+                    {props.editing ? 
+                    <>
                     <Button
-                      className={classes.btn}
                       variant="contained"
                       color="primary"
                       type="submit"
                       disabled={submitting}
+                      className={classes.btn}
                       style={{marginRight: 25}}
                     >
-                      Добавить
+                      Сохранить
                     </Button>
                     <Button
                       className={classes.btn}
@@ -426,20 +405,47 @@ export default function WorkshopForm(props) {
                       type="button"
                       onClick={onCloseClick}
                       disabled={submitting}
-                  >
-                    Закрыть
-                  </Button>
-                  </>}
+                      className={classes.btn}
+                    >
+                      Закрыть
+                    </Button>
+                    </>
+                    :
+                    <>
+                      <Button
+                        className={classes.btn}
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        disabled={submitting}
+                        style={{marginRight: 25}}
+                      >
+                        Добавить
+                      </Button>
+                      <Button
+                        className={classes.btn}
+                        variant="contained"
+                        color="primary"
+                        type="button"
+                        onClick={onCloseClick}
+                        disabled={submitting}
+                    >
+                      Закрыть
+                    </Button>
+                    </>}
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Paper>
-          </form>
-        )}
-      />
+              </Paper>
+            </form>
+          )}
+        />
 
-    </div>
+      </div>
+        </>
+        }
+      />
     :
-    <></>
+      <></>
     );
 }
 

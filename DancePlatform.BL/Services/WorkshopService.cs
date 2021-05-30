@@ -115,7 +115,7 @@ namespace DancePlatform.BL.Services
                 .Include(X => X.Choreographer)
                 .Include(X => X.Registrations)
                 .Where(x => x.IsClosed == true)
-                .Where(x => x.Comment == null)
+                //.Where(x => x.Comment == null)
                 .ToListAsync();
         }
 
@@ -144,11 +144,12 @@ namespace DancePlatform.BL.Services
             await Update(workshopToApprove);
         }
 
-        public async Task DeclineWorkshop(int workshopId)
+        public async Task DeclineWorkshop(int workshopId, string comment)
         {
             var workshopToDecline = await _context.Workshops.FirstAsync(x => x.Id == workshopId);
 
             workshopToDecline.IsClosed = true;
+            workshopToDecline.Comment = comment;
 
             await Update(workshopToDecline);
         }

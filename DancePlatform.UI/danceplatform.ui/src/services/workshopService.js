@@ -68,10 +68,10 @@ const approveWorkshop = workshopId => {
     });
 }
 
-const declineWorkshop = (workshopId) => {
+const declineWorkshop = (workshopId, comment) => {
     return request({
         method: 'POST',
-        url: `/workshop/decline/${workshopId}`
+        url: `/workshop/decline/${workshopId}/${comment}`
     });
 }
 

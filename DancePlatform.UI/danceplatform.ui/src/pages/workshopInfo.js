@@ -14,6 +14,9 @@ import storageHelper from '../helpers/storageHelper';
 import { useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInstagram } from '@fortawesome/free-brands-svg-icons'
+import Popup from '../components/dialog/popup';
+import { Form, Field } from 'react-final-form';
+import { TextField, Select, Input } from 'final-form-material-ui';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -54,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
         width: 500
     },
     btn: {
+        marginTop: 15,
         color: 'black',
         backgroundColor: '#B2C8D6',
         "&:hover": {
@@ -71,6 +75,15 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const validate = values => {
+    const errors = {};
+    if (!values.comment) {
+      errors.comment = 'Обязательно';
+    }
+
+    return errors;
+}
+
 export default function WorkshopInfo(){
     let history = useHistory();
     const classes = useStyles();
@@ -85,6 +98,8 @@ export default function WorkshopInfo(){
             address: '',
         }
     });
+
+    const [showPopup, setShowPopup] = useState(false);
     
     const [isDesired] = useState(new URLSearchParams(window.location.search).get('desired'));
 
@@ -107,6 +122,12 @@ export default function WorkshopInfo(){
         RegistrationService.registerOnWorkshop(registration).then(response => {
             history.push('/');
         })
+    }
+
+    const declineWorkshop = (values) => {
+        WorkshopService.declineWorkshop(workshop.id, values.comment).then(x => {
+            history.push('/');
+        });
     }
 
     return(
@@ -182,7 +203,7 @@ export default function WorkshopInfo(){
                             </Grid>
                         </Grid>
                     </Grid>
-                      <Grid className={classes.btnsGrid} container xs={12}>
+                      <Grid className={classes.btnsGrid} item container xs={12}>
                         {storageHelper.isModerator() ?
                             <div className={classes.moderatorButtons}>
                                 <Button
@@ -203,11 +224,7 @@ export default function WorkshopInfo(){
                                     color="primary"
                                     type="button"
                                     color="primary"
-                                    onClick={() => {
-                                        WorkshopService.declineWorkshop(workshop.id).then(x => {
-                                            history.push('/');
-                                        });
-                                    }}
+                                    onClick={() => setShowPopup(true)}
                                 >
                                     Отклонить мастер-класс
                                 </Button>
@@ -234,6 +251,46 @@ export default function WorkshopInfo(){
                         </Grid>
                 </Grid>
             </Paper>
+            {showPopup ? 
+                <Popup content={
+                    <>
+                        <Form
+                            onSubmit={declineWorkshop}
+                            initialValues={''}
+                            validate={validate}
+                            render={({ handleSubmit, reset, submitting, pristine, values }) => (
+                                <form onSubmit={handleSubmit}>
+                                     <Paper style={{padding: 15}}>
+                                         {/* <h1>КОММЕНТАРИЙ</h1> */}
+                                        <Grid container item xs={12}>
+                                        <Field
+                                            fullWidth
+                                            name="comment"
+                                            component={TextField}
+                                            label="Коментарий *"
+                                            type="text"
+                                        />
+                                        </Grid>
+                                        <Button variant="contained"
+                                            color="primary"
+                                            type="submit"
+                                            style={{marginRight: 25}}
+                                            className={classes.btn} disabled={submitting} type="submit">Отклонить</Button>
+                                        <Button variant="contained"
+                                            color="primary"
+                                            type="submit"
+                                            className={classes.btn}
+                                            disabled={submitting} onClick={() => setShowPopup(false)}>Закрыть</Button>
+                                    </Paper>
+                                </form>)
+                            }
+                        />
+                    </>
+                }/>
+            :
+                <></>
+            }
+            
         </>
     );
 }

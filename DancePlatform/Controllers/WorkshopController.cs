@@ -182,10 +182,10 @@ namespace DancePlatform.API.Controllers
         }
 
         [Authorize(Roles = "Moderator")]
-        [HttpPost("decline/{workshopId}")]
-        public async Task<IActionResult> DeclineWorkshop(int workshopId)
+        [HttpPost("decline/{workshopId}/{comment}")]
+        public async Task<IActionResult> DeclineWorkshop(int workshopId, string comment)
         {
-            await _service.DeclineWorkshop(workshopId);
+            await _service.DeclineWorkshop(workshopId, comment);
 
             return Ok();
         }

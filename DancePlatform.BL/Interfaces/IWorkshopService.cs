@@ -20,7 +20,6 @@ namespace DancePlatform.BL.Interfaces
 		Task<List<Workshop>> GetWorkshopsForApproval();
 
 		Task ApproveWorkshop(int workshopId);
-		Task DeclineWorkshop(int workshopId);
-
+		Task DeclineWorkshop(int workshopId, string comment);
 	}
 }

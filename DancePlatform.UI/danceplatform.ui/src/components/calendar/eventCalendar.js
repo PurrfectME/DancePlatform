@@ -19,6 +19,10 @@ import '../../styles/profileInfo.css'
 const useStyles = makeStyles((theme) => ({
   btn: {
     width: '-webkit-fill-available',
+    backgroundColor: '#ec973e47',
+    "&:hover": {
+      backgroundColor: '#ecbe1275',
+    }
   },
 }));
 
@@ -45,7 +49,6 @@ export default function EventCalendar() {
         <MonthlyBody
           events={[...workshops.map(x => {
             const date = parseISO(`${timeHelper.normalizeDate(x.date)}T${timeHelper.toUtc(x.time).substr(11, 5)}`);
-            // console.log('DATE', timeHelper.toUtc(x.time))
             if(date < new Date()){
               return false;
             }
