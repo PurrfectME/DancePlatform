@@ -9,6 +9,13 @@ const getAllWorkshops = () => {
     });
 }
 
+const getAllForUsersAccounting = () => {
+    return request({
+        method: 'GET',
+        url: '/workshop/getAll-users-accounting'
+    });
+}
+
 const getAvailableWorkshopsForUser = userId => {
     return request({
         method: 'GET',
@@ -95,6 +102,7 @@ const WorkshopService = {
     approveWorkshop,
     declineWorkshop,
     getWorkshopsForApproval,
+    getAllForUsersAccounting,
 }
 
 export default WorkshopService;

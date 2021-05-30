@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from "react-router-dom";
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -11,6 +12,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -25,8 +27,9 @@ import {styles, categories} from '../../constants/commonData';
 import UsersAdditionalInfo from './usersAdditionalInfo';
 import ErrorBox from '../dialog/errorBox.js';
 import '../../styles/workshopTable.css'
+import Popup from '../dialog/popup';
 
-const headCells = storageHelper.isOrganizer() ? [
+const headCells = storageHelper.isOrganizer() && window.location.pathname.split("/")[1] !== "users-accounting" ? [
     { id: 'place', numeric: false,  label: 'Место' },
     { id: 'date', date: true,  label: 'Дата' },
     { id: 'time', date: true,  label: 'Время' },
@@ -36,7 +39,21 @@ const headCells = storageHelper.isOrganizer() ? [
     { id: 'price', numeric: true, label: 'Цена, USD' },
     { id: 'minAge', numeric: false, label: 'Мин. возраст' },
     { id: 'maxUsers', numeric: false, label: 'Макс. людей' },
-] : [
+    { id: 'comment', numeric: false, label: 'Комментарий' },
+] : storageHelper.isOrganizer() && window.location.pathname.split("/")[1] === "users-accounting" ?
+[
+  { id: 'place', numeric: false,  label: 'Место' },
+  { id: 'date', date: true,  label: 'Дата' },
+  { id: 'time', date: true,  label: 'Время' },
+  { id: 'choreographer', numeric: false, label: 'Хореограф' },
+  { id: 'style', numeric: false, label: 'Стиль' },
+  { id: 'category', numeric: false, label: 'Уровень' },
+  { id: 'price', numeric: true, label: 'Цена, USD' },
+  { id: 'minAge', numeric: false, label: 'Мин. возраст' },
+  { id: 'maxUsers', numeric: false, label: 'Макс. людей' },
+]
+:
+[
   { id: 'place', numeric: false,  label: 'Место' },
   { id: 'date', date: true,  label: 'Дата' },
   { id: 'time', date: true,  label: 'Время' },
@@ -81,7 +98,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-      {storageHelper.isOrganizer() ?
+      {storageHelper.isOrganizer() && window.location.pathname.split("/")[1] !== "workshops-history" ?
         <TableCell padding="checkbox">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -146,6 +163,7 @@ const useToolbarStyles = makeStyles((theme) => ({
         },
   title: {
     flex: '1 1 100%',
+    color: 'black',
   }
 }));
 
@@ -206,6 +224,7 @@ export default function WorkshopTable(props) {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isCloseButtonDisabled, setIsCloseButtonDisabled] = useState(true);
+  const date = timeHelper.normalizeDate(new Date());
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -245,7 +264,7 @@ export default function WorkshopTable(props) {
       }
 
       if((rows.length === 0 && !props.fromWorkshops)){
-        WorkshopService.getAllWorkshops().then(workshops => {
+        WorkshopService.getAllForUsersAccounting().then(workshops => {
 
         RegistrationService.getAllRegistrations().then(registrations => {
             if(registrations.length === 0){
@@ -299,11 +318,13 @@ export default function WorkshopTable(props) {
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-  const numSelected= selected.length;
+  const numSelected = selected.length;
 
   const toolBarStyles = useToolbarStyles();
 
   const currentWorkshop = rows.find(x => x.id === selected[0]);
+
+  console.log('SELECT', currentWorkshop)
 
   return (
     <div className={classes.root}>
@@ -368,7 +389,8 @@ export default function WorkshopTable(props) {
               Сбросить выбранное
             </Button>
             <Button
-              disabled={isCloseButtonDisabled}
+              disabled={!currentWorkshop ? true : (currentWorkshop.date > date && timeHelper.isBeforeWithAddDays(currentWorkshop.date, date, 1)) ? false : true}
+              // props.selectedWorkshop.date > date && timeHelper.isBeforeWithAddDays(props.selectedWorkshop.date, date, 1)
               type="button"
               variant="contained"
               color="primary"
@@ -463,7 +485,7 @@ export default function WorkshopTable(props) {
                       key={shortid.generate()}
                       selected={isItemSelected}
                     >
-                      {storageHelper.isOrganizer() ?
+                      {storageHelper.isOrganizer() && window.location.pathname.split("/")[1] !== "workshops-history" ?
                         <TableCell padding="checkbox">
                           <Checkbox
                             checked={isItemSelected}
@@ -483,7 +505,13 @@ export default function WorkshopTable(props) {
                       <TableCell align="right">{styles[row.style]}</TableCell>
                       <TableCell align="right">{categories[row.category]}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>
-                      {storageHelper.isOrganizer() ? 
+                      {storageHelper.isOrganizer() && window.location.pathname.split("/")[1] !== "users-accounting" ? 
+                        <>
+                          <TableCell align="right">{row.minAge}</TableCell>
+                          <TableCell align="right">{row.maxUsers}</TableCell>
+                          <TableCell align="right"><textarea type="text">{row.comment}</textarea></TableCell>
+                        </>
+                        : storageHelper.isOrganizer() && window.location.pathname.split("/")[1] === "users-accounting" ?
                         <>
                           <TableCell align="right">{row.minAge}</TableCell>
                           <TableCell align="right">{row.maxUsers}</TableCell>
@@ -519,6 +547,24 @@ export default function WorkshopTable(props) {
 
     {isError ? <ErrorBox isOpen={isError} message={errorMessage}/> : <></>}
     {isOpenAdditionalInfo ? <UsersAdditionalInfo selectedWorkshop={currentWorkshop} workshopId={workshopIdToPreview}/> : <></>}
+
+    {currentWorkshop && currentWorkshop.comment ? 
+    <Popup content={
+      <>
+        <Paper style={{padding: 25}}>
+          <Typography style={{fontSize: 25}}>Комментарий модератора</Typography>
+          <Grid style={{padding: 45}} container item>
+            <Typography>{currentWorkshop.comment}</Typography>
+          </Grid>
+          <Grid container item>
+            <Button className={classes.btn} style={{marginLeft: 0, width: 300, margin: 'auto'}} onClick={() => {setSelected([])}}>Закрыть</Button>
+          </Grid>
+        </Paper>
+      </>
+    }/>
+    :
+    <></>
+    }
     </div>
   );
 }

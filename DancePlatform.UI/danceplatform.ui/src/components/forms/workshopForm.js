@@ -114,8 +114,8 @@ const validate = values => {
   if (values.maxUsers <= 0) {
     errors.maxUsers = 'Некорректное значение';
   }
-  if (!values.photo) {
-    errors.photo = 'Обязательно';
+  if (!values.photoName) {
+    errors.photoName = 'Обязательно';
   }
   return errors;
 };
@@ -171,7 +171,9 @@ export default function WorkshopForm(props) {
           return;
         }
         
-        WorkshopService.createWorkshop(values).then(response => props.showFormCallback(props.showForm, response.data));
+        WorkshopService.createWorkshop(values).then(response => {
+          props.showFormCallback(props.showForm, response.data);
+        });
     }
     else{
       if(timeHelper.normalizeDate(today) === timeHelper.normalizeDate(values.date) &&
@@ -180,7 +182,9 @@ export default function WorkshopForm(props) {
           setErrorMessage('Некорректное время');
           return;
         }
-        WorkshopService.editWorkshop(values).then(response => props.showFormCallback(props.showForm, response.data, props.editing))
+        WorkshopService.editWorkshop(values).then(response => {
+          props.showFormCallback(props.showForm, response.data, props.editing);
+        })
     }
   };
 
@@ -288,7 +292,7 @@ export default function WorkshopForm(props) {
                   </Grid>
                   <Grid item xs={3} >
                       <Field
-                        name="photo"
+                        name="photoName"
                         component={TextField}
                         type="text"
                         label={'Фото'}
@@ -300,7 +304,7 @@ export default function WorkshopForm(props) {
                       value={images}
                       onChange={(imageList, a) => {
                         onChange(imageList, a);
-                        form.change('photo', imageList[0].file.name);
+                        form.change('photoName', imageList[0].file.name);
                       }
                       }
                       dataURLKey="base64Img"

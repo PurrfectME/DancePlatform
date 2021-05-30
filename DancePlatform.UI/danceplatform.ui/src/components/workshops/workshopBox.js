@@ -43,9 +43,9 @@ export default function WorkshopBox(props) {
                             imageList,
                             }) => (
                             // write your building UI
-                            <Grid container>
+                            <Grid item container xs={4}>
                             <div className="upload__image-wrapper">
-                                <div key={1} className="image-item">
+                                <div key={1} className="box-image-item">
                                     <img src={workshop['photo']} alt="" width="200" height="200" />
                                 </div>
                             </div>

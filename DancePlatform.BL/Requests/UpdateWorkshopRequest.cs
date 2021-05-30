@@ -17,5 +17,7 @@ namespace DancePlatform.BL.Requests
         public int MinAge { get; set; }
         public int MaxUsers { get; set; }
         public bool IsClosed { get; set; }
+        public string PhotoName { get; set; }
+        public string Photo { get; set; }
     }
 }

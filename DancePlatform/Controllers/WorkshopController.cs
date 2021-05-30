@@ -29,9 +29,6 @@ namespace DancePlatform.API.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> PostWorkshop([FromBody] CreateWorkshopRequest request)
         {
-            request.Photo = request.Photo.Remove(0, 23);
-            var converted = Convert.FromBase64String(request.Photo);
-
             var name = _userManager.GetUserId(User);
             var user = await _userManager.FindByEmailAsync(name);
 
@@ -49,7 +46,8 @@ namespace DancePlatform.API.Controllers
                     MinAge = request.MinAge,
                     CreatedBy = user.Id,
                     IsApprovedByModerator = false,
-                    Photo = converted
+                    Photo = PreparePhoto(request.Photo),
+                    PhotoName = request.PhotoName
                 }));
         }
 
@@ -58,6 +56,13 @@ namespace DancePlatform.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _service.GetAll());
+        }
+
+        [Authorize(Roles = "Organizer")]
+        [HttpGet("getAll-users-accounting")]
+        public async Task<IActionResult> GetAllForUsersAccounting()
+        {
+            return Ok(await _service.GetAllForUsersAccounting());
         }
 
         [Authorize(Roles = "Organizer")]
@@ -110,6 +115,8 @@ namespace DancePlatform.API.Controllers
             workshopToUpdate.MinAge = request.MinAge;
             workshopToUpdate.MaxUsers = request.MaxUsers;
             workshopToUpdate.IsClosed = request.IsClosed;
+            workshopToUpdate.PhotoName = request.PhotoName;
+            workshopToUpdate.Photo = request.Photo.Contains("data") ? PreparePhoto(request.Photo) : Convert.FromBase64String(request.Photo);
 
             return Ok(await _service.Update(workshopToUpdate));
         }
@@ -188,6 +195,11 @@ namespace DancePlatform.API.Controllers
             await _service.DeclineWorkshop(workshopId, comment);
 
             return Ok();
+        }
+
+        private byte[] PreparePhoto(string photoBase64)
+        {
+            return Convert.FromBase64String(photoBase64.Remove(0, 23));
         }
     }
 }

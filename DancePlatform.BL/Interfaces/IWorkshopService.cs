@@ -12,7 +12,8 @@ namespace DancePlatform.BL.Interfaces
 		Task Delete(Workshop entity);
 
 		Task<List<Workshop>> GetAll();
-        Task<List<User>> GetWorkshopUsers(int workshopId);
+		Task<List<Workshop>> GetAllForUsersAccounting();
+		Task<List<User>> GetWorkshopUsers(int workshopId);
         Task<Workshop> GetById(int id);
 		Task<List<Workshop>> GetUserDesiredWorkshops(int userId);
 		Task<List<Workshop>> GetClosed();

@@ -7,6 +7,7 @@ import {
   Button,
   CssBaseline,
   MenuItem,
+  makeStyles,
 } from '@material-ui/core';
 import ErrorBox from '../dialog/errorBox';
 import PlaceService from '../../services/placeService';
@@ -24,7 +25,19 @@ const validate = values => {
   return errors;
 };
 
+const useStyles = makeStyles((theme) => ({
+  btn: {
+    color: 'black',
+    backgroundColor: '#B2C8D6',
+    "&:hover": {
+      backgroundColor: '#F59B69',
+    }
+},
+}));
+
+
 export default function PlaceForm(props) {
+  const classes = useStyles();
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -84,6 +97,8 @@ export default function PlaceForm(props) {
                   {props.editing ? 
                   <>
                   <Button
+                    style={{marginRight: 25}}
+                    className={classes.btn}
                     variant="contained"
                     color="primary"
                     type="submit"
@@ -92,6 +107,7 @@ export default function PlaceForm(props) {
                     Сохранить
                   </Button>
                   <Button
+                    className={classes.btn}
                     variant="contained"
                     color="primary"
                     type="button"
@@ -104,6 +120,8 @@ export default function PlaceForm(props) {
                   :
                   <>
                     <Button
+                      style={{marginRight: 25}}
+                      className={classes.btn}
                       variant="contained"
                       color="primary"
                       type="submit"
@@ -112,11 +130,12 @@ export default function PlaceForm(props) {
                       Добавить
                     </Button>
                     <Button
-                    variant="contained"
-                    color="primary"
-                    type="button"
-                    onClick={onCloseClick}
-                    disabled={submitting}
+                      className={classes.btn}
+                      variant="contained"
+                      color="primary"
+                      type="button"
+                      onClick={onCloseClick}
+                      disabled={submitting}
                   >
                     Закрыть
                   </Button>

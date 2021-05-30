@@ -61,7 +61,7 @@ export default function AdminTable(props) {
               sort: false,
               customBodyRender: (value, tableMeta, updateValue) => {
                 return (
-                    <Button className={classes.btn} disabled={showForm} onClick={() => {
+                    <Button className={classes.btn} disabled={showForm || tableMeta.rowData[13] === 'Да'} onClick={() => {
                         const idToDelete = workshops[tableMeta.rowIndex].id;
 
                         WorkshopService.deleteWorkshop(idToDelete).then(response => {
@@ -90,7 +90,6 @@ export default function AdminTable(props) {
 
     const handleRowClick = (rowData, rowMeta) => {
         setSelectedRowToEdit(rowMeta.dataIndex);
-        console.log('ROWDATA', rowData)
         setSelectedStyle(rowData[7]);
         setSelectedCategory(rowData[8]);
     };
@@ -153,7 +152,8 @@ const showFormCallback = (show, workshop, editing) => {
             maxUsers: workshop.maxUsers,
             currentUsersCount: workshop.currentUsersCount,
             id: workshop.id,
-            isApprovedByModerator: workshop.isApprovedByModerator ? 'Да' : 'Нет'
+            isApprovedByModerator: workshop.isApprovedByModerator ? 'Да' : 'Нет',
+            photoName: workshop.photoName,
         }]);
     else if(workshop){
         var index = workshops.map(x => x.id).indexOf(workshop.id);
@@ -172,7 +172,8 @@ const showFormCallback = (show, workshop, editing) => {
             maxUsers: workshop.maxUsers,
             currentUsersCount: workshop.currentUsersCount,
             id: workshop.id,
-            isApprovedByModerator: workshop.isApprovedByModerator ? 'Да' : 'Нет'
+            isApprovedByModerator: workshop.isApprovedByModerator ? 'Да' : 'Нет',
+            photoName: workshop.photoName,
         });
 
         const secArr = workshops.slice(index + 1, workshops.length);

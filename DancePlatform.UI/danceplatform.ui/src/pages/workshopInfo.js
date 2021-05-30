@@ -42,7 +42,8 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 0,
         marginBottom: 10,
         flexDirection: 'column',
-        marginLeft: 60
+        marginLeft: 60,
+        justifyContent: 'space-evenly'
     },
     img: {
     },
@@ -54,7 +55,8 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 45,
         display: 'flex',
         justifyContent: 'space-evenly',
-        width: 500
+        width: 770,
+        paddingBottom: 45
     },
     btn: {
         marginTop: 15,
@@ -154,26 +156,24 @@ export default function WorkshopInfo(){
                             </ImageUploading>
                         </Grid>
                         <Grid className={classes.gridInfo} item xs={6} container>
-                            <Grid item>
-                                <Typography variant="subtitle1">Мастер-класс</Typography>
-                            </Grid>
-                            <Grid item style={{display: 'flex'}}>
-                                <Typography variant="subtitle1">{styles[workshop.style]}</Typography>
-                                <Typography variant="subtitle1">&#160;({categories[workshop.category]})</Typography>
+                            
+                            <Grid item style={{display: 'flex', flexDirection: 'column'}}>
+                                <Typography variant="h5">Мастер-класс</Typography>
+                                <Typography variant="h2">{styles[workshop.style]}&#160;({categories[workshop.category]})</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="subtitle1">Хореограф: {workshop.choreographer.name}</Typography>
+                                <Typography variant="h4">Хореограф: {workshop.choreographer.name}</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="subtitle1">Возраст: {new Date().getFullYear() - new Date(workshop.choreographer.dateOfBirth).getFullYear()}</Typography>
+                                <Typography variant="h4">Возраст: {new Date().getFullYear() - new Date(workshop.choreographer.dateOfBirth).getFullYear()}</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="subtitle1">{workshop.choreographer.description}</Typography>
+                                <Typography variant="h4">{workshop.choreographer.description}</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography style={{display: 'inline'}}>Соцсеть:</Typography>
+                                <Typography variant="h4" style={{display: 'inline'}}>Соцсеть:</Typography>
                                 &#160;&#160;
-                                <Link color="inherit" href={`${workshop.choreographer.link}`}>
+                                <Link variant="h4" color="inherit" href={`${workshop.choreographer.link}`}>
                                     <FontAwesomeIcon icon={faInstagram} />
                                 </Link>
                             </Grid>
@@ -187,19 +187,19 @@ export default function WorkshopInfo(){
 
                         <Grid className={classes.gridInfo} item xs={6} container>
                             <Grid item>
-                                <Typography variant="subtitle1">Стоимость: {workshop.price} USD</Typography>
+                                <Typography variant="h4">Стоимость: {workshop.price} USD</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="subtitle1">Место проведения: {workshop.place.address} ({workshop.place.studioName})</Typography>
+                                <Typography variant="h4">Место проведения: {workshop.place.address} ({workshop.place.studioName})</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="subtitle1">Возрастное ограничение: {workshop.minAge}</Typography>
+                                <Typography variant="h4">Возрастное ограничение: {workshop.minAge}</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="subtitle1">Максимальное количество участников: {workshop.maxUsers}</Typography>
+                                <Typography variant="h4">Количество мест: {workshop.maxUsers}</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="subtitle1">Количество свободных мест: {workshop.maxUsers - workshop.currentUsersCount}</Typography>
+                                <Typography variant="h4">Количество свободных мест: {workshop.maxUsers - workshop.currentUsersCount}</Typography>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -211,6 +211,7 @@ export default function WorkshopInfo(){
                                     color="primary"
                                     type="button"
                                     color="primary"
+                                    className={classes.btn}
                                     onClick={() => {
                                         WorkshopService.approveWorkshop(workshop.id).then(x => {
                                             history.push('/');
@@ -224,6 +225,7 @@ export default function WorkshopInfo(){
                                     color="primary"
                                     type="button"
                                     color="primary"
+                                    className={classes.btn}
                                     onClick={() => setShowPopup(true)}
                                 >
                                     Отклонить мастер-класс
@@ -272,7 +274,6 @@ export default function WorkshopInfo(){
                                         />
                                         </Grid>
                                         <Button variant="contained"
-                                            color="primary"
                                             type="submit"
                                             style={{marginRight: 25}}
                                             className={classes.btn} disabled={submitting} type="submit">Отклонить</Button>

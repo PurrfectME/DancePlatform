@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     },
     img: {
         display: 'block',
-        marginRight: 15,
+        marginRight: 43,
         minWidth: 300,
         minHeight: 300,
         backgroundPosition: 'center', 
@@ -142,7 +142,7 @@ export default function ProfileInfo(){
 
     return(
         <>
-            <Paper>
+            <Paper style={{height: 560}}>
                 <Grid className={classes.grid} container>
                 <Grid className={classes.img} item>
                     <ImageUploading
@@ -158,15 +158,15 @@ export default function ProfileInfo(){
                         dragProps,
                         }) => (
                         // write your building UI
-                        <Grid container>
+                        <Grid container item>
                         <div className="upload__image-wrapper">
                             {images.length !== 0 ? <></> :
                                 defaultImg.length === 0 ? <></> :
-                                <img src={defaultImg[0].base64Img} alt="" width="200" height="200"/>
+                                <img src={defaultImg[0].base64Img} alt="" width="300" height="300"/>
                             }
                             {imageList.map((image, index) => (
-                            <div key={index} className="image-item">
-                                <img src={image['base64Img']} alt="" width="200" height="200" />
+                            <div key={index} className="profile-image-item">
+                                <img src={image['base64Img']} alt="" width="300" height="300" />
                             </div>
                             ))}
                             <div className={classes.imageButtons}>
@@ -196,8 +196,11 @@ export default function ProfileInfo(){
                     />
                     :
                     <>
-                        <Typography className={classes.userName}>
+                        <Typography style={{marginBottom: 0}} className={classes.userName}>
                             Логин: {user.userName}
+                        </Typography>
+                        <Typography className={classes.userName}>
+                            E-mail: {user.email}
                         </Typography>
                         <Typography className={classes.fullName}>
                             Имя: {user.name}
@@ -205,11 +208,8 @@ export default function ProfileInfo(){
                         <Typography className={classes.fullName}>
                             Фамилия: {user.surname}
                         </Typography>
-                        <Typography className={classes.fullName}>
-                            E-mail: {user.email}
-                        </Typography>
                         <Typography className={classes.dob}>
-                            Дата рождения: {new Date().getFullYear() - new Date(timeHelper.normalizeDate(user.dateOfBirth)).getFullYear()}
+                            Возраст: {new Date().getFullYear() - new Date(timeHelper.normalizeDate(user.dateOfBirth)).getFullYear()}
                         </Typography>
                         <Typography className={classes.dob}>
                             Телефон: {user.phoneNumber}

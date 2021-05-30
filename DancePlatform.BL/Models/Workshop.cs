@@ -11,6 +11,7 @@ namespace DancePlatform.BL.Models
         public DateTimeOffset Date { get; set; }
         public DateTimeOffset Time { get; set; }
         public byte[] Photo { get; set; }
+        public string PhotoName { get; set; }
         public float Price { get; set; }
         public int MinAge { get; set; }
         public int MaxUsers { get; set; }
