@@ -24,17 +24,26 @@ import timeHelper from '../../helpers/dateHelper';
 import {styles, categories} from '../../constants/commonData';
 import UsersAdditionalInfo from './usersAdditionalInfo';
 import ErrorBox from '../dialog/errorBox.js';
+import '../../styles/workshopTable.css'
 
-const headCells = [
+const headCells = storageHelper.isOrganizer() ? [
     { id: 'place', numeric: false,  label: 'Место' },
     { id: 'date', date: true,  label: 'Дата' },
     { id: 'time', date: true,  label: 'Время' },
     { id: 'choreographer', numeric: false, label: 'Хореограф' },
     { id: 'style', numeric: false, label: 'Стиль' },
     { id: 'category', numeric: false, label: 'Уровень' },
-    { id: 'price', numeric: true, label: 'Цена, BYN' },
+    { id: 'price', numeric: true, label: 'Цена, USD' },
     { id: 'minAge', numeric: false, label: 'Мин. возраст' },
     { id: 'maxUsers', numeric: false, label: 'Макс. людей' },
+] : [
+  { id: 'place', numeric: false,  label: 'Место' },
+  { id: 'date', date: true,  label: 'Дата' },
+  { id: 'time', date: true,  label: 'Время' },
+  { id: 'choreographer', numeric: false, label: 'Хореограф' },
+  { id: 'style', numeric: false, label: 'Стиль' },
+  { id: 'category', numeric: false, label: 'Уровень' },
+  { id: 'price', numeric: true, label: 'Цена, USD' },
 ];
   
 function descendingComparator(a, b, orderBy) {
@@ -129,15 +138,15 @@ const useToolbarStyles = makeStyles((theme) => ({
     theme.palette.type === 'light'
       ? {
           color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+          backgroundColor: '#f7b692',
         }
       : {
           color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
+          backgroundColor: '#f7b692',
         },
   title: {
     flex: '1 1 100%',
-  },
+  }
 }));
 
 const useStyles = makeStyles((theme) => ({
@@ -170,6 +179,17 @@ const useStyles = makeStyles((theme) => ({
     },
     width: 720,
     marginLeft: 30
+},
+rowsInfo: {
+  display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    flexWrap: 'wrap',
+    maxWidth: 1198,
+    margin: 'auto',
+    height: 200,
+    alignItems: 'center',
+    fontSize: 35
 },
 }));
 
@@ -283,14 +303,13 @@ export default function WorkshopTable(props) {
 
   const toolBarStyles = useToolbarStyles();
 
-  console.log('SECLETED', selected)
-
   const currentWorkshop = rows.find(x => x.id === selected[0]);
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-
+      {rows.length ?
+      <>
       <Toolbar
       className={clsx(toolBarStyles.root, {
         [toolBarStyles.highlight]: numSelected > 0,
@@ -302,11 +321,11 @@ export default function WorkshopTable(props) {
         </Typography>
       ) : (
         !props.isHistory && !props.isUserOwnHistory ?
-        <Typography className={toolBarStyles.title} variant="h6" id="tableTitle" component="div">
+        <Typography className={toolBarStyles.title} variant="h4" id="tableTitle" component="div">
           Мастер-классы
         </Typography>
         :
-        <Typography className={toolBarStyles.title} variant="h6" id="tableTitle" component="div">
+        <Typography className={toolBarStyles.title} variant="h4" id="tableTitle" component="div">
           История мастер-классов
         </Typography>
       )}
@@ -346,7 +365,7 @@ export default function WorkshopTable(props) {
                   }
               }}
               >
-              Закрыть выбранное
+              Сбросить выбранное
             </Button>
             <Button
               disabled={isCloseButtonDisabled}
@@ -464,8 +483,14 @@ export default function WorkshopTable(props) {
                       <TableCell align="right">{styles[row.style]}</TableCell>
                       <TableCell align="right">{categories[row.category]}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>
-                      <TableCell align="right">{row.minAge}</TableCell>
-                      <TableCell align="right">{row.maxUsers}</TableCell>
+                      {storageHelper.isOrganizer() ? 
+                        <>
+                          <TableCell align="right">{row.minAge}</TableCell>
+                          <TableCell align="right">{row.maxUsers}</TableCell>
+                        </>
+                        :
+                        <></>
+                      }
                     </TableRow>
                   );
                 })}
@@ -486,6 +511,10 @@ export default function WorkshopTable(props) {
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
+        </>
+        :
+        <div className={classes.rowsInfo}><h1>НЕТ ДОСТУПНЫХ МАСТЕР-КЛАССОВ</h1></div>
+        }
       </Paper>
 
     {isError ? <ErrorBox isOpen={isError} message={errorMessage}/> : <></>}

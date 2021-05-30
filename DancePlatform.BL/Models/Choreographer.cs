@@ -9,7 +9,6 @@ namespace DancePlatform.BL.Models
         public string Name { get; set; }
         public DateTimeOffset DateOfBirth { get; set; }
         public string Description { get; set; }
-        public byte[] Photo { get; set; }
         public Style Style { get; set; }
         public string Link { get; set; }
 

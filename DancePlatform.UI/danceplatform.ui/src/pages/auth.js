@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: 'grey',
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -242,7 +242,7 @@ export default function Auth(props) {
         {isError ? <ErrorBox isOpen={isError} message={errorMessage}/> : <></>}
         {showNotification ? <NotificationBox closeCallback={notificationBoxCallback} isNotify={showNotification} message={'Подтвердите Вашу почту'}/> : <></>}
       </div>
-      <Box mt={8}>
+      <Box mt={3}>
         <Copyright />
       </Box>
     </Container>

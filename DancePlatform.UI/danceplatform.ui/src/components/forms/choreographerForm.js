@@ -7,9 +7,11 @@ import {
   Button,
   CssBaseline,
   MenuItem,
+  makeStyles
 } from '@material-ui/core';
 import ErrorBox from '../dialog/errorBox';
 import ChoreographerService from '../../services/choreographerService';
+import Popup from '../dialog/popup';
 
 const validate = values => {
   const errors = {};
@@ -25,16 +27,29 @@ const validate = values => {
   if (!values.dateOfBirth) {
     errors.dateOfBirth = 'Обязательно';
   }
+  if (!values.link) {
+    errors.link = 'Обязательно';
+  }
   
   return errors;
 };
 
+const useStyles = makeStyles((theme) => ({
+  btn: {
+    color: 'black',
+    backgroundColor: '#B2C8D6',
+    "&:hover": {
+      backgroundColor: '#F59B69',
+    }
+},
+}));
+
 export default function ChoreographerForm(props) {
+  const classes = useStyles();
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const onSubmit = values => {
-    console.log('VALUES', values)
     if(!props.editing){
         ChoreographerService.create(values).then(response => props.showFormCallback(props.showForm, response));
     }
@@ -62,7 +77,9 @@ export default function ChoreographerForm(props) {
 
   return(
     props.showForm ?
-    <div style={{ padding: 16, margin: 'auto', maxWidth: 700 }}>
+    <Popup content={
+      <>
+    <div style={{margin: 'auto', maxWidth: 700 }}>
         {error ? <ErrorBox callback={errorCallback} isError={error} message={errorMessage}/> : <></>}
       <CssBaseline />
       <Form
@@ -86,6 +103,7 @@ export default function ChoreographerForm(props) {
                 <Grid item xs={6}>
                   <Field
                     fullWidth
+                    required
                     name="description"
                     component={TextField}
                     label="Описание"
@@ -94,6 +112,7 @@ export default function ChoreographerForm(props) {
                 <Grid item xs={6}>
                   <Field
                     fullWidth
+                    required
                     name="dateOfBirth"
                     component={TextField}
                     label="Дата рождения"
@@ -102,26 +121,39 @@ export default function ChoreographerForm(props) {
                 <Grid item xs={6}>
                 <Field
                     fullWidth
+                    required
                     name="style"
                     component={Select}
-                    label="Стиль"
+                    label="Стиль *"
                     formControlProps={{ fullWidth: true}}
                   >
                     {stylesData}
                   </Field>
                 </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    fullWidth
+                    required
+                    name="link"
+                    component={TextField}
+                    label="Соцсеть"
+                  />
+                </Grid>
                 <Grid item style={{ marginTop: 16 }}>
                   {props.editing ? 
                   <>
                   <Button
+                    className={classes.btn}
                     variant="contained"
                     color="primary"
                     type="submit"
                     disabled={submitting}
+                    style={{marginRight: 20}}
                   >
                     Сохранить
                   </Button>
                   <Button
+                    className={classes.btn}
                     variant="contained"
                     color="primary"
                     type="button"
@@ -134,14 +166,17 @@ export default function ChoreographerForm(props) {
                   :
                   <>
                     <Button
+                      className={classes.btn}
                       variant="contained"
                       color="primary"
                       type="submit"
                       disabled={submitting}
+                      style={{marginRight: 20}}
                     >
                       Добавить
                     </Button>
                     <Button
+                    className={classes.btn}
                     variant="contained"
                     color="primary"
                     type="button"
@@ -162,6 +197,9 @@ export default function ChoreographerForm(props) {
       />
 
     </div>
+    </>
+    }
+    />
     :
     <></>
     );

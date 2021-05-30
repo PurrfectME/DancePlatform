@@ -132,5 +132,13 @@ namespace DancePlatform.API.Controllers
         {
 			return Ok(await _registrationService.GetUserVisitedWorkshops(userId));
         }
+
+		[HttpPost("remove-desired/{userId}/{workshopId}")]
+		public async Task<IActionResult> RemoveFromDesired(int userId, int workshopid)
+        {
+			await _registrationService.RemoveFromDesired(userId, workshopid);
+
+			return Ok();
+        }
 	}
 }

@@ -8,6 +8,7 @@ import { categories, styles } from '../../constants/commonData';
 import timeHelper from '../../helpers/dateHelper';
 import PlaceService from '../../services/placeService';
 import ChoreographerService from '../../services/choreographerService';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,7 +43,7 @@ export default function AdminTable(props) {
                 sort: false,
                 customBodyRender: (value, tableMeta, updateValue) => {
                     return (
-                        <Button className={classes.btn} disabled={showForm} onClick={() => 
+                        <Button className={classes.btn} disabled={showForm || tableMeta.rowData[13] === 'Да'} onClick={() => 
                         {
                             setShowForm(!showForm);
                             setEditing(true);
@@ -80,7 +81,7 @@ export default function AdminTable(props) {
         { name: 'choreographerName', label: 'Хореограф' },
         { name: 'style', label: 'Стиль' },
         { name: 'category', label: 'Уровень' },
-        { name: 'price', label: 'Цена, BYN' },
+        { name: 'price', label: 'Цена, USD' },
         { name: 'minAge', label: 'Мин. возраст' },
         { name: 'maxUsers', label: 'Макс. людей' },
         { name: 'currentUsersCount', label: 'Зарег. людей' },
@@ -209,8 +210,6 @@ const showFormCallback = (show, workshop, editing) => {
     currentWorkshop.style = Object.keys(styles).find(key => styles[key] === selectedStyle);
     currentWorkshop.category = Object.keys(categories).find(key => categories[key] === selectedCategory);
 
-    console.log('CLICK', currentWorkshop)
-
     return(
         <>
         <div className={classes.root}>
@@ -223,7 +222,11 @@ const showFormCallback = (show, workshop, editing) => {
         </div>
         
             <MUIDataTable
-                title={"Мастер-классы"}
+                title={
+                    <Typography variant="h4" id="tableTitle" component="div">
+                        Мастер-классы
+                    </Typography>
+                }
                 data={workshops}
                 columns={columns}
                 options={options}
@@ -239,7 +242,6 @@ const showFormCallback = (show, workshop, editing) => {
                 places={places}
                 choreographers={choreographers}
             />
-            
         </>
     );
 }

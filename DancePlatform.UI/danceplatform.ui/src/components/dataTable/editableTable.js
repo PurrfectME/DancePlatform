@@ -23,7 +23,7 @@ export default function EditableTable() {
     { name: 'choreographer', title: 'Хореограф' },
     { name: 'style', title: 'Стиль' },
     { name: 'category', title: 'Уровень' },
-    { name: 'price', title: 'Цена, BYN' },
+    { name: 'price', title: 'Цена, USD' },
   ]);
   const [rows, setRows] = useState([]);
   const [editingStateColumnExtensions] = useState([

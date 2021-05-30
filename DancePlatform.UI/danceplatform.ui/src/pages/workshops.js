@@ -8,8 +8,7 @@ export default function Workshops(){
         <>
             {storageHelper.isAuthenticated() ? 
                     
-                <WorkshopTable fromWorkshops={true} isOrganizer={storageHelper.isOrganizer()}
-                    data={[]}/>
+                <WorkshopTable fromWorkshops={true} isOrganizer={storageHelper.isOrganizer()} />
             
             :
                 <Redirect to='/login' />
