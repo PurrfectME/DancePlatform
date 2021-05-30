@@ -23,7 +23,10 @@ import timeHelper from '../../helpers/dateHelper';
 
 const headCells = [
     { id: 'id', numeric: true,  label: 'ID' },
-    { id: 'userName', numeric: false,  label: 'Имя' },
+    { id: 'userName', numeric: false,  label: 'Логин' },
+    { id: 'name', numeric: false,  label: 'Имя' },
+    { id: 'surname', numeric: false,  label: 'Фамилия' },
+    { id: 'phoneNumber', numeric: false,  label: 'Телефон' },
     { id: 'email', numeric: false, label: 'Почта' },
 ];
   
@@ -115,14 +118,15 @@ const useToolbarStyles = makeStyles((theme) => ({
     theme.palette.type === 'light'
       ? {
           color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+          backgroundColor: '#f7b692',
         }
       : {
           color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
+          backgroundColor: '#f7b692',
         },
   title: {
     flex: '1 1 100%',
+    color: 'black',
   },
 }));
 
@@ -317,6 +321,9 @@ export default function UsersAdditionalInfo(props) {
                       </TableCell> */}
                       <TableCell align="center">{row.id}</TableCell>
                       <TableCell align="center">{row.userName}</TableCell>
+                      <TableCell align="center">{row.name}</TableCell>
+                      <TableCell align="center">{row.surname}</TableCell>
+                      <TableCell align="center">{row.phoneNumber}</TableCell>
                       <TableCell align="center">{row.email}</TableCell>
                     </TableRow>
                   );

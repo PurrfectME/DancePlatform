@@ -18,11 +18,11 @@ import '../../styles/profileInfo.css'
 
 const useStyles = makeStyles((theme) => ({
   btn: {
+    boxShadow: 'inset 0 0 10px rgb(47 66 146 / 50%)',
+    borderRadius: 30,
     width: '-webkit-fill-available',
-    backgroundColor: '#ec973e47',
-    "&:hover": {
-      backgroundColor: '#ecbe1275',
-    }
+    color: 'black',
+    marginBottom: 5
   },
 }));
 

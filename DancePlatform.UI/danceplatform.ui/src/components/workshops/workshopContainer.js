@@ -6,6 +6,8 @@ import storageHelper from '../../helpers/storageHelper';
 import { categories, styles } from '../../constants/commonData';
 import SearchInput, {createFilter} from 'react-search-input';
 import '../../styles/profileInfo.css'
+import { Paper } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 const KEYS_TO_FILTERS = ['choreographer.name', 'price', 'style', 'category'];
 
@@ -126,9 +128,10 @@ export default function WorkshopContainer(props) {
             
             {workshops.length === 0 ? <h1 className={classes.root}>НЕТ ДОСТУПНЫХ МАСТЕР-КЛАССОВ</h1> : 
                 <>
-                    <h1 className="search-label">Поиск</h1>
-                    <SearchInput className="search-input" onChange={searchUpdated} />
-                    
+                        <Grid container item style={{alignItems: 'baseline'}}>
+                            <h1 className="search-label">Поиск</h1>
+                            <SearchInput className="search-input" onChange={searchUpdated} />
+                        </Grid>
                     <div className={classes.root}>
                         {filteredWorkshops.map(workshop => {
                             return (

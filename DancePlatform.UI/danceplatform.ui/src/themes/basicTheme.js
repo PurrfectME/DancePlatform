@@ -1,6 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import blue from "@material-ui/core/colors/blue";
-import yellow from "@material-ui/core/colors/yellow";
+import { ruRU } from '@material-ui/core/locale';
 
 const montserrat = {
     fontFamily: "Montserrat",
@@ -27,12 +26,6 @@ const montserrat = {
         primary: {
           main: '#838EA2',
     },
-    //   secondary: {
-    //     light: yellow[300],
-    //     main: yellow[300],
-    //     dark: yellow[800],
-    //     contrastText: blue[900],
-    //   },
     },
     typography: {
       fontFamily: "Montserrat",
@@ -44,6 +37,6 @@ const montserrat = {
         },
       },
     },
-});
+}, ruRU);
 
 export default basicTheme;

@@ -40,6 +40,7 @@ namespace DancePlatform.BL.Services
                 .Include(X => X.Choreographer)
                 .Include(X => X.Registrations)
                 .Where(x => !x.IsClosed)
+                //.Where(x => x.IsApprovedByModerator)
                 .ToListAsync();
 		}
 
@@ -164,6 +165,17 @@ namespace DancePlatform.BL.Services
                .Where(x => !x.IsClosed)
                .Where(x => !x.IsApprovedByModerator)
                .ToListAsync();
+        }
+
+        public Task<List<Workshop>> GetAllForUsersAccounting()
+        {
+            return _context.Workshops
+                .Include(X => X.Place)
+                .Include(X => X.Choreographer)
+                .Include(X => X.Registrations)
+                .Where(x => !x.IsClosed)
+                .Where(x => x.IsApprovedByModerator)
+                .ToListAsync();
         }
     }
 }
