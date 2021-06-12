@@ -1,4 +1,5 @@
 import {React, useEffect, useState} from 'react';
+import { useHistory } from "react-router-dom";
 import {
     Paper,
     Grid,
@@ -82,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProfileInfo(){
     const classes = useStyles();
+    let history = useHistory();
     const [images, setImages] = useState([]);
     const [defaultImg, setDefaultImg] = useState([]);
     const [user, setUser] = useState(storageHelper.getCurrentUser());
@@ -108,7 +110,12 @@ export default function ProfileInfo(){
                 setImages([{base64Img: `data:image/jpg;base64,${response}`}]);
                 return;
             }
-        });
+        }).catch(err => {
+            if(err.status == 401){
+                localStorage.removeItem('token');
+                history.push('/login')
+            }
+        });;
     }, [])
 
     const onChange = (imageList, addUpdateIndex) => {

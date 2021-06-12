@@ -10,6 +10,7 @@ import storageHelper from '../../helpers/storageHelper';
 import PlaceService from '../../services/placeService';
 import ChoreographerService from '../../services/choreographerService';
 import Typography from '@material-ui/core/Typography';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AdminTable(props) {
     const classes = useStyles();
+    let history = useHistory();
 
     const [showForm, setShowForm] = useState(false);
     const [workshops, setWorkshops] = useState([]);
@@ -206,6 +208,11 @@ const showFormCallback = (show, workshop, editing) => {
         ChoreographerService.getAll(userId).then(response => {
             setChoreographers(response);
         })
+    }).catch(err => {
+        if(err.status == 401){
+            localStorage.removeItem('token');
+            history.push('/login')
+        }
     });
     }, []);
 

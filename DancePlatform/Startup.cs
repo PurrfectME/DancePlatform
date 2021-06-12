@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using DancePlatform.BL.Interfaces;
 using DancePlatform.BL.Models;
@@ -64,7 +65,6 @@ namespace DancePlatform.API
             .AddJwtBearer(options =>
             {
                 options.SaveToken = true;
-                options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = false,
@@ -74,6 +74,7 @@ namespace DancePlatform.API
                     ValidIssuer = Configuration["JWT:ValidIssuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"])),
                     ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromMinutes(1),
                 };
             });
 

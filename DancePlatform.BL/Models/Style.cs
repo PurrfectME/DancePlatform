@@ -12,6 +12,14 @@ namespace DancePlatform.BL.Models
         JazzFunk,
         Vogue,
         Contemporary,
+        Afro,
+        BreakDance,
+        Waacking,
+        Popping,
+        Strip,
+        FrameUp,
+        House,
+        Stretching,
         Choreo
     }
 }

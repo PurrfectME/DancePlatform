@@ -65,7 +65,7 @@ namespace DancePlatform.API.Controllers
             var token = new JwtSecurityToken(
                 issuer: "issuer",
                 audience: "audience",
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddMinutes(120),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );
