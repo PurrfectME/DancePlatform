@@ -1,9 +1,9 @@
 import request from '../http/http';
 
-const getAll = () => {
+const getAll = (organizerId) => {
     return request({
         method: 'GET',
-        url: '/choreographer/getAll/',
+        url: `/choreographer/getAll/${organizerId}`,
     });
 }
 

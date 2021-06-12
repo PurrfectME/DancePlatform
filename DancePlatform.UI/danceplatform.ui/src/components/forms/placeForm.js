@@ -12,6 +12,7 @@ import {
 import ErrorBox from '../dialog/errorBox';
 import PlaceService from '../../services/placeService';
 import Popup from '../dialog/popup';
+import storageHelper from '../../helpers/storageHelper';
 
 const validate = values => {
   const errors = {};
@@ -44,6 +45,7 @@ export default function PlaceForm(props) {
   const onSubmit = values => {
     
     if(!props.editing){
+        values.createdBy = storageHelper.getCurrentUserId();
         PlaceService.createPlace(values).then(response => props.showFormCallback(props.showForm, response));
     }
     else{

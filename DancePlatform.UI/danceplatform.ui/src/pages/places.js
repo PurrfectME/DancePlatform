@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import PlaceForm from '../components/forms/placeForm';
 import PlaceService from '../services/placeService';
 import Typography from '@material-ui/core/Typography';
+import storageHelper from '../helpers/storageHelper';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -122,7 +123,7 @@ const showFormCallback = (show, addedPlace, editing) => {
 }
 
     useEffect(() => {
-          PlaceService.getAllPlaces().then(places => {
+          PlaceService.getAllPlaces(storageHelper.getCurrentUserId()).then(places => {
             setPlaces([...places]);
         });
     }, []);

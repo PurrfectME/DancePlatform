@@ -12,6 +12,42 @@ import {
 import ErrorBox from '../dialog/errorBox';
 import ChoreographerService from '../../services/choreographerService';
 import Popup from '../dialog/popup';
+import storageHelper from '../../helpers/storageHelper';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  TimePicker,
+  DatePicker,
+} from '@material-ui/pickers';
+import ruLocale from "date-fns/locale/ru";
+
+function DatePickerWrapper(props) {
+  const {
+    input: { name, onChange, value, ...restInput },
+    meta,
+    ...rest
+  } = props;
+  const showError =
+    ((meta.submitError && !meta.dirtySinceLastSubmit) || meta.error) &&
+    meta.touched;
+
+  return (
+    <DatePicker
+      {...rest}
+      name={name}
+      helperText={showError ? meta.error || meta.submitError : undefined}
+      error={showError}
+      inputProps={restInput}
+      onChange={onChange}
+      format="dd/MM/yyyy"
+      value={value === '' ? null : value}
+      placeholder="dd/MM/yyyy"
+      cancelLabel="Закрыть"
+      mask="__/__/____"
+      disableFuture={true}
+    />
+  );
+}
 
 const validate = values => {
   const errors = {};
@@ -51,6 +87,7 @@ export default function ChoreographerForm(props) {
 
   const onSubmit = values => {
     if(!props.editing){
+        values.createdBy = storageHelper.getCurrentUserId();
         ChoreographerService.create(values).then(response => props.showFormCallback(props.showForm, response));
     }
     else{
@@ -109,15 +146,18 @@ export default function ChoreographerForm(props) {
                     label="Описание"
                   />
                 </Grid>
-                <Grid item xs={6}>
-                  <Field
-                    fullWidth
-                    required
-                    name="dateOfBirth"
-                    component={TextField}
-                    label="Дата рождения"
-                  />
-                </Grid>
+                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
+                    <Grid item xs={6}>
+                      <Field
+                        fullWidth
+                        required
+                        name="dateOfBirth"
+                        type="text"
+                        label="Дата"
+                        component={DatePickerWrapper}
+                    />
+                    </Grid>
+                  </MuiPickersUtilsProvider>
                 <Grid item xs={6}>
                 <Field
                     fullWidth

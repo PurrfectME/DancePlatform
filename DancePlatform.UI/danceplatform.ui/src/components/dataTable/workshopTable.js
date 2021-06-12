@@ -36,7 +36,7 @@ const headCells = storageHelper.isOrganizer() && window.location.pathname.split(
     { id: 'choreographer', numeric: false, label: 'Хореограф' },
     { id: 'style', numeric: false, label: 'Стиль' },
     { id: 'category', numeric: false, label: 'Уровень' },
-    { id: 'price', numeric: true, label: 'Цена, USD' },
+    { id: 'price', numeric: true, label: 'Цена, RUB' },
     { id: 'minAge', numeric: false, label: 'Мин. возраст' },
     { id: 'maxUsers', numeric: false, label: 'Макс. людей' },
     { id: 'comment', numeric: false, label: 'Комментарий' },
@@ -48,7 +48,7 @@ const headCells = storageHelper.isOrganizer() && window.location.pathname.split(
   { id: 'choreographer', numeric: false, label: 'Хореограф' },
   { id: 'style', numeric: false, label: 'Стиль' },
   { id: 'category', numeric: false, label: 'Уровень' },
-  { id: 'price', numeric: true, label: 'Цена, USD' },
+  { id: 'price', numeric: true, label: 'Цена, RUB' },
   { id: 'minAge', numeric: false, label: 'Мин. возраст' },
   { id: 'maxUsers', numeric: false, label: 'Макс. людей' },
 ]
@@ -60,7 +60,7 @@ const headCells = storageHelper.isOrganizer() && window.location.pathname.split(
   { id: 'choreographer', numeric: false, label: 'Хореограф' },
   { id: 'style', numeric: false, label: 'Стиль' },
   { id: 'category', numeric: false, label: 'Уровень' },
-  { id: 'price', numeric: true, label: 'Цена, USD' },
+  { id: 'price', numeric: true, label: 'Цена, RUB' },
 ];
   
 function descendingComparator(a, b, orderBy) {
@@ -250,7 +250,7 @@ export default function WorkshopTable(props) {
       }
 
       if(props.isHistory){
-        WorkshopService.getClosed().then(response => {
+        WorkshopService.getClosed(storageHelper.getCurrentUserId()).then(response => {
           setRows([...response]);
         });
         return;
@@ -264,7 +264,7 @@ export default function WorkshopTable(props) {
       }
 
       if((rows.length === 0 && !props.fromWorkshops)){
-        WorkshopService.getAllForUsersAccounting().then(workshops => {
+        WorkshopService.getAllForUsersAccounting(storageHelper.getCurrentUserId()).then(workshops => {
 
         RegistrationService.getAllRegistrations().then(registrations => {
             if(registrations.length === 0){

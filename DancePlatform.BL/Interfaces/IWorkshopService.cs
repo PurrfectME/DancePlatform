@@ -11,12 +11,12 @@ namespace DancePlatform.BL.Interfaces
 		Task<Workshop> Update(Workshop entity);
 		Task Delete(Workshop entity);
 
-		Task<List<Workshop>> GetAll();
-		Task<List<Workshop>> GetAllForUsersAccounting();
+		Task<List<Workshop>> GetAll(int organizerId);
+		Task<List<Workshop>> GetAllForUsersAccounting(int organizerId);
 		Task<List<User>> GetWorkshopUsers(int workshopId);
         Task<Workshop> GetById(int id);
 		Task<List<Workshop>> GetUserDesiredWorkshops(int userId);
-		Task<List<Workshop>> GetClosed();
+		Task<List<Workshop>> GetClosed(int organizerId);
 		Task<List<Workshop>> GetAvailableWorkshopsForUser(int userId, DateTimeOffset? dateOfBirth);
 		Task<List<Workshop>> GetWorkshopsForApproval();
 

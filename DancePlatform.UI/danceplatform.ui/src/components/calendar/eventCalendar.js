@@ -2,19 +2,23 @@ import {React, useState, useEffect} from 'react';
 import {
     MonthlyBody,
     MonthlyCalendar,
-    MonthlyNav,
+    useMonthlyCalendar,
     DefaultMonthlyEventItem,
   } from '@zach.codes/react-calendar';
   import {
     startOfMonth,
-    parseISO
+    parseISO,
+    format
   } from 'date-fns';
-  import '@zach.codes/react-calendar/dist/calendar-tailwind.css';
+import '@zach.codes/react-calendar/dist/calendar-tailwind.css';
+import MonthlyNav from './monthlyNav.js';
 import { Button } from '@material-ui/core';
 import WorkshopService from '../../services/workshopService';
 import timeHelper from '../../helpers/dateHelper';
 import { makeStyles } from '@material-ui/core/styles';
 import '../../styles/profileInfo.css'
+import { Paper } from '@material-ui/core';
+import storageHelper from '../../helpers/storageHelper.js';
 
 const useStyles = makeStyles((theme) => ({
   btn: {
@@ -22,25 +26,29 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 30,
     width: '-webkit-fill-available',
     color: 'black',
-    marginBottom: 5
+    marginBottom: 5,
+    "&:hover": {
+      backgroundColor: 'rgb(47 66 146 / 20%)'
+    }
   },
 }));
 
 
 export default function EventCalendar() {
   const classes = useStyles();
-    let [currentMonth, setCurrentMonth] = useState(
-      startOfMonth(new Date())
-    );
-    const [workshops, setWorkshops] = useState([]);
-  
-      useEffect(() => {
-        WorkshopService.getAllWorkshops().then(response => {
-          setWorkshops([...response]);
-        })
-      }, [])
+  let [currentMonth, setCurrentMonth] = useState(
+    startOfMonth(new Date())
+  );
+  const [workshops, setWorkshops] = useState([]);
 
-    return (
+  useEffect(() => {
+    WorkshopService.getAllWorkshops(storageHelper.getCurrentUserId()).then(response => {
+      setWorkshops([...response]);
+    })
+  }, []);
+
+  return (
+    <Paper style={{padding: 50}}>
       <MonthlyCalendar
         currentMonth={currentMonth}
         onCurrentMonthChange={date => setCurrentMonth(date)}
@@ -65,7 +73,6 @@ export default function EventCalendar() {
             data.map((item, index) => (
               <Button color="primary" className={classes.btn} href={`/users-accounting/${item.id}`}>
                 <DefaultMonthlyEventItem
-                  style={{width: 50}}
                   key={item.id}
                   title={item.title}
                   date={`${item.date.toLocaleTimeString()}`}
@@ -76,5 +83,6 @@ export default function EventCalendar() {
           }
         />
       </MonthlyCalendar>
-    );
-  };
+    </Paper>
+  );
+};

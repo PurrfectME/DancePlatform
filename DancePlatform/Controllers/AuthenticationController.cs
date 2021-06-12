@@ -65,7 +65,7 @@ namespace DancePlatform.API.Controllers
             var token = new JwtSecurityToken(
                 issuer: "issuer",
                 audience: "audience",
-                expires: DateTime.Now.AddDays(10),
+                expires: DateTime.Now.AddDays(1),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );
@@ -93,6 +93,15 @@ namespace DancePlatform.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest model)
         {
+            var validationResult = ValidateForm(model);
+
+            if (!validationResult.Item1)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    new BaseResponse
+                    { Status = "Error", Message = validationResult.Item2 });
+            }
+
             var userExists = await _userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
                 return StatusCode(StatusCodes.Status400BadRequest, new BaseResponse { Status = "Error", Message = "Пользователь уже существует!" });
@@ -126,7 +135,7 @@ namespace DancePlatform.API.Controllers
             var link = $"https://localhost:44305/auth/confirm-email?userId={user.Id}&code={token}";
 
             await _emailService.SendEmail(model.Email, "Confirm your account",
-                $"Подтвердите регистрацию, перейдя по ссылке: <a href='{link}'>link</a>");
+                $"Подтвердите регистрацию, перейдя по <a href='{link}'>ссылке</a>");
 
             return Ok(new BaseResponse
             { Status = "Success", Message = "Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме!" });
@@ -161,6 +170,46 @@ namespace DancePlatform.API.Controllers
                    { Status = "Error", Message = "Ошибка подтверждения почты" });
 
             return Redirect("http://localhost:3000/login");
+        }
+
+        private (bool, string) ValidateForm(RegisterRequest model)
+        {
+            if (string.IsNullOrEmpty(model.Name))
+            {
+                return (false, "Имя не заполнено");
+            }
+
+            if (string.IsNullOrEmpty(model.Surname))
+            {
+                return (false, "Фамилия не заполнена");
+            }
+
+            if (model.DateOfBirth.Year == 0001)
+            {
+                return (false, "Дата не заполнена");
+            }
+
+            if (model.DateOfBirth.Year > 2010)
+            {
+                return (false, "Некорректная дата");
+            }
+
+            //if (string.IsNullOrEmpty(model.Username))
+            //{
+            //    return (false, "Логин не заполнен");
+            //}
+
+            if (string.IsNullOrEmpty(model.Email))
+            {
+                return (false, "Почта не заполнена");
+            }
+
+            //if (string.IsNullOrEmpty(model.Password))
+            //{
+            //    return (false, "Почта не заполнена");
+            //}
+
+            return (true, string.Empty);
         }
     }
 }

@@ -149,6 +149,7 @@ export default function ProfileInfo(){
                         value={images}
                         onChange={onChange}
                         dataURLKey="base64Img"
+                        acceptType={['jpg']}
                     >
                         {({
                         imageList,

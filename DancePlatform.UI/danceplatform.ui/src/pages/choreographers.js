@@ -7,6 +7,7 @@ import ChoreographerForm from '../components/forms/choreographerForm';
 import {styles} from '../constants/commonData';
 import timeHelper from '../helpers/dateHelper';
 import Typography from '@material-ui/core/Typography';
+import storageHelper from '../helpers/storageHelper';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -135,7 +136,7 @@ export default function Choregraphers(){
     }
 
     useEffect(() => {
-        ChoreographerService.getAll().then(response => {
+        ChoreographerService.getAll(storageHelper.getCurrentUserId()).then(response => {
             setChoreographers(response.map(x => {
                 x.style = styles[x.style];
                 x.dateOfBirth = timeHelper.normalizeDate(x.dateOfBirth);

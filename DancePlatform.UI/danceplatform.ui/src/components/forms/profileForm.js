@@ -13,7 +13,41 @@ import ErrorBox from '../dialog/errorBox';
 import ProfileService from '../../services/profileService';
 import storageHelper from '../../helpers/storageHelper';
 import timeHelper from '../../helpers/dateHelper';
+import DateFnsUtils from '@date-io/date-fns';
+import ruLocale from "date-fns/locale/ru";
+import {
+  MuiPickersUtilsProvider,
+  TimePicker,
+  DatePicker,
+} from '@material-ui/pickers';
 
+function DatePickerWrapper(props) {
+  const {
+    input: { name, onChange, value, ...restInput },
+    meta,
+    ...rest
+  } = props;
+  const showError =
+    ((meta.submitError && !meta.dirtySinceLastSubmit) || meta.error) &&
+    meta.touched;
+
+  return (
+    <DatePicker
+      {...rest}
+      name={name}
+      helperText={showError ? meta.error || meta.submitError : undefined}
+      error={showError}
+      inputProps={restInput}
+      format="dd/MM/yyyy"
+      onChange={onChange}
+      value={value === '' ? null : value}
+      placeholder="dd/MM/yyyy"
+      cancelLabel="Закрыть"
+      mask="__/__/____"
+      disableFuture={true}
+    />
+  );
+}
 
 const useStyles = makeStyles((theme) => ({
   submit: {
@@ -30,14 +64,16 @@ const validate = values => {
   if (!values.dateOfBirth) {
     errors.dateOfBirth = 'Обязательно';
   }
+
+  if (new Date(values.dateOfBirth) == 'Invalid Date') {
+    errors.dateOfBirth = 'Некорректная дата';
+  }
+
   if (!values.surname) {
     errors.surname = 'Обязательно';
   }
   if (!values.name) {
     errors.name = 'Обязательно';
-  }
-  if (!values.phoneNumber) {
-    errors.phoneNumber = 'Обязательно';
   }
   
   return errors;
@@ -118,21 +154,23 @@ export default function ProfileForm(props) {
                 <Grid item xs={6}>
                   <Field
                     fullWidth
-                    required
                     name="phoneNumber"
                     component={TextField}
                     label="Номер телефона"
                   />
                 </Grid>
-                <Grid item xs={6}>
-                  <Field
-                    fullWidth
-                    required
-                    name="dateOfBirth"
-                    component={TextField}
-                    label="Дата рождения"
-                  />
-                </Grid>
+                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
+                    <Grid item xs={4}>
+                      <Field
+                        fullWidth
+                        required
+                        name="dateOfBirth"
+                        component={DatePickerWrapper}
+                        type="text"
+                        label="Дата"
+                      />
+                    </Grid>
+                  </MuiPickersUtilsProvider>
                 <Grid item style={{ marginTop: 16 }}>
                   <>
                   <Button

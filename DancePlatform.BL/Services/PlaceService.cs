@@ -2,6 +2,7 @@
 using DancePlatform.BL.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DancePlatform.BL.Services
@@ -38,9 +39,11 @@ namespace DancePlatform.BL.Services
             await _context.SaveChangesAsync();
         }
 
-        public Task<List<Place>> GetAll()
+        public Task<List<Place>> GetAll(int organizerId)
         {
-            return _context.Places.ToListAsync();
+            return _context.Places
+                .Where(x => x.CreatedBy == organizerId)
+                .ToListAsync();
         }
 
         public Task<Place> GetById(int id)

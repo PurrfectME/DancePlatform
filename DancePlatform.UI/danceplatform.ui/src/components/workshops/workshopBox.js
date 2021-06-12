@@ -65,7 +65,7 @@ export default function WorkshopBox(props) {
                             </Typography>
                         </Grid>
                         <Grid item>
-                            <Typography variant="subtitle1">{workshop.price} USD</Typography>
+                            <Typography variant="subtitle1">{workshop.price} RUB</Typography>
                         </Grid>
                         {storageHelper.isUser() && props.isDesired ?
                             <>
