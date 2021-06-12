@@ -308,6 +308,7 @@ export default function WorkshopForm(props) {
                       }
                       }
                       dataURLKey="base64Img"
+                      acceptType={['jpg']}
                     >
                       {({
                       onImageUpload,

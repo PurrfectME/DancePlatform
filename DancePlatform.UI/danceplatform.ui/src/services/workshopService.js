@@ -2,17 +2,17 @@ import request from '../http/http';
 import axios from 'axios';
 import storageHelper from '../helpers/storageHelper';
 
-const getAllWorkshops = () => {
+const getAllWorkshops = organizerId => {
     return request({
         method: 'GET',
-        url: '/workshop/getAll'
+        url: `/workshop/getAll/${organizerId}`
     });
 }
 
-const getAllForUsersAccounting = () => {
+const getAllForUsersAccounting = (organizerId) => {
     return request({
         method: 'GET',
-        url: '/workshop/getAll-users-accounting'
+        url: `/workshop/getAll-users-accounting/${organizerId}`
     });
 }
 
@@ -54,10 +54,10 @@ const getById = id => {
     });
 }
 
-const getClosed = () => {
+const getClosed = (organizerId) => {
     return request({
         method: 'GET',
-        url: `/workshop/workshops-history`
+        url: `/workshop/workshops-history/${organizerId}`
     });
 }
 

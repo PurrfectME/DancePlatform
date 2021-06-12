@@ -14,22 +14,31 @@ namespace DancePlatform.API.Controllers
     {
         private readonly IChoreographerService _service;
 
-
         public ChoreographerController(IChoreographerService service)
         {
             _service = service;
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> Add(Choreographer request)
+        public async Task<IActionResult> Add(CreateChoreographerRequest request)
         {
-            return Ok(await _service.Create(request));
+            var result = await _service.Create(new Choreographer
+            {
+                CreatedBy = request.CreatedBy,
+                DateOfBirth = request.DateOfBirth,
+                Description = request.Description,
+                Link = request.Link,
+                Name = request.Name,
+                Style = request.Style
+            });
+
+            return Ok(result);
         }
 
-        [HttpGet("getAll")]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("getAll/{organizerId}")]
+        public async Task<IActionResult> GetAll(int organizerId)
         {
-            return Ok(await _service.GetAll());
+            return Ok(await _service.GetAll(organizerId));
         }
 
         [HttpPost("delete/{id}")]

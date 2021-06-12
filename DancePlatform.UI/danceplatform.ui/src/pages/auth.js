@@ -84,6 +84,7 @@ export default function Auth(props) {
     if(props.actionName === 'Регистрация'){
       setIsError(false);
       const isOrganizer = checked;
+      console.log('DOB', dateOfBirth)
       AuthService.register({email, password, username, isOrganizer, name, surname, dateOfBirth}).then(x => {
         setShowNotification(true);
           // history.push('/login');

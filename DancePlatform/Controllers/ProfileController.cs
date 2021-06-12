@@ -7,9 +7,11 @@ using DancePlatform.BL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using DancePlatform.BL.Responses;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DancePlatform.API.Controllers
 {
+    [Authorize(Roles = "User")]
     [Route("user")]
     [ApiController]
     public class ProfileController : ControllerBase

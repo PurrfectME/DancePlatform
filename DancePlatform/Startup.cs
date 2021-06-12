@@ -73,7 +73,7 @@ namespace DancePlatform.API
                     ValidAudience = Configuration["JWT:ValidAudience"],
                     ValidIssuer = Configuration["JWT:ValidIssuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"])),
-                    ValidateLifetime = false,
+                    ValidateLifetime = true,
                 };
             });
 
@@ -85,6 +85,9 @@ namespace DancePlatform.API
 
                 options.AddPolicy("MODERATOR",
                     policy => policy.RequireRole("MODERATOR"));
+
+                options.AddPolicy("USER",
+                    policy => policy.RequireRole("USER"));
             });
 
 

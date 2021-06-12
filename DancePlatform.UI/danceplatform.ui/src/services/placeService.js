@@ -8,10 +8,10 @@ const createPlace = data => {
     });
 }
 
-const getAllPlaces = () => {
+const getAllPlaces = (organizerId) => {
     return request({
         method: 'GET',
-        url: '/place/getAll',
+        url: `/place/getAll/${organizerId}`,
     });
 }
 

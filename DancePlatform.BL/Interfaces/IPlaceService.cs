@@ -11,7 +11,7 @@ namespace DancePlatform.BL.Interfaces
         Task Delete(Place entity);
         Task Delete(List<Place> entities);
 
-        Task<List<Place>> GetAll();
+        Task<List<Place>> GetAll(int organizerId);
         Task<Place> GetById(int id);
     }
 }

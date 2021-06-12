@@ -17,6 +17,7 @@ import { faInstagram } from '@fortawesome/free-brands-svg-icons'
 import Popup from '../components/dialog/popup';
 import { Form, Field } from 'react-final-form';
 import { TextField, Select, Input } from 'final-form-material-ui';
+import timeHelper from '../helpers/dateHelper';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -165,15 +166,15 @@ export default function WorkshopInfo(){
                                 <Typography variant="h4">Хореограф: {workshop.choreographer.name}</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="h4">Возраст: {new Date().getFullYear() - new Date(workshop.choreographer.dateOfBirth).getFullYear()}</Typography>
+                                <Typography variant="h5">Возраст: {new Date().getFullYear() - new Date(workshop.choreographer.dateOfBirth).getFullYear()}</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="h4">{workshop.choreographer.description}</Typography>
+                                <Typography variant="h6">{workshop.choreographer.description}</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="h4" style={{display: 'inline'}}>Соцсеть:</Typography>
+                                <Typography variant="h5" style={{display: 'inline'}}>Соцсеть:</Typography>
                                 &#160;&#160;
-                                <Link variant="h4" color="inherit" href={`${workshop.choreographer.link}`}>
+                                <Link variant="h5" color="inherit" href={`${workshop.choreographer.link}`}>
                                     <FontAwesomeIcon icon={faInstagram} />
                                 </Link>
                             </Grid>
@@ -187,19 +188,22 @@ export default function WorkshopInfo(){
 
                         <Grid className={classes.gridInfo} item xs={6} container>
                             <Grid item>
-                                <Typography variant="h4">Стоимость: {workshop.price} USD</Typography>
+                                <Typography variant="h5">Стоимость: {workshop.price} RUB</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="h4">Место проведения: {workshop.place.address} ({workshop.place.studioName})</Typography>
+                                <Typography variant="h5">Место проведения: {workshop.place.address} ({workshop.place.studioName})</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="h4">Возрастное ограничение: {workshop.minAge}</Typography>
+                                <Typography variant="h5">Дата: {timeHelper.normalizeDate(workshop.date)} {timeHelper.normalizeTime(workshop.time)}</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="h4">Количество мест: {workshop.maxUsers}</Typography>
+                                <Typography variant="h5">Возрастное ограничение: {workshop.minAge}</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="h4">Количество свободных мест: {workshop.maxUsers - workshop.currentUsersCount}</Typography>
+                                <Typography variant="h5">Количество мест: {workshop.maxUsers}</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography variant="h5">Количество свободных мест: {workshop.maxUsers - workshop.currentUsersCount}</Typography>
                             </Grid>
                         </Grid>
                     </Grid>

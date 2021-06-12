@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using DancePlatform.BL.Interfaces;
 using DancePlatform.BL.Models;
@@ -52,17 +51,17 @@ namespace DancePlatform.API.Controllers
         }
 
         [Authorize(Roles = "Organizer")]
-        [HttpGet("getAll")]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("getAll/{organizerId}")]
+        public async Task<IActionResult> GetAll(int organizerId)
         {
-            return Ok(await _service.GetAll());
+            return Ok(await _service.GetAll(organizerId));
         }
 
         [Authorize(Roles = "Organizer")]
-        [HttpGet("getAll-users-accounting")]
-        public async Task<IActionResult> GetAllForUsersAccounting()
+        [HttpGet("getAll-users-accounting/{organizerId}")]
+        public async Task<IActionResult> GetAllForUsersAccounting(int organizerId)
         {
-            return Ok(await _service.GetAllForUsersAccounting());
+            return Ok(await _service.GetAllForUsersAccounting(organizerId));
         }
 
         [Authorize(Roles = "Organizer")]
@@ -81,6 +80,7 @@ namespace DancePlatform.API.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "Organizer")]
         [HttpGet("get/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -130,6 +130,7 @@ namespace DancePlatform.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("available/{userId}")]
         public async Task<IActionResult> GetAvailableWorkshopsForUser(int userId)
         {
@@ -158,14 +159,15 @@ namespace DancePlatform.API.Controllers
         }
 
         [Authorize(Roles = "Organizer")]
-        [HttpGet("workshops-history")]
-        public async Task<IActionResult> GetClosedWorkshops()
+        [HttpGet("workshops-history/{organizerId}")]
+        public async Task<IActionResult> GetClosedWorkshops(int organizerId)
         {
-            var result = await _service.GetClosed();
+            var result = await _service.GetClosed(organizerId);
 
             return Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("desired/{userId}")]
         public async Task<IActionResult> GetDesiredWorkshops(int userId)
         {

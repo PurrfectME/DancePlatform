@@ -11,7 +11,7 @@ namespace DancePlatform.BL.Interfaces
         Task Delete(Choreographer entity);
         Task Delete(List<Choreographer> entities);
 
-        Task<List<Choreographer>> GetAll();
+        Task<List<Choreographer>> GetAll(int organizerId);
         Task<Choreographer> GetById(int id);
     }
 }

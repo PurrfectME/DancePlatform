@@ -11,6 +11,7 @@ namespace DancePlatform.BL.Models
         public string Description { get; set; }
         public Style Style { get; set; }
         public string Link { get; set; }
+        public int CreatedBy { get; set; }
 
         public List<Workshop> Workshops { get; set; }
     }

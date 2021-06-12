@@ -4,5 +4,6 @@
     {
         public string StudioName { get; set; }
         public string Address { get; set; }
+        public int OrganizerId { get; set; }
     }
 }

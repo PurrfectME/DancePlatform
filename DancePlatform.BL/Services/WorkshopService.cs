@@ -33,13 +33,14 @@ namespace DancePlatform.BL.Services
 			await _context.SaveChangesAsync();
 		}
 
-		public Task<List<Workshop>> GetAll()
+		public Task<List<Workshop>> GetAll(int organizerId)
 		{
 			return _context.Workshops
                 .Include(X => X.Place)
                 .Include(X => X.Choreographer)
                 .Include(X => X.Registrations)
                 .Where(x => !x.IsClosed)
+                .Where(x => x.CreatedBy == organizerId)
                 //.Where(x => x.IsApprovedByModerator)
                 .ToListAsync();
 		}
@@ -109,14 +110,14 @@ namespace DancePlatform.BL.Services
             return res;
         }
 
-        public Task<List<Workshop>> GetClosed()
+        public Task<List<Workshop>> GetClosed(int organizerId)
         {
             return _context.Workshops
                 .Include(X => X.Place)
                 .Include(X => X.Choreographer)
                 .Include(X => X.Registrations)
                 .Where(x => x.IsClosed == true)
-                //.Where(x => x.Comment == null)
+                .Where(x => x.CreatedBy == organizerId)
                 .ToListAsync();
         }
 
@@ -167,7 +168,7 @@ namespace DancePlatform.BL.Services
                .ToListAsync();
         }
 
-        public Task<List<Workshop>> GetAllForUsersAccounting()
+        public Task<List<Workshop>> GetAllForUsersAccounting(int organizerId)
         {
             return _context.Workshops
                 .Include(X => X.Place)
@@ -175,6 +176,7 @@ namespace DancePlatform.BL.Services
                 .Include(X => X.Registrations)
                 .Where(x => !x.IsClosed)
                 .Where(x => x.IsApprovedByModerator)
+                .Where(x => x.CreatedBy == organizerId)
                 .ToListAsync();
         }
     }

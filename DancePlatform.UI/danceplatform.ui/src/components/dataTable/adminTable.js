@@ -6,6 +6,7 @@ import WorkshopForm from '../forms/workshopForm';
 import WorkshopService from '../../services/workshopService';
 import { categories, styles } from '../../constants/commonData';
 import timeHelper from '../../helpers/dateHelper';
+import storageHelper from '../../helpers/storageHelper';
 import PlaceService from '../../services/placeService';
 import ChoreographerService from '../../services/choreographerService';
 import Typography from '@material-ui/core/Typography';
@@ -81,7 +82,7 @@ export default function AdminTable(props) {
         { name: 'choreographerName', label: 'Хореограф' },
         { name: 'style', label: 'Стиль' },
         { name: 'category', label: 'Уровень' },
-        { name: 'price', label: 'Цена, USD' },
+        { name: 'price', label: 'Цена, RUB' },
         { name: 'minAge', label: 'Мин. возраст' },
         { name: 'maxUsers', label: 'Макс. людей' },
         { name: 'currentUsersCount', label: 'Зарег. людей' },
@@ -185,7 +186,8 @@ const showFormCallback = (show, workshop, editing) => {
 }
 
     useEffect(() => {
-        WorkshopService.getAllWorkshops().then(response => {
+        const userId = storageHelper.getCurrentUserId();
+        WorkshopService.getAllWorkshops(userId).then(response => {
             setWorkshops(response.map(x => {
                 x.style = styles[x.style];
                 x.category = categories[x.category];
@@ -197,11 +199,11 @@ const showFormCallback = (show, workshop, editing) => {
                 return x;
             }));
 
-        PlaceService.getAllPlaces().then(places => {
+        PlaceService.getAllPlaces(userId).then(places => {
             setPlaces(places);
         });
 
-        ChoreographerService.getAll().then(response => {
+        ChoreographerService.getAll(userId).then(response => {
             setChoreographers(response);
         })
     });

@@ -19,10 +19,10 @@ namespace DancePlatform.API.Controllers
             _service = service;
         }
 
-        [HttpGet("getAll")]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("getAll/{organizerId}")]
+        public async Task<IActionResult> GetAll(int organizerId)
         {
-            return Ok(await _service.GetAll());
+            return Ok(await _service.GetAll(organizerId));
         }
 
         [HttpPost("add")]
@@ -31,7 +31,8 @@ namespace DancePlatform.API.Controllers
             var result = await _service.Create(new Place
             {
                 StudioName = request.StudioName,
-                Address = request.Address
+                Address = request.Address,
+                CreatedBy = request.OrganizerId
             });
 
             return Ok(result);
