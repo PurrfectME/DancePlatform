@@ -1,5 +1,6 @@
 import {React, useEffect, useState} from 'react';
 import WorkshopBox from '../workshops/workshopBox';
+import {useHistory} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import WorkshopService from '../../services/workshopService';
 import storageHelper from '../../helpers/storageHelper';
@@ -57,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function WorkshopContainer(props) {
     const classes = useStyles();
+    let history = useHistory();
     const [workshops, setWorkshops] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -88,6 +90,11 @@ export default function WorkshopContainer(props) {
     
                     return item;
                 })]);
+            }).catch(err => {
+                if(err.status == 401){
+                    localStorage.removeItem('token');
+                    history.push('/login')
+                }
             });
             return;
         }
@@ -101,6 +108,11 @@ export default function WorkshopContainer(props) {
     
                     return item;
                 })]);
+            }).catch(err => {
+                if(err.status == 401){
+                    localStorage.removeItem('token');
+                    history.push('/login')
+                }
             });
         }
         else{
@@ -112,6 +124,11 @@ export default function WorkshopContainer(props) {
     
                     return item;
                 })]);
+            }).catch(err => {
+                if(err.status == 401){
+                    localStorage.removeItem('token');
+                    history.push('/login')
+                }
             });
         }
 

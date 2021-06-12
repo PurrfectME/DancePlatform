@@ -1,4 +1,5 @@
 import {React, useState, useEffect} from 'react';
+import {useHistory} from 'react-router-dom';
 import {
     MonthlyBody,
     MonthlyCalendar,
@@ -36,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EventCalendar() {
   const classes = useStyles();
+  let history = useHistory();
   let [currentMonth, setCurrentMonth] = useState(
     startOfMonth(new Date())
   );
@@ -44,7 +46,13 @@ export default function EventCalendar() {
   useEffect(() => {
     WorkshopService.getAllWorkshops(storageHelper.getCurrentUserId()).then(response => {
       setWorkshops([...response]);
-    })
+    }).catch(err => {
+      if(err.status == 401){
+          localStorage.removeItem('token');
+          history.push('/login')
+      }
+  })
+    
   }, []);
 
   return (

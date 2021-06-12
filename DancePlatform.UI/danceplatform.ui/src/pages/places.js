@@ -1,4 +1,5 @@
 import {React, useEffect, useState} from 'react';
+import {useHistory} from 'react-router-dom';
 import MUIDataTable from "mui-datatables";
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Places(props) {
     const classes = useStyles();
-
+    let history = useHistory();
     const [showForm, setShowForm] = useState(false);
     const [places, setPlaces] = useState([]);
     const [selectedRowToEdit, setSelectedRowToEdit] = useState(null);
@@ -125,6 +126,11 @@ const showFormCallback = (show, addedPlace, editing) => {
     useEffect(() => {
           PlaceService.getAllPlaces(storageHelper.getCurrentUserId()).then(places => {
             setPlaces([...places]);
+        }).catch(err => {
+            if(err.status == 401){
+                localStorage.removeItem('token');
+                history.push('/login')
+            }
         });
     }, []);
 

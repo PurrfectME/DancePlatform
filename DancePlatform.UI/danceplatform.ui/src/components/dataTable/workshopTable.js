@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -212,6 +212,7 @@ rowsInfo: {
 }));
 
 export default function WorkshopTable(props) {
+  let history = useHistory();
   const classes = useStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('name');
@@ -245,21 +246,39 @@ export default function WorkshopTable(props) {
       if(props.workshopId){
         WorkshopService.getById(props.workshopId).then(response => {
           setRows([response])
-        });
+        })
+        .catch(err => {
+          if(err.status == 401){
+              localStorage.removeItem('token');
+              history.push('/login')
+          }
+      });
         return;
       }
 
       if(props.isHistory){
         WorkshopService.getClosed(storageHelper.getCurrentUserId()).then(response => {
           setRows([...response]);
-        });
+        })
+        .catch(err => {
+          if(err.status == 401){
+              localStorage.removeItem('token');
+              history.push('/login')
+          }
+      });
         return;
       }
 
       if(props.isUserOwnHistory){
         RegistrationService.getUserVisitedWorkshops(storageHelper.getCurrentUserId()).then(response => {
           setRows([...response]);
-        });
+        })
+        .catch(err => {
+          if(err.status == 401){
+              localStorage.removeItem('token');
+              history.push('/login')
+          }
+      });
         return;
       }
 
@@ -273,13 +292,23 @@ export default function WorkshopTable(props) {
             else{
                 setRows([...workshops.filter(x => !registrations.some(y => x.id === y.workshopId && y.userId === storageHelper.getCurrentUserId()))]);
             }
-        })
+        }).catch(err => {
+          if(err.status == 401){
+              localStorage.removeItem('token');
+              history.push('/login')
+          }
+      })
         });
     }
     else if(rows.length === 0 && props.fromWorkshops){
         RegistrationService.getUserWorkshops(storageHelper.getCurrentUserId()).then(x => {
             setRows([...x]);
-        })
+        }).catch(err => {
+          if(err.status == 401){
+              localStorage.removeItem('token');
+              history.push('/login')
+          }
+      });
     }
   }, [])
 
