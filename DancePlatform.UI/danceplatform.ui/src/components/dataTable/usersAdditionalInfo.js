@@ -251,7 +251,7 @@ export default function UsersAdditionalInfo(props) {
         </Typography>
       )}
 
-        {props.selectedWorkshop.date > date && timeHelper.isBeforeWithAddDays(props.selectedWorkshop.date, date, 1) ?
+        {props.selectedWorkshop ? props.selectedWorkshop.date > date && timeHelper.isBeforeWithAddDays(props.selectedWorkshop.date, date, 1) ?
         <Tooltip title="Отметить">
           <Button
             type="button"
@@ -261,11 +261,13 @@ export default function UsersAdditionalInfo(props) {
             onClick={() => {
                 const {workshopId} = props;
 
-                RegistrationService.checkoutUsers(selected.map(x => {
-                    return {userId: x, workshopId: workshopId};
-                })).then(x => {
-                    setSelected([]);
-                    setRows([]);
+                const idsToCheckout = selected.map(id => {
+                  return {userId: id, workshopId: workshopId}
+                });
+
+                RegistrationService.checkoutUsers(idsToCheckout).then(resp => {
+                    setSelected(selected.filter(x => !idsToCheckout.map(x => x.userId).includes(x)))
+                    setRows(rows.filter(x => !idsToCheckout.map(x => x.userId).includes(x.id)))
                 });
             }}
             >
@@ -274,6 +276,7 @@ export default function UsersAdditionalInfo(props) {
         </Tooltip>
         :
         <></>
+        : <></>
         }
     </Toolbar>
 

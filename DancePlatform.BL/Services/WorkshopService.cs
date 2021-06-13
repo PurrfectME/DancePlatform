@@ -53,7 +53,7 @@ namespace DancePlatform.BL.Services
                 .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(x => x.Id == workshopId);
 
-            return workshop.Registrations.Select(registration => registration.User).ToList();
+            return workshop.Registrations.Where(x => x.IsPaid).Select(registration => registration.User).ToList();
         }
 
         public async Task<Workshop> GetById(int id)
