@@ -157,6 +157,7 @@ const showFormCallback = (show, workshop, editing) => {
             id: workshop.id,
             isApprovedByModerator: workshop.isApprovedByModerator ? 'Да' : 'Нет',
             photoName: workshop.photoName,
+            // createdBy: workshop.createdBy
         }]);
     else if(workshop){
         var index = workshops.map(x => x.id).indexOf(workshop.id);
@@ -177,6 +178,7 @@ const showFormCallback = (show, workshop, editing) => {
             id: workshop.id,
             isApprovedByModerator: workshop.isApprovedByModerator ? 'Да' : 'Нет',
             photoName: workshop.photoName,
+            // createdBy: workshop.createdBy
         });
 
         const secArr = workshops.slice(index + 1, workshops.length);

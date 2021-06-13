@@ -80,7 +80,7 @@ namespace DancePlatform.API.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "Organizer")]
+        [Authorize(Roles = "Organizer, Moderator, User")]
         [HttpGet("get/{id}")]
         public async Task<IActionResult> GetById(int id)
         {

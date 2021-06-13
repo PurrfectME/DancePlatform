@@ -38,7 +38,7 @@ const headCells = storageHelper.isOrganizer() && window.location.pathname.split(
     { id: 'category', numeric: false, label: 'Уровень' },
     { id: 'price', numeric: true, label: 'Цена, RUB' },
     { id: 'minAge', numeric: false, label: 'Мин. возраст' },
-    { id: 'maxUsers', numeric: false, label: 'Макс. людей' },
+    { id: 'currentUsersCount', numeric: false, label: 'Зарег. людей' },
     { id: 'comment', numeric: false, label: 'Комментарий' },
 ] : storageHelper.isOrganizer() && window.location.pathname.split("/")[1] === "users-accounting" ?
 [
@@ -537,7 +537,7 @@ export default function WorkshopTable(props) {
                       {storageHelper.isOrganizer() && window.location.pathname.split("/")[1] !== "users-accounting" ? 
                         <>
                           <TableCell align="right">{row.minAge}</TableCell>
-                          <TableCell align="right">{row.maxUsers}</TableCell>
+                          <TableCell align="right">{row.currentUsersCount}</TableCell>
                           <TableCell align="right"><textarea type="text">{row.comment}</textarea></TableCell>
                         </>
                         : storageHelper.isOrganizer() && window.location.pathname.split("/")[1] === "users-accounting" ?
