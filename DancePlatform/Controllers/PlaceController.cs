@@ -32,7 +32,7 @@ namespace DancePlatform.API.Controllers
             {
                 StudioName = request.StudioName,
                 Address = request.Address,
-                CreatedBy = request.OrganizerId
+                CreatedBy = request.CreatedBy
             });
 
             return Ok(result);
